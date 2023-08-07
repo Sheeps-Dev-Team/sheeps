@@ -143,11 +143,11 @@ class CommunityReplyController extends GetxController {
 
   // 답글 쓰기 함수
   Future<void> reReplySubmitFunc({
-    @required BuildContext context,
-    @required TextEditingController textEditingController,
-    @required CommunityReply communityReply,
-    @required Community community,
-    @required ScrollController scrollController,
+    required BuildContext context,
+    required TextEditingController textEditingController,
+    required CommunityReply communityReply,
+    required Community community,
+    required ScrollController scrollController,
   }) async {
     if (isInputColor.value) {
 
@@ -214,7 +214,7 @@ class CommunityReplyController extends GetxController {
         DialogBuilder(context).hideOpenDialog();
 
         textEditingController.clear(); // 텍스트 필드 깨끗이
-        FocusManager.instance.primaryFocus.unfocus(); // 포커스 해제
+        FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
 
         // 스크롤 밑으로
         Timer(Duration(milliseconds: 100), () {
@@ -245,7 +245,7 @@ class CommunityReplyController extends GetxController {
 
       if (!isReplyLike.value) {
         if (result != null) {
-          CommunityReplyLike user = InsertReplyLike.fromJson(result)?.item;
+          CommunityReplyLike user = InsertReplyLike.fromJson(result).item;
           communityReply.communityReplyLike.add(user);
 
           isReplyLike(true);
@@ -288,7 +288,7 @@ class CommunityReplyController extends GetxController {
 
       if (!isReReplyLike) {
         if (result != null) {
-          CommunityReplyReplyLike user = InsertReplyReplyLike.fromJson(result)?.item;
+          CommunityReplyReplyLike user = InsertReplyReplyLike.fromJson(result).item;
           communityReplyReply.communityReplyReplyLike.add(user);
 
           isReReplyLike = true;

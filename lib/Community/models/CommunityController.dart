@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sheeps_app/Community/models/Community.dart';
-import 'package:sheeps_app/Community/models/CommunityDetailController.dart';
 import 'package:sheeps_app/config/AppConfig.dart';
 import 'package:sheeps_app/config/GlobalWidget.dart';
 import 'package:sheeps_app/config/NavigationNum.dart';
@@ -30,7 +29,7 @@ class CommunityController extends GetxController {
   String savedSearchWord = '';//검색단어 저장용
 
   // 공지, 핫 게시글 add 이벤트
-  int addHotList({@required List<Community> hotCommunityList, @required List<Community> communityList}){
+  int addHotList({required List<Community> hotCommunityList, required List<Community> communityList}){
     int addedPost = 0;
 
     if(hotCommunityList.isNotEmpty) {
@@ -51,7 +50,7 @@ class CommunityController extends GetxController {
 
 
   // 새로고침 이벤트
-  Future<void> refreshEvent({String searchWord}) async{
+  Future<void> refreshEvent({required String searchWord}) async{
     if(isSearch){
       GlobalProfile.searchedCommunityList.clear();
       var res = await ApiProvider().post(

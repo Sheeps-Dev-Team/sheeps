@@ -12,15 +12,15 @@ const int COMMUNITY_NOTICE_TYPE = 100; // 공지 게시글
 const List<String> basicCommunityCategoryList = ['전체', '인기', '자유', '비밀', '홍보', '회사', '소모임', '개발', '경영', '디자인', '마케팅', '영업', '대학생']; // 기본 커뮤니티 카테고리 리스트
 List<String> communityCategoryList = []; // 커뮤니티 카테고리 리스트
 
-class Community{
+class Community {
   int id;
   int userID;
   String category;
   String title;
   String contents;
-  String imageUrl1;
-  String imageUrl2;
-  String imageUrl3;
+  String? imageUrl1;
+  String? imageUrl2;
+  String? imageUrl3;
   String createdAt;
   String updatedAt;
   List<CommunityLike> communityLike;
@@ -30,34 +30,36 @@ class Community{
   int declareLength;
 
   Community({
-    this.id,
-    this.userID,
-    this.category,
-    this.title,
-    this.contents,
-    this.imageUrl1,
-    this.imageUrl2,
-    this.imageUrl3,
-    this.createdAt,
-    this.updatedAt,
-    this.communityLike,
-    this.isShow,
-    this.type,
-    this.repliesLength,
-    this.declareLength,
+    required this.id,
+    required this.userID,
+    required this.category,
+    required this.title,
+    required this.contents,
+    required this.imageUrl1,
+    required this.imageUrl2,
+    required this.imageUrl3,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.communityLike,
+    required this.isShow,
+    required this.type,
+    required this.repliesLength,
+    required this.declareLength,
   });
 
   factory Community.fromJson(Map<String, dynamic> json, {bool isHot = false, bool isNotice = false}) {
     int type = COMMUNITY_NORMAL_TYPE;
 
-    if(isNotice) type = COMMUNITY_NOTICE_TYPE; // 공지 게시글
-    else if(isHot) type = COMMUNITY_HOT_TYPE; // 핫 게시글
-    else if((json['community']['CommunityLikes'] as List).length - (json['declareLength'] as int ?? 0) >= minimumScoreForPopular) type = COMMUNITY_POPULAR_TYPE; // 인기 게시글
+    if (isNotice)
+      type = COMMUNITY_NOTICE_TYPE; // 공지 게시글
+    else if (isHot)
+      type = COMMUNITY_HOT_TYPE; // 핫 게시글
+    else if ((json['community']['CommunityLikes'] as List).length - (json['declareLength'] as int ?? 0) >= minimumScoreForPopular) type = COMMUNITY_POPULAR_TYPE; // 인기 게시글
 
     List<CommunityLike> communityLikeList = [];
-    if(json['community']['CommunityLikes'] != null) {
-      for(int i =0;i<(json['community']['CommunityLikes'] as List).length;i++){
-        Map<String,dynamic> data = (json['community']['CommunityLikes'] as List)[i];
+    if (json['community']['CommunityLikes'] != null) {
+      for (int i = 0; i < (json['community']['CommunityLikes'] as List).length; i++) {
+        Map<String, dynamic> data = (json['community']['CommunityLikes'] as List)[i];
         CommunityLike tmpLike = CommunityLike.fromJson(data);
         communityLikeList.add(tmpLike);
       }
@@ -83,24 +85,24 @@ class Community{
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'userID' : userID,
-    'category' : category,
-    'title' : title,
-    'contents' : contents,
-    'imageUrl1' : imageUrl1,
-    'imageUrl2' : imageUrl2,
-    'imageUrl3' : imageUrl3,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    'CommunityLikes' : communityLike,
-    'IsShow' : isShow,
-    'type' : type,
-    'repliesLength' : repliesLength,
-  };
+        'id': id,
+        'userID': userID,
+        'category': category,
+        'title': title,
+        'contents': contents,
+        'imageUrl1': imageUrl1,
+        'imageUrl2': imageUrl2,
+        'imageUrl3': imageUrl3,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        'CommunityLikes': communityLike,
+        'IsShow': isShow,
+        'type': type,
+        'repliesLength': repliesLength,
+      };
 }
 
-class CommunityReplyLight{
+class CommunityReplyLight {
   int id;
   int userID;
   int postID;
@@ -108,10 +110,17 @@ class CommunityReplyLight{
   String createdAt;
   String updatedAt;
 
-  CommunityReplyLight({this.id, this.userID, this.postID, this.contents,this.createdAt, this.updatedAt});
+  CommunityReplyLight({
+    required this.id,
+    required this.userID,
+    required this.postID,
+    required this.contents,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  factory  CommunityReplyLight.fromJson(Map<String, dynamic> json) {
-    return  CommunityReplyLight(
+  factory CommunityReplyLight.fromJson(Map<String, dynamic> json) {
+    return CommunityReplyLight(
       id: json['id'] as int,
       userID: json['UserID'] as int,
       postID: json['PostID'] as int,
@@ -122,20 +131,26 @@ class CommunityReplyLight{
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'UserID' : userID,
-    'PostID' : postID,
-    'Contexts' : contents,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-  };
+        'id': id,
+        'UserID': userID,
+        'PostID': postID,
+        'Contexts': contents,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+      };
 }
-class InsertReplyReplyLike{
+
+class InsertReplyReplyLike {
   CommunityReplyReplyLike item;
   bool created;
-  InsertReplyReplyLike({this.item, this.created});
-  factory InsertReplyReplyLike.fromJson(Map<String,dynamic> json){
-    Map<String,dynamic> data = json['item'];
+
+  InsertReplyReplyLike({
+    required this.item,
+    required this.created,
+  });
+
+  factory InsertReplyReplyLike.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic> data = json['item'];
     CommunityReplyReplyLike tmpLike = CommunityReplyReplyLike.fromJson(data);
 
     return InsertReplyReplyLike(
@@ -143,17 +158,24 @@ class InsertReplyReplyLike{
       created: json['created'] as bool,
     );
   }
-  Map<String, dynamic> toJson() =>{
-    'item' : item,
-    'created' : created,
-  };
+
+  Map<String, dynamic> toJson() => {
+        'item': item,
+        'created': created,
+      };
 }
-class InsertReplyLike{
+
+class InsertReplyLike {
   CommunityReplyLike item;
   bool created;
-  InsertReplyLike({this.item, this.created});
-  factory InsertReplyLike.fromJson(Map<String,dynamic> json){
-    Map<String,dynamic> data = json['item'];
+
+  InsertReplyLike({
+    required this.item,
+    required this.created,
+  });
+
+  factory InsertReplyLike.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic> data = json['item'];
     CommunityReplyLike tmpLike = CommunityReplyLike.fromJson(data);
 
     return InsertReplyLike(
@@ -161,19 +183,26 @@ class InsertReplyLike{
       created: json['created'] as bool,
     );
   }
-  Map<String, dynamic> toJson() =>{
-    'item' : item,
-    'created' : created,
-  };
+
+  Map<String, dynamic> toJson() => {
+        'item': item,
+        'created': created,
+      };
 }
-class InsertLike{
+
+class InsertLike {
   CommunityLike item;
   bool created;
-  InsertLike({this.item, this.created});
-  factory InsertLike.fromJson(Map<String,dynamic> json){
-    if((json['created'] as bool) == false) return null;
 
-    Map<String,dynamic> data = json['item'];
+  InsertLike({
+    required this.item,
+    required this.created,
+  });
+
+  factory InsertLike.fromJson(Map<String, dynamic> json) {
+    // if ((json['created'] as bool) == false) return null;
+
+    Map<String, dynamic> data = json['item'];
     CommunityLike tmpLike = CommunityLike.fromJson(data);
 
     return InsertLike(
@@ -181,22 +210,30 @@ class InsertLike{
       created: json['created'] as bool,
     );
   }
-  Map<String, dynamic> toJson() =>{
-    'item' : item,
-    'created' : created,
-  };
+
+  Map<String, dynamic> toJson() => {
+        'item': item,
+        'created': created,
+      };
 }
-class CommunityLike{
+
+class CommunityLike {
   int id;
   int userID;
   int postID;
   String createdAt;
   String updatedAt;
 
-  CommunityLike({this.id, this.userID, this.postID, this.createdAt, this.updatedAt});
+  CommunityLike({
+    required this.id,
+    required this.userID,
+    required this.postID,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  factory  CommunityLike.fromJson(Map<String, dynamic> json) {
-    return  CommunityLike(
+  factory CommunityLike.fromJson(Map<String, dynamic> json) {
+    return CommunityLike(
       id: json['id'] as int,
       userID: json['UserID'] as int,
       postID: json['PostID'] as int,
@@ -206,24 +243,31 @@ class CommunityLike{
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'UserID' : userID,
-    'PostID' : postID,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-  };
+        'id': id,
+        'UserID': userID,
+        'PostID': postID,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+      };
 }
-class CommunityReplyLike{
+
+class CommunityReplyLike {
   int id;
   int userID;
   int replyID;
   String createdAt;
   String updatedAt;
 
-  CommunityReplyLike({this.id, this.userID, this.replyID, this.createdAt, this.updatedAt});
+  CommunityReplyLike({
+    required this.id,
+    required this.userID,
+    required this.replyID,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  factory  CommunityReplyLike.fromJson(Map<String, dynamic> json) {
-    return  CommunityReplyLike(
+  factory CommunityReplyLike.fromJson(Map<String, dynamic> json) {
+    return CommunityReplyLike(
       id: json['id'] as int,
       userID: json['UserID'] as int,
       replyID: json['ReplyID'] as int,
@@ -233,15 +277,15 @@ class CommunityReplyLike{
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'UserID' : userID,
-    'ReplyID' : replyID,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-  };
+        'id': id,
+        'UserID': userID,
+        'ReplyID': replyID,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+      };
 }
 
-class CommunityReply{
+class CommunityReply {
   int id;
   int userID;
   int postID;
@@ -253,12 +297,23 @@ class CommunityReply{
   int isShow;
   int declareLength;
 
-  CommunityReply({this.id, this.userID, this.contents, this.createdAt, this.updatedAt, this.postID, this.communityReplyLike,this.communityReplyReply, this.isShow, this.declareLength});
+  CommunityReply({
+    required this.id,
+    required this.userID,
+    required this.contents,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.postID,
+    required this.communityReplyLike,
+    required this.communityReplyReply,
+    required this.isShow,
+    required this.declareLength,
+  });
 
   factory CommunityReply.fromJson(Map<String, dynamic> json) {
     List<CommunityReplyLike> communityReplyLikeList = [];
 
-    if(json['CommunityReplyLikes'] != null) {
+    if (json['CommunityReplyLikes'] != null) {
       for (int i = 0; i < (json['CommunityReplyLikes'] as List).length; i++) {
         Map<String, dynamic> data = (json['CommunityReplyLikes'] as List)[i];
         CommunityReplyLike tmpReply = CommunityReplyLike.fromJson(data);
@@ -268,7 +323,7 @@ class CommunityReply{
 
     List<CommunityReplyReply> communityReplyReplyList = [];
 
-    if(json['CommunityReplyReplies'] != null) {
+    if (json['CommunityReplyReplies'] != null) {
       for (int i = 0; i < (json['CommunityReplyReplies'] as List).length; i++) {
         Map<String, dynamic> data = (json['CommunityReplyReplies'] as List)[i];
         CommunityReplyReply tmpReplyReply = CommunityReplyReply.fromJson(data);
@@ -287,35 +342,39 @@ class CommunityReply{
       communityReplyLike: communityReplyLikeList,
       communityReplyReply: communityReplyReplyList,
       isShow: json['IsShow'] as int ?? 1,
-      declareLength: json['CommunityReplyDeclares'] as List != null ? (json['CommunityReplyDeclares'] as List).length : 0,
+      declareLength: json['CommunityReplyDeclares'] != null ? (json['CommunityReplyDeclares'] as List).length : 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'userID' : userID,
-    'contents' : contents,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    'CommunityReplyLikes' : communityReplyLike,
-    'CommunityReplyReplies' : communityReplyReply,
-    'isShow': isShow,
-  };
+        'id': id,
+        'userID': userID,
+        'contents': contents,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        'CommunityReplyLikes': communityReplyLike,
+        'CommunityReplyReplies': communityReplyReply,
+        'isShow': isShow,
+      };
 }
 
-
-
-class CommunityReplyReplyLike{
+class CommunityReplyReplyLike {
   int id;
   int userID;
   int replyReplyID;
   String createdAt;
   String updatedAt;
 
-  CommunityReplyReplyLike({this.id, this.userID, this.replyReplyID, this.createdAt, this.updatedAt});
+  CommunityReplyReplyLike({
+    required this.id,
+    required this.userID,
+    required this.replyReplyID,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  factory  CommunityReplyReplyLike.fromJson(Map<String, dynamic> json) {
-    return  CommunityReplyReplyLike(
+  factory CommunityReplyReplyLike.fromJson(Map<String, dynamic> json) {
+    return CommunityReplyReplyLike(
       id: json['id'] as int,
       userID: json['UserID'] as int,
       replyReplyID: json['ReplyReplyID'] as int,
@@ -325,16 +384,15 @@ class CommunityReplyReplyLike{
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'UserID' : userID,
-    'ReplyReplyID' : replyReplyID,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-  };
+        'id': id,
+        'UserID': userID,
+        'ReplyReplyID': replyReplyID,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+      };
 }
 
-
-class CommunityReplyReply{
+class CommunityReplyReply {
   int id;
   int userID;
   int replyID;
@@ -345,15 +403,24 @@ class CommunityReplyReply{
   int isShow;
   int declareLength;
 
-  CommunityReplyReply({this.id, this.userID, this.contents, this.createdAt, this.updatedAt, this.replyID, this.communityReplyReplyLike, this.isShow, this.declareLength});
+  CommunityReplyReply({
+    required this.id,
+    required this.userID,
+    required this.contents,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.replyID,
+    required this.communityReplyReplyLike,
+    required this.isShow,
+    required this.declareLength,
+  });
 
   factory CommunityReplyReply.fromJson(Map<String, dynamic> json) {
-
     List<CommunityReplyReplyLike> tmp = [];
 
-    if(json['CommunityReplyReplyLikes'] != null){
-      for(int i =0;i<(json['CommunityReplyReplyLikes'] as List).length;i++){
-        Map<String,dynamic> data = (json['CommunityReplyReplyLikes'] as List)[i];
+    if (json['CommunityReplyReplyLikes'] != null) {
+      for (int i = 0; i < (json['CommunityReplyReplyLikes'] as List).length; i++) {
+        Map<String, dynamic> data = (json['CommunityReplyReplyLikes'] as List)[i];
         CommunityReplyReplyLike tmpReply = CommunityReplyReplyLike.fromJson(data);
         tmp.add(tmpReply);
       }
@@ -373,26 +440,23 @@ class CommunityReplyReply{
   }
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'userID' : userID,
-    'contents' : contents,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    'CommunityReplyReplyLikes' : communityReplyReplyLike,
-    'isShow' : isShow,
-  };
+        'id': id,
+        'userID': userID,
+        'contents': contents,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        'CommunityReplyReplyLikes': communityReplyReplyLike,
+        'isShow': isShow,
+      };
 }
 
-
 //프로필 수정에서 인증 중, 반려, 인증 완료를 나누기 위한 status
-enum IdentifiedType {Reject, Complete, Proceed}
+enum IdentifiedType { Reject, Complete, Proceed }
 
 bool insertCheckForFilterAfterSelect(int userID, int index) {
   bool check = false;
-  for (int i = 0;
-  i <  GlobalProfile. filteredCommunityList[index].communityLike.length;
-  i++) {
-    if (GlobalProfile. filteredCommunityList[index].communityLike[i].userID == userID) {
+  for (int i = 0; i < GlobalProfile.filteredCommunityList[index].communityLike.length; i++) {
+    if (GlobalProfile.filteredCommunityList[index].communityLike[i].userID == userID) {
       check = true;
       break;
     }
@@ -400,10 +464,10 @@ bool insertCheckForFilterAfterSelect(int userID, int index) {
   return check;
 }
 
-bool searchWordInsertCheck(int userID, int index){
+bool searchWordInsertCheck(int userID, int index) {
   bool check = false;
-  for(int i= 0; i<GlobalProfile.searchedCommunityList[index].communityLike.length;i++){
-    if(GlobalProfile.searchedCommunityList[index].communityLike[i].userID == userID){
+  for (int i = 0; i < GlobalProfile.searchedCommunityList[index].communityLike.length; i++) {
+    if (GlobalProfile.searchedCommunityList[index].communityLike[i].userID == userID) {
       check = true;
       break;
     }
@@ -413,9 +477,7 @@ bool searchWordInsertCheck(int userID, int index){
 
 bool popularCommunityInsertCheck(int userID, int index) {
   bool check = false;
-  for (int i = 0;
-  i < GlobalProfile.popularCommunityList[index].communityLike.length;
-  i++) {
+  for (int i = 0; i < GlobalProfile.popularCommunityList[index].communityLike.length; i++) {
     if (GlobalProfile.popularCommunityList[index].communityLike[i].userID == userID) {
       check = true;
       break;
@@ -426,11 +488,8 @@ bool popularCommunityInsertCheck(int userID, int index) {
 
 bool insertReplyCheck(int userID, int index) {
   bool check = false;
-  for (int i = 0;
-  i < GlobalProfile.communityReply[index].communityReplyLike.length;
-  i++) {
-    if (GlobalProfile.communityReply[index].communityReplyLike[i].userID ==
-        userID) {
+  for (int i = 0; i < GlobalProfile.communityReply[index].communityReplyLike.length; i++) {
+    if (GlobalProfile.communityReply[index].communityReplyLike[i].userID == userID) {
       check = true;
       break;
     }
@@ -440,14 +499,8 @@ bool insertReplyCheck(int userID, int index) {
 
 bool insertReplyReplyCheck(int userID, int index, int index2) {
   bool check = false;
-  for (int i = 0;
-  i <
-      GlobalProfile.communityReply[index].communityReplyReply[index2]
-          .communityReplyReplyLike.length;
-  i++) {
-    if (GlobalProfile.communityReply[index].communityReplyReply[index2]
-        .communityReplyReplyLike[i].userID ==
-        userID) {
+  for (int i = 0; i < GlobalProfile.communityReply[index].communityReplyReply[index2].communityReplyReplyLike.length; i++) {
+    if (GlobalProfile.communityReply[index].communityReplyReply[index2].communityReplyReplyLike[i].userID == userID) {
       check = true;
       break;
     }
@@ -456,9 +509,9 @@ bool insertReplyReplyCheck(int userID, int index, int index2) {
 }
 
 // 댓글 갯수 올려주기 동기화
-void syncRepliesLength({@required List<Community> communityList, @required Community community}){
-  for(int i =0; i < communityList.length; i++){
-    if(communityList[i].id == community.id){
+void syncRepliesLength({required List<Community> communityList, required Community community}) {
+  for (int i = 0; i < communityList.length; i++) {
+    if (communityList[i].id == community.id) {
       communityList[i].repliesLength = GlobalProfile.communityReply.length;
     }
   }

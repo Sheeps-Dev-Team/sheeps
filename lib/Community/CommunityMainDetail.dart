@@ -11,7 +11,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sheeps_app/Community/CommunityWriteNoticePostPage.dart';
 import 'package:sheeps_app/chat/ImageScaleUpPage.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -37,11 +36,14 @@ const int deletedReply = 0; // 삭제된 댓글
 const int normalReply = 1; // 정상 댓글
 
 class CommunityMainDetail extends StatefulWidget {
-  Community a_community;
+  // Community a_community;
+  final Community a_community;
 
-  CommunityMainDetail(Community community) {
-    a_community = community;
-  }
+  const CommunityMainDetail(this.a_community);
+
+  // CommunityMainDetail(Community community) {
+  //   a_community = community;
+  // }
 
   @override
   _CommunityMainDetailState createState() => _CommunityMainDetailState();
@@ -61,11 +63,11 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
 
   int replyReplyInt = -1;
   bool keyboardState = false;
-  Community _community;
-  UserData user;
+  late Community _community;
+  late UserData user;
 
-  GlobalKey<RefreshIndicatorState> refreshKey;
-  AnimationController extendedController;
+  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey();
+  late AnimationController extendedController;
   bool isCanTapLike = true; // 좋아요 연속 호출 방지
   bool isCanWriteReply = true; // 댓글 연속으로 쓰기 방지
   int tapLikeDelayMilliseconds = 500;
@@ -73,7 +75,6 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
 
   List<String> urlList = [];
 
-  SharedPreferences prefs;
   bool isAlarm = false;
 
   bool isReady = true;
@@ -91,9 +92,9 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
     });
 
     extendedController = AnimationController(vsync: this, duration: const Duration(seconds: 1), lowerBound: 0.0, upperBound: 1.0);
-    if (_community.imageUrl1 != null) urlList.add(_community.imageUrl1);
-    if (_community.imageUrl2 != null) urlList.add(_community.imageUrl2);
-    if (_community.imageUrl3 != null) urlList.add(_community.imageUrl3);
+    if (_community.imageUrl1 != null) urlList.add(_community.imageUrl1!);
+    if (_community.imageUrl2 != null) urlList.add(_community.imageUrl2!);
+    if (_community.imageUrl3 != null) urlList.add(_community.imageUrl3!);
 
     Future.microtask(() async {
       var res = await ApiProvider().post('/CommunityPost/Select/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser.userID}));
@@ -338,7 +339,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                                           enabledBorder: InputBorder.none,
                                         ),
                                         maxLength: 200,
-                                        buildCounter: (context, {currentLength, isFocused, maxLength}) => null,
+                                        // buildCounter: (context, {currentLength, isFocused, maxLength}) => null,
                                       ),
                                     ),
                                     InkWell(
@@ -410,11 +411,11 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                                             syncRepliesLength(communityList: GlobalProfile.searchedCommunityList, community: _community);
                                             syncRepliesLength(communityList: GlobalProfile.myCommunityList, community: _community);
 
-                                            FocusManager.instance.primaryFocus.unfocus();
+                                            FocusManager.instance.primaryFocus?.unfocus();
                                             SystemChannels.textInput.invokeMethod('TextInput.hide');
 
                                             communityReplyController.clear(); // 텍스트 필드 클리어
-                                            FocusManager.instance.primaryFocus.unfocus(); // 포커스 해제
+                                            FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
                                             SystemChannels.textInput.invokeMethod('TextInput.hide');
 
                                             // 스크롤 밑으로
@@ -781,9 +782,9 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                       void syncPost(value) {
                         _community = value[0];
                         urlList.clear();
-                        if (_community.imageUrl1 != null) urlList.add(_community.imageUrl1);
-                        if (_community.imageUrl2 != null) urlList.add(_community.imageUrl2);
-                        if (_community.imageUrl3 != null) urlList.add(_community.imageUrl3);
+                        if (_community.imageUrl1 != null) urlList.add(_community.imageUrl1!);
+                        if (_community.imageUrl2 != null) urlList.add(_community.imageUrl2!);
+                        if (_community.imageUrl3 != null) urlList.add(_community.imageUrl3!);
                       }
 
                       if (isBlind) {
@@ -794,7 +795,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                       Get.back();
                       // 공지글일 때
                       if (_community.category == '공지') {
-                        Get.to(() => CommunityWriteNoticePostPage(isEdit: true, community: _community)).then((value) {
+                        Get.to(() => CommunityWriteNoticePostPage(isEdit: true, community: _community))?.then((value) {
                           if (value != null) {
                             setState(() {
                               syncPost(value);
@@ -803,7 +804,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                         });
                       } else {
                         Get.back();
-                        Get.to(() => CommunityWritePage(isEdit: true, community: _community)).then((value) {
+                        Get.to(() => CommunityWritePage(isEdit: true, community: _community))?.then((value) {
                           if (value != null) {
                             setState(() {
                               syncPost(value);
@@ -1024,14 +1025,15 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
           packageName: 'kr.noteasy.sheeps_app',
           minimumVersion: 1, //실행 가능 최소 버전
         ),
-        iosParameters: IosParameters(
+        iosParameters: IOSParameters(
           bundleId: 'kr.noteasy.sheepsApp',
           minimumVersion: '1.0',
           appStoreId: '1558625011',
         ));
 
-    final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
-    final Uri shortUrl = shortDynamicLink.shortUrl;
+    // final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+    // final Uri shortUrl = shortDynamicLink.shortUrl;
+    final Uri shortUrl = parameters.link;
 
     String name = _community.title;
 

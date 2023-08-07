@@ -29,10 +29,10 @@ import 'models/Community.dart';
 
 class CommunityWritePage extends StatefulWidget {
   final bool isEdit; //수정일때만 true
-  final Community community; //수정일때만 받음
-  final String selectedCategory;
+  final Community? community; //수정일때만 받음
+  final String? selectedCategory;
 
-  const CommunityWritePage({Key key, this.isEdit = false, this.community, this.selectedCategory}) : super(key: key);
+  const CommunityWritePage({Key? key, this.isEdit = false, this.community, this.selectedCategory}) : super(key: key);
 
   @override
   _CommunityWritePageState createState() => _CommunityWritePageState();
@@ -44,10 +44,10 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
   TextEditingController contentsController = TextEditingController();
   MultipartImgFilesController _filesController = Get.put(MultipartImgFilesController());
 
-  AnimationController extendedController;
+  late AnimationController extendedController;
 
   bool isFinishFileLoading = false; //파일생성 완료 전 이미지변경방지
-  Community community;
+  late Community? community;
 
   @override
   void initState() {
@@ -59,12 +59,12 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
 
     community = widget.community;
 
-    File f;
+    // File f;
     _filesController.filesList.clear();
-    _filesController.filesList.add(f);
+    // _filesController.filesList.add(f);
 
     if (widget.isEdit) {
-      controller.loading(widget.community);
+      controller.loading(widget.community!);
       titleController.text = controller.title.value;
       contentsController.text = controller.contents.value;
       controller.checkFilledRequired();
@@ -87,7 +87,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
         isFinishFileLoading = true; //모든 파일 변환 완료
       });
     } else {
-      if (widget.selectedCategory != null) controller.setCategory(widget.selectedCategory);
+      if (widget.selectedCategory != null) controller.setCategory(widget.selectedCategory!);
       isFinishFileLoading = true;
     }
   }
@@ -407,7 +407,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                               function: () {
                                 if (controller.isFilledRequired.value) {
                                   if (isFinishFileLoading) {
-                                    String category;
+                                    late String category;
                                     if (controller.isCategoryCompany.value) category = '회사';
                                     if (controller.isCategorySecret.value) category = '비밀';
                                     if (controller.isCategoryPromotion.value) category = '홍보';
@@ -431,7 +431,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                         if (widget.isEdit) {
                                           //게시글 수정
                                           FormData formData = FormData.fromMap({
-                                            "id": widget.community.id,
+                                            "id": widget.community!.id,
                                             "category": category,
                                             "title": controlSpace(controller.title.value),
                                             "contents": controlSpace(controller.contents.value),
@@ -451,14 +451,14 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                           DialogBuilder(context).showLoadingIndicator();
 
                                           var res;
-                                          Community modifiedCommunity = Community();
+                                          late Community modifiedCommunity;
 
                                           try {
                                             res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Modify', data: formData);
                                             modifiedCommunity = Community.fromJson(json.decode(res.toString()));
 
                                             for (int i = 0; i < GlobalProfile.globalCommunityList.length; i++) {
-                                              if (GlobalProfile.globalCommunityList[i].id == widget.community.id) {
+                                              if (GlobalProfile.globalCommunityList[i].id == widget.community!.id) {
                                                 GlobalProfile.globalCommunityList[i] = Community.fromJson(json.decode(res.toString()));
                                                 modifiedCommunity = GlobalProfile.globalCommunityList[i];
                                                 break;
@@ -466,7 +466,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                             }
 
                                             for (int i = 0; i < GlobalProfile.hotCommunityList.length; i++) {
-                                              if (GlobalProfile.hotCommunityList[i].id == widget.community.id) {
+                                              if (GlobalProfile.hotCommunityList[i].id == widget.community!.id) {
                                                 GlobalProfile.hotCommunityList[i] = Community.fromJson(json.decode(res.toString()), isHot: true);
                                                 modifiedCommunity = GlobalProfile.hotCommunityList[i];
                                                 break;
@@ -474,7 +474,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                             }
 
                                             for (int i = 0; i < GlobalProfile.popularCommunityList.length; i++) {
-                                              if (GlobalProfile.popularCommunityList[i].id == widget.community.id) {
+                                              if (GlobalProfile.popularCommunityList[i].id == widget.community!.id) {
                                                 GlobalProfile.popularCommunityList[i] = Community.fromJson(json.decode(res.toString()));
                                                 modifiedCommunity = GlobalProfile.popularCommunityList[i];
                                                 break;
@@ -484,7 +484,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                             for (int i = 0; i < GlobalProfile.filteredCommunityList.length; i++) {
                                               bool isHot = false;
 
-                                              if (GlobalProfile.filteredCommunityList[i].id == widget.community.id) {
+                                              if (GlobalProfile.filteredCommunityList[i].id == widget.community!.id) {
                                                 if (GlobalProfile.filteredCommunityList[i].type == COMMUNITY_HOT_TYPE) isHot = true; // 필터 리스트에 있는 타입에 따라 hot 체크
 
                                                 GlobalProfile.filteredCommunityList[i] = Community.fromJson(json.decode(res.toString()), isHot: isHot);
@@ -493,7 +493,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                             }
 
                                             for (int i = 0; i < GlobalProfile.searchedCommunityList.length; i++) {
-                                              if (GlobalProfile.searchedCommunityList[i].id == widget.community.id) {
+                                              if (GlobalProfile.searchedCommunityList[i].id == widget.community!.id) {
                                                 GlobalProfile.searchedCommunityList[i] = Community.fromJson(json.decode(res.toString()));
                                                 modifiedCommunity = GlobalProfile.searchedCommunityList[i];
                                                 break;
@@ -501,7 +501,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                             }
 
                                             for (int i = 0; i < GlobalProfile.myCommunityList.length; i++) {
-                                              if (GlobalProfile.myCommunityList[i].id == widget.community.id) {
+                                              if (GlobalProfile.myCommunityList[i].id == widget.community!.id) {
                                                 GlobalProfile.myCommunityList[i] = Community.fromJson(json.decode(res.toString()));
                                                 modifiedCommunity = GlobalProfile.myCommunityList[i];
                                                 break;
@@ -509,7 +509,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                             }
                                           } on DioError catch (e) {
                                             DialogBuilder(context).hideOpenDialog();
-                                            throw FetchDataException(e.message);
+                                            throw FetchDataException(e.message ?? '');
                                           }
 
                                           DialogBuilder(context).hideOpenDialog();
@@ -539,12 +539,12 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                           DialogBuilder(context).showLoadingIndicator();
 
                                           var res;
-                                          Community newCommunity = Community();
+                                          late Community newCommunity;
                                           try {
                                             res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Insert', data: formData);
                                           } on DioError catch (e) {
                                             DialogBuilder(context).hideOpenDialog();
-                                            throw FetchDataException(e.message);
+                                            throw FetchDataException(e.message ?? '');
                                           }
                                           newCommunity = Community.fromJson(json.decode(res.toString()));
                                           GlobalProfile.globalCommunityList.insert(0, newCommunity);
@@ -579,7 +579,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
     );
   }
 
-  Widget categorySelectContainer({@required String text, @required bool isSelected}) {
+  Widget categorySelectContainer({required String text, required bool isSelected}) {
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? sheepsColorGreen : Colors.white,

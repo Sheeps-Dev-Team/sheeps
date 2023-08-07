@@ -23,7 +23,7 @@ class CommunityReplyPage extends StatefulWidget {
   final Community community;
   final CommunityReply communityReply;
 
-  const CommunityReplyPage({Key key, @required this.communityReply, @required this.community}) : super(key: key);
+  const CommunityReplyPage({Key? key, required this.communityReply, required this.community}) : super(key: key);
 
   @override
   _CommunityReplyPageState createState() => _CommunityReplyPageState();
@@ -38,10 +38,10 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
   final String thumbIcon = 'assets/images/Public/GreyThumbIcon.svg';
   final String commentIcon = 'assets/images/Public/GreySpeechBubble.svg';
 
-  Community community;
-  CommunityReply communityReply;
-  UserData replyUser;
-  GlobalKey<RefreshIndicatorState> refreshKey;
+  late Community community;
+  late CommunityReply communityReply;
+  late UserData replyUser;
+  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey();
   bool isAlarm = false;
 
   @override
@@ -152,7 +152,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                   contentPadding: EdgeInsets.only(left: 12 * sizeUnit, bottom: 8 * sizeUnit, top: 8 * sizeUnit, right: 8 * sizeUnit),
                 ),
                 maxLength: 200,
-                buildCounter: (context, {currentLength, isFocused, maxLength}) => null,
+                // buildCounter: (context, {currentLength, isFocused, maxLength}) => null,
               ),
             ),
             GestureDetector(
@@ -360,7 +360,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                                 classification: 'Community',
                                 postType: reportForReplyReply,
                                 communityReplyReply: communityReplyReply,
-                              )).then((value) => setState(() {})),
+                              ))?.then((value) => setState(() {})),
                         ),
                       ],
                     ],
@@ -372,10 +372,10 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
     );
   }
 
-  GestureDetector reReplyShapeButton(CommunityReplyReply communityReplyReply, {@required Function press, @required String text, Color textColor = sheepsColorBlack}) {
+  GestureDetector reReplyShapeButton(CommunityReplyReply communityReplyReply, {required Function press, required String text, Color textColor = sheepsColorBlack}) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: press,
+      onTap: () => press,
       child: Container(
         height: 22 * sizeUnit,
         padding: EdgeInsets.symmetric(horizontal: 6 * sizeUnit),
@@ -444,9 +444,9 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
     );
   }
 
-  Widget customIconButton({@required String icon, @required String text, Color color = sheepsColorDarkGrey, @required Function press}) {
+  Widget customIconButton({required String icon, required String text, Color color = sheepsColorDarkGrey, required Function press}) {
     return GestureDetector(
-      onTap: press,
+      onTap: () => press,
       behavior: HitTestBehavior.translucent,
       child: Row(
         children: [
@@ -468,7 +468,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
     );
   }
 
-  Widget customAppBar(BuildContext context) {
+  PreferredSizeWidget customAppBar(BuildContext context) {
     return SheepsAppBar(
       context,
       '댓글',
@@ -599,7 +599,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                           postType: reportForReply,
                           communityReply: communityReply,
                         ),
-                      ).then((value) => setState(() {}));
+                      )?.then((value) => setState(() {}));
                     },
                   ),
                 ],
