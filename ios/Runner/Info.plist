@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>쉽스</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>sheepsApplication</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.23391409989-b0vnjapn4ern8f3i7dte46ckg0894dkt</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao8c4efefeb2cbdbcdf329ee31458dcaa4</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>FirebaseScreenReportingEnabled</key>
+	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakao${8c4efefeb2cbdbcdf329ee31458dcaa4}</string>
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+		<string>kakaotalk-5.9.7</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>애플 뮤직에 접근을 허용하시겠습니까?</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>블루투스에 접근을 허용하시겠습니까?</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>주변의 블루투스 기기 사용을 허용하시겠습니까?</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>달력에 접근을 허용하시겠습니까?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>프로필 및 커뮤니티에 사진을 등록하기 위해 카메라에 접근합니다.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>연락처에 접근을 허용하시겠습니까?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>사용자 위치에 접근을 허용하시겠습니까?</string>
+	<key>NSMotionUsageDescription</key>
+	<string>모션에 접근을 허용하시겠습니까?</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>프로필 및 커뮤니티에 사진을 업로드하기 위해 사진 라이브러리에 접근합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>프로필 및 커뮤니티에 사진을 업로드하기 위해 사진 라이브러리에 접근합니다.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>말하기 녹음에 접근을 허용하시겠습니까?</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>귀하의 데이터는 개인화 광고를 제공하기 위해 사용됩니다.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>음악에 접근을 허용하시겠습니까?</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+</dict>
+</plist>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>23391409989-b0vnjapn4ern8f3i7dte46ckg0894dkt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.23391409989-b0vnjapn4ern8f3i7dte46ckg0894dkt</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>23391409989-9a1bqombln6o1mf7d9f1qo1rujergn3j.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA2DXEgYsoNhSJ2iqJorb2gYi8QUPedExY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>23391409989</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kr.noteasy.sheepsApplication</string>
+	<key>PROJECT_ID</key>
+	<string>sheeps-app-c8bba</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sheeps-app-c8bba.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:23391409989:ios:167654bfaa66c62981502c</string>
+	<key>DATABASE_URL</key>
+	<string>https://sheeps-app-c8bba.firebaseio.com</string>
+</dict>
+</plist>

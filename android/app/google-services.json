@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "23391409989",
+    "firebase_url": "https://sheeps-app-c8bba.firebaseio.com",
+    "project_id": "sheeps-app-c8bba",
+    "storage_bucket": "sheeps-app-c8bba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23391409989:android:e5456c2dfe064f6c81502c",
+        "android_client_info": {
+          "package_name": "kr.noteasy.sheeps_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23391409989-9a1bqombln6o1mf7d9f1qo1rujergn3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.noteasy.sheeps_app",
+            "certificate_hash": "86bb5cd1b4dd4374ad69975dec1e32d05a3495a8"
+          }
+        },
+        {
+          "client_id": "23391409989-hd919m129ujvnod6832cqaumf27minh3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.noteasy.sheeps_app",
+            "certificate_hash": "ee21d33a6ec04d1ed1c5b970d25a7c18eab42b72"
+          }
+        },
+        {
+          "client_id": "23391409989-rji34ma7lp9af3a5l38vt9fi55qpgt3e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.noteasy.sheeps_app",
+            "certificate_hash": "ac2b69d3eff83436dfc4cf500ee02bb4f726f55a"
+          }
+        },
+        {
+          "client_id": "23391409989-1nnfnpmta07sau31l434dfievs7mk3us.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuiSi8TPkrPDNEBcwRVCyseLXLKqE9vG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23391409989-1nnfnpmta07sau31l434dfievs7mk3us.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "23391409989-5ds7gpmf1eem01nhnu82nq2gn54rc9mp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.noteasy.sheepsApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
