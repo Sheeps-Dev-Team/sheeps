@@ -25,20 +25,20 @@ class ChatRecvMessageModel {
   String createdAt;
 
   ChatRecvMessageModel({
-    this.chatId,
-    this.roomName,
-    this.roomId,
-    this.to,
-    this.from,
-    this.fromName,
-    this.message,
-    this.date,
-    this.isContinue,
-    this.fileMessage,
-    this.isImage,
-    this.isRead,
-    this.updatedAt,
-    this.createdAt
+    required this.chatId,
+    this.roomName = '',
+    this.roomId = 0,
+    this.to = '',
+    this.from = 0,
+    this.fromName = '',
+    this.message = '',
+    this.date = '',
+    this.isContinue = false,
+    this.fileMessage = '',
+    this.isImage = 0,
+    this.isRead = 0,
+    this.updatedAt = '',
+    this.createdAt = ''
   });
 
   factory ChatRecvMessageModel.fromJson(Map<String, dynamic> json) {

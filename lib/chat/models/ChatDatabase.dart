@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:path/path.dart';
@@ -22,13 +21,13 @@ class ChatDBHelper {
 
   factory ChatDBHelper() => _db;
 
-  static Database _database;
+  static Database? _database;
 
   Future<Database> get database async {
-    if (_database != null) return _database;
+    if (_database != null) return _database!;
 
     _database = await initDB();
-    return _database;
+    return _database!;
   }
 
   initDB() async {
@@ -43,7 +42,7 @@ class ChatDBHelper {
             await db.execute("CREATE TABLE $TableName(chatId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, roomId INTEGER, roomName TEXT, userId INTEGER, message TEXT, date INTEGER, isImage INTEGER, isRead INTEGER, updatedAt TEXT)");
           }
           catch(e){
-            debugPrint(e);
+            debugPrint(e.toString());
           }
 
         },
@@ -52,7 +51,7 @@ class ChatDBHelper {
   }
 
   Future<String> createData(ChatRecvMessageModel messageModel, {bool isCreated = false}) async {
-    if(messageModel == null || messageModel.message == null || messageModel.message == '') return null;
+    if(messageModel == null || messageModel.message == null || messageModel.message == '') return '';
 
     final db = await database;
 
@@ -123,15 +122,15 @@ class ChatDBHelper {
 
     var res = await db.query(TableName, where: 'roomName = ?', whereArgs: [roomName], orderBy: 'chatId DESC', limit: 20, offset: offset);
     List<ChatRecvMessageModel> list  = res.isNotEmpty ? res.map((c) => ChatRecvMessageModel(
-      chatId: c['chatId'],
-      roomId: c['roomId'],
-      roomName: c['roomName'],
-      from: c['userId'],
-      message: c['message'] == null ? '' : c['message'],
-      date: c['date'],
-      isImage: c['isImage'],
-      isRead: c['isRead'],
-      updatedAt: c['updatedAt'],
+      chatId: c['chatId'] as int,
+      roomId: c['roomId'] as int,
+      roomName: c['roomName'] as String,
+      from: c['userId'] as int,
+      message: c['message'] as String,
+      date: c['date'] as String,
+      isImage: c['isImage'] as int,
+      isRead: c['isRead'] as int,
+      updatedAt: c['updatedAt'] as String,
       isContinue: true
     )).toList()
         : [];
@@ -145,15 +144,15 @@ class ChatDBHelper {
         'SELECT * FROM $TableName where roomId = ?', [id]);
     return res.isNotEmpty ?
     ChatRecvMessageModel(
-      chatId: res.first['chatId'],
-      roomId: res.first['roomId'],
-      roomName: res.first['roomName'],
-      from: res.first['userId'],
-      message: res.first['message'] == null ? '' : res.first['message'],
-      date: res.first['date'],
-      isImage: res.first['isImage'],
-      isRead: res.first['isRead'],
-      updatedAt: res.first['updatedAt']
+      chatId: res.first['chatId'] as int,
+      roomId: res.first['roomId'] as int,
+      roomName: res.first['roomName'] as String,
+      from: res.first['userId'] as int,
+      message: res.first['message'] as String,
+      date: res.first['date'] as String,
+      isImage: res.first['isImage'] as int,
+      isRead: res.first['isRead'] as int,
+      updatedAt: res.first['updatedAt'] as String
     )
         : null;
   }
@@ -169,15 +168,15 @@ class ChatDBHelper {
     final db = await database;
     var res = await db.rawQuery('SELECT * FRom $TableName');
     List<ChatRecvMessageModel> list  = res.isNotEmpty ? res.map((c) => ChatRecvMessageModel(
-      chatId: c['chatId'],
-      roomId: c['roomId'],
-      roomName: c['roomName'],
-      from: c['userId'],
-        message: c['message'] == null ? '' : c['message'],
-      date: c['date'],
-      isImage: c['isImage'],
-      isRead: c['isRead'],
-      updatedAt: c['updatedAt']
+      chatId: c['chatId'] as int,
+      roomId: c['roomId'] as int,
+      roomName: c['roomName'] as String,
+      from: c['userId'] as int,
+      message: c['message'] as String,
+      date: c['date'] as String,
+      isImage: c['isImage'] as int,
+      isRead: c['isRead'] as int,
+      updatedAt: c['updatedAt'] as String,
     )).toList()
         : [];
 

@@ -1,15 +1,18 @@
 
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:sheeps_app/config/AppConfig.dart';
 import 'package:sheeps_app/config/GlobalAsset.dart';
 import 'package:sheeps_app/config/LoadingUI.dart';
 import 'package:sheeps_app/config/constants.dart';
 import 'package:sheeps_app/config/GlobalWidget.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
+import '';
 import 'package:get/get.dart';
 
 class ImageScaleUpPage extends StatefulWidget {
@@ -17,14 +20,14 @@ class ImageScaleUpPage extends StatefulWidget {
   final String title;
   final bool isFile;
 
-  const ImageScaleUpPage({Key key, @required this.fileString, this.title, this.isFile = true}) : super(key: key);
+  const ImageScaleUpPage({Key? key, required this.fileString,required this.title, this.isFile = true}) : super(key: key);
 
   @override
   _ImageScaleUpPageState createState() => _ImageScaleUpPageState();
 }
 
 class _ImageScaleUpPageState extends State<ImageScaleUpPage> with SingleTickerProviderStateMixin {
-  AnimationController extendedController;
+  AnimationController? extendedController;
 
   @override
   void initState() {
@@ -35,7 +38,7 @@ class _ImageScaleUpPageState extends State<ImageScaleUpPage> with SingleTickerPr
   @override
   void dispose() {
     super.dispose();
-    extendedController.dispose();
+    extendedController!.dispose();
   }
 
   @override
@@ -87,7 +90,7 @@ class _ImageScaleUpPageState extends State<ImageScaleUpPage> with SingleTickerPr
       child: Image.network(
         widget.fileString,
         fit: BoxFit.contain,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+        loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
           return Padding(
             padding: EdgeInsets.all(8.0 * sizeUnit),
@@ -125,7 +128,7 @@ class _ImageScaleUpPageState extends State<ImageScaleUpPage> with SingleTickerPr
       child: GestureDetector(
         onTap: () {
           DialogBuilder(context).showLoadingIndicator();
-          GallerySaver.saveImage(widget.fileString).then((value) {
+          ImageGallerySaver.saveFile(widget.fileString)?.then((value) {
             DialogBuilder(context).hideOpenDialog();
             showSheepsToast(context: context, text: "사진 저장 완료");
           });

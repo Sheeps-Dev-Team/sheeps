@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,17 +37,17 @@ class ChatRoomPage extends StatefulWidget {
 }
 
 class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderStateMixin {
-  ChatGlobal _chatGlobal;
+  ChatGlobal? _chatGlobal;
   final NavigationNum navigationNum = Get.put(NavigationNum());
   String teamIconName = "assets/images/Chat/teamIcon.svg";
 
-  AnimationController extendedController;
-  LocalNotification _localNotification;
-  SocketProvider _socket;
+  AnimationController? extendedController;
+  LocalNotification? _localNotification;
+  SocketProvider? _socket;
 
   int barIndex = 0;
-  ChatRoomState chatRoomState;
-  PageController pageController;
+  ChatRoomState? chatRoomState;
+  PageController? pageController;
 
   String get svgGreyMyPageButton => 'assets/images/Public/GreyMyPageButton.svg';
 
@@ -59,7 +59,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
     _chatGlobal = Get.put(ChatGlobal());
     chatRoomState = Get.put(ChatRoomState());
     extendedController = AnimationController(vsync: this, duration: const Duration(seconds: 1), lowerBound: 0.0, upperBound: 1.0);
-    pageController = PageController(initialPage: chatRoomState.getState);
+    pageController = PageController(initialPage: chatRoomState!.getState);
     initShared();
   }
 
@@ -82,9 +82,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    _socket.setRoomStatus(ROOM_STATUS_ETC);
-    extendedController.dispose();
-    pageController.dispose();
+    _socket!.setRoomStatus(ROOM_STATUS_ETC);
+    extendedController!.dispose();
+    pageController!.dispose();
     super.dispose();
   }
 
@@ -121,18 +121,18 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
 
     if (null == _socket) {
       _socket = SocketProvider.to;
-      _socket.setRoomStatus(ROOM_STATUS_ROOM);
+      _socket!.setRoomStatus(ROOM_STATUS_ROOM);
     }
 
-    if (barIndex != chatRoomState.getState) {
-      barIndex = chatRoomState.getState;
+    if (barIndex != chatRoomState!.getState) {
+      barIndex = chatRoomState!.getState;
     }
 
     return WillPopScope(
       onWillPop: () {
-        _socket.setRoomStatus(ROOM_STATUS_ETC);
+        _socket!.setRoomStatus(ROOM_STATUS_ETC);
         Get.back();
-        return;
+        return Future.value(true);
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
@@ -144,19 +144,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
               child: Scaffold(
                   body: Column(
                 children: [
-                  chatRoomPageTopBar(context, chatRoomState),
+                  chatRoomPageTopBar(context, chatRoomState!),
                   Expanded(
                     child: PageView(
                       controller: pageController,
                       onPageChanged: (index) {
                         barIndex = index;
-                        chatRoomState.setState(index);
-                        switch (chatRoomState.getState) {
+                        chatRoomState!.setState(index);
+                        switch (chatRoomState!.getState) {
                           case ChatRoomState.PERSON_AND_TEAM:
                             {
                               setState(() {
-                                if (chatRoomState.getState != ChatRoomState.PERSON_AND_TEAM) {
-                                  chatRoomState.setState(ChatRoomState.PERSON_AND_TEAM);
+                                if (chatRoomState!.getState != ChatRoomState.PERSON_AND_TEAM) {
+                                  chatRoomState!.setState(ChatRoomState.PERSON_AND_TEAM);
                                 }
                               });
                             }
@@ -164,8 +164,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                           case ChatRoomState.INTERVIEW:
                             {
                               setState(() {
-                                if (chatRoomState.getState != ChatRoomState.INTERVIEW) {
-                                  chatRoomState.setState(ChatRoomState.INTERVIEW);
+                                if (chatRoomState!.getState != ChatRoomState.INTERVIEW) {
+                                  chatRoomState!.setState(ChatRoomState.INTERVIEW);
                                 }
                               });
                             }
@@ -173,8 +173,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                           case ChatRoomState.EXPERT:
                             {
                               setState(() {
-                                if (chatRoomState.getState != ChatRoomState.EXPERT) {
-                                  chatRoomState.setState(ChatRoomState.EXPERT);
+                                if (chatRoomState!.getState != ChatRoomState.EXPERT) {
+                                  chatRoomState!.setState(ChatRoomState.EXPERT);
                                 }
                               });
                             }
@@ -182,7 +182,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                         }
                       },
                       children: [
-                        Obx(() => divideRoomList(_chatGlobal.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL) || (element.type == ROOM_TYPE_TEAM) ).toList(), (RoomInfo room) async {
+                        Obx(() => divideRoomList(_chatGlobal!.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL) || (element.type == ROOM_TYPE_TEAM) ).toList(), (RoomInfo room) async {
                               bool isPersonal = room.isPersonal;
 
                               if (isPersonal) {
@@ -195,9 +195,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                                   GlobalProfile.setModifyPersonalProfile(UserData.fromJson(user));
                                 }
 
-                                Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(room.chatUserIDList[0]))).then((value) {
+                                Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(room.chatUserIDList[0])))?.then((value) {
                                   setState(() {
-                                    _chatGlobal.sortLocalRoomInfoList();
+                                    _chatGlobal!.sortLocalRoomInfoList();
                                   });
                                 });
                               } else {
@@ -211,16 +211,16 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                                   GlobalProfile.setModifyTeamProfile(resTeam);
                                 }
 
-                                Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByRoomName(room.roomName))).then((value) {
+                                Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByRoomName(room.roomName)))?.then((value) {
                                   setState(() {
-                                    _chatGlobal.sortLocalRoomInfoList();
+                                    _chatGlobal!.sortLocalRoomInfoList();
                                   });
                                 });
                               }
 
                               return Future.value(null);
                             }, (RoomInfo room) async {
-                              _socket.setRoomStatus(ROOM_STATUS_CHAT);
+                              _socket!.setRoomStatus(ROOM_STATUS_CHAT);
                               bool isChange = false;
 
                               DialogBuilder(context).showLoadingIndicator();
@@ -277,8 +277,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                                 titleName: room.name,
                                 chatUserList: GlobalProfile.getUserListByUserIDList(room.chatUserIDList),
                                 targetID: targetID,
-                                leaderID: leaderID,
-                              )).then((value) {
+                                leaderID: leaderID, isNeedCallPop: false,
+                              ))?.then((value) {
                                 setState(() {
                                   ChatGlobal.sortRoomInfoList();
                                   ChatGlobal.currentRoomIndex = -1;
@@ -289,14 +289,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                                     ChatGlobal.roomInfoList.remove(ChatGlobal.willRemoveRoom);
                                     ChatGlobal.willRemoveRoom = null;
                                   }
-                                  _socket.setRoomStatus(ROOM_STATUS_ROOM);
+                                  _socket!.setRoomStatus(ROOM_STATUS_ROOM);
                                 });
                               });
 
                               return Future.value(null);
                             })),
                         Obx(
-                          () => divideRoomList(_chatGlobal.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL_SEEK_TEAM) || (element.type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) ).toList(), (RoomInfo room) async {
+                          () => divideRoomList(_chatGlobal!.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL_SEEK_TEAM) || (element.type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) ).toList(), (RoomInfo room) async {
                             UserData alreadyUser = GlobalProfile.getUserByUserID(room.chatUserIDList[0]);
 
                             var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": room.chatUserIDList[0], "updatedAt": alreadyUser.updatedAt}));
@@ -310,13 +310,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                                 context, // 기본 파라미터, SecondRoute로 전달
                                 CupertinoPageRoute(builder: (context) => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(room.chatUserIDList[0])))).then((value) {
                               setState(() {
-                                _chatGlobal.sortLocalRoomInfoList();
+                                _chatGlobal!.sortLocalRoomInfoList();
                               });
                             });
 
                             return Future.value(null);
                           }, (RoomInfo room) async {
-                            _socket.setRoomStatus(ROOM_STATUS_CHAT);
+                            _socket!.setRoomStatus(ROOM_STATUS_CHAT);
                             bool isChange = false;
 
                             DialogBuilder(context).showLoadingIndicator();
@@ -372,8 +372,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                               titleName: room.name,
                               chatUserList: GlobalProfile.getUserListByUserIDList(room.chatUserIDList),
                               targetID: targetID,
-                              leaderID: leaderID,
-                            )).then((value) {
+                              leaderID: leaderID, isNeedCallPop: false,
+                            ))?.then((value) {
                               setState(() {
                                 ChatGlobal.sortRoomInfoList();
                                 ChatGlobal.currentRoomIndex = -1;
@@ -385,7 +385,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                                   ChatGlobal.willRemoveRoom = null;
                                 }
 
-                                _socket.setRoomStatus(ROOM_STATUS_ROOM);
+                                _socket!.setRoomStatus(ROOM_STATUS_ROOM);
                               });
                             });
 
@@ -435,7 +435,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => MyPage()).then((value) {
+                  Get.to(() => MyPage())?.then((value) {
                     setState(() {
 
                     });
@@ -456,14 +456,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
         Padding(
           padding: EdgeInsets.only(left: 16 * sizeUnit),
           child: SheepsAnimatedTabBar(
-            pageController: pageController,
+            pageController: pageController!,
             barIndex: barIndex,
             insidePadding: 22 * sizeUnit,
             listTabItemTitle: ['개인・팀', '인터뷰', '전문가'],
             listTabItemWidth: [62 * sizeUnit, 46 * sizeUnit, 46 * sizeUnit],
             listTabItemBoolean: [
-              _chatGlobal.getMessageCountByList(_chatGlobal.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL) || (element.type == ROOM_TYPE_TEAM) ).toList()) == 0 ? false : true,
-              _chatGlobal.getMessageCountByList(_chatGlobal.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL_SEEK_TEAM) || (element.type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) ).toList()) == 0 ? false : true,
+              _chatGlobal!.getMessageCountByList(_chatGlobal!.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL) || (element.type == ROOM_TYPE_TEAM) ).toList()) == 0 ? false : true,
+              _chatGlobal!.getMessageCountByList(_chatGlobal!.getRoomInfoList.where((element) => (element.type == ROOM_TYPE_PERSONAL_SEEK_TEAM) || (element.type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) ).toList()) == 0 ? false : true,
               false],
           ),
         ),
@@ -502,12 +502,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                   child: roomList[index].profileImage == 'BasicImage'
                       ?
                   roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ||  roomList[index].type == ROOM_TYPE_PERSONAL_SEEK_TEAM ?
-                  Badge(
-                    shape: BadgeShape.circle,
-                    position: BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
-                    badgeColor: roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
-                    padding: EdgeInsets.all(4),
-                    toAnimate: false,
+                  badges.Badge(
+                    badgeStyle: badges.BadgeStyle(
+                      shape : badges.BadgeShape.circle,
+                      badgeColor : roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
+                      elevation : 0,
+                      padding : EdgeInsets.all(4 * sizeUnit),
+                    ),
+                    position: badges.BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
                     badgeContent: SvgPicture.asset(
                       roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? 'assets/images/NavigationBar/TeamRecruitIcon.svg' : svgSearchIcon,
                       width: 8 * sizeUnit,
@@ -552,12 +554,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                   )
                       :
                   roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ||  roomList[index].type == ROOM_TYPE_PERSONAL_SEEK_TEAM ?
-                  Badge(
-                    shape: BadgeShape.circle,
-                    position: BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
-                    badgeColor: roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
-                    padding: EdgeInsets.all(4),
-                    toAnimate: false,
+                  badges.Badge(
+                    badgeStyle: badges.BadgeStyle(
+                      shape : badges.BadgeShape.circle,
+                      badgeColor : roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
+                      elevation : 0,
+                      padding : EdgeInsets.all(4 * sizeUnit),
+                    ),
+                    position: badges.BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
                     badgeContent: SvgPicture.asset(
                       roomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? 'assets/images/NavigationBar/TeamRecruitIcon.svg' : svgSearchIcon,
                       width: 8 * sizeUnit,
@@ -574,7 +578,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                       child: ClipRRect(
                           borderRadius: new BorderRadius.circular(12 * sizeUnit),
                           child: FittedBox(
-                            child: getExtendedImage(roomList[index].profileImage, 60, extendedController),
+                            child: getExtendedImage(roomList[index].profileImage, 60, extendedController!),
                             fit: BoxFit.cover,
                           )),
                     ),
@@ -591,7 +595,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                     child: ClipRRect(
                         borderRadius: new BorderRadius.circular(12 * sizeUnit),
                         child: FittedBox(
-                          child: getExtendedImage(roomList[index].profileImage, 60, extendedController),
+                          child: getExtendedImage(roomList[index].profileImage, 60, extendedController!),
                           fit: BoxFit.cover,
                         )),
                   ),

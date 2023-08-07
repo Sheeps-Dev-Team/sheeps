@@ -14,7 +14,7 @@ class Room {
   String roomName;
   List<int> chatUserIDList;
 
-  Room(String str, {this.roomName, this.chatUserIDList});
+  Room(String str, {required this.roomName, required this.chatUserIDList});
 }
 
 class RoomInfo {
@@ -34,7 +34,23 @@ class RoomInfo {
   String updateAt;
   String createdAt;
 
-  RoomInfo({this.name, this.roomName, this.lastMessage, this.date, this.profileImage, this.messageCount, this.type, this.isPersonal, this.chatList, this.chatUserIDList, this.updateAt, this.createdAt});
+  RoomInfo({
+    this.name = '',
+    this.roomName = '',
+    this.lastMessage = '',
+    this.date = '',
+    this.profileImage = '',
+    this.messageCount = 0,
+    this.roomUserID = 0,
+    this.roomInfoID = 0,
+    this.isAlarm = 0,
+    this.type = 0,
+    this.isPersonal = false,
+    this.chatList = const [],
+    this.chatUserIDList = const [],
+    this.updateAt = '',
+    this.createdAt = ''
+  });
 }
 
 Future<RoomInfo> SetPersonalSeekTeamRoomInfo(RoomInfo roomInfo) async {

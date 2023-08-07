@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:extended_image/extended_image.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -45,7 +45,7 @@ class ChatPage extends StatefulWidget {
   int targetID;
   int leaderID;
 
-  ChatPage({Key key, this.roomName, this.titleName, this.isNeedCallPop, this.chatUserList, this.targetID, this.leaderID}) : super(key: key);
+  ChatPage({Key? key,required this.roomName,required this.titleName,required this.isNeedCallPop,required this.chatUserList,required this.targetID,required this.leaderID}) : super(key: key);
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -54,19 +54,19 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
 
   NavigationNum navigationNum = Get.put(NavigationNum());
-  LocalNotification _localNotification;
-  SocketProvider _socket;
-  ChatGlobal _chatGlobal;
+  LocalNotification? _localNotification;
+  SocketProvider? _socket;
+  ChatGlobal? _chatGlobal;
   final RecruitInviteController recruitInviteController = Get.put(RecruitInviteController());
 
   bool isMain = false;
-  int chatStartIndex;
-  ScrollController _chatLVController;
-  TextEditingController _chatTfController;
+  int chatStartIndex = 0;
+  ScrollController? _chatLVController;
+  TextEditingController? _chatTfController;
   FocusNode _focusNode = FocusNode();
 
   bool isToggleButton = false;
-  GlobalKey<RefreshIndicatorState> refreshKey;
+  GlobalKey<RefreshIndicatorState>? refreshKey;
 
   String get svgMeIcon => "assets/images/Chat/me.svg";
 
@@ -109,18 +109,18 @@ class _ChatPageState extends State<ChatPage> {
 
     chatUserList = widget.chatUserList;
 
-    for (int i = 0; i < _chatGlobal.getRoomInfoList.length; ++i) {
-      if (widget.roomName != _chatGlobal.getRoomInfoList[i].roomName) continue;
+    for (int i = 0; i < _chatGlobal!.getRoomInfoList.length; ++i) {
+      if (widget.roomName != _chatGlobal!.getRoomInfoList[i].roomName) continue;
       ChatGlobal.currentRoomIndex = i;
 
-      if(_chatGlobal.getRoomInfoList[i].roomInfoID == null || _chatGlobal.getRoomInfoList[i].roomInfoID == -1){
+      if(_chatGlobal!.getRoomInfoList[i].roomInfoID == null || _chatGlobal!.getRoomInfoList[i].roomInfoID == -1){
         Future.microtask(() async {
           await ApiProvider().post('/Room/Info/Select', jsonEncode({
             "userID" : GlobalProfile.loggedInUser.userID,
             "roomName" : widget.roomName
           })).then((value) => {
             if(value != null){
-              _chatGlobal.getRoomInfoList[i].roomInfoID = value['RoomID'],
+              _chatGlobal!.getRoomInfoList[i].roomInfoID = value['RoomID'],
             }
           });
 
@@ -130,15 +130,15 @@ class _ChatPageState extends State<ChatPage> {
       break;
     }
 
-    _chatLVController = ScrollController(initialScrollOffset: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length * 40 * sizeUnit);
+    _chatLVController = ScrollController(initialScrollOffset: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length * 40 * sizeUnit);
     ChatGlobal.scrollController = _chatLVController;
   }
 
   @override
   void dispose() {
     ChatGlobal.scrollController = null;
-    _chatLVController.dispose();
-    _chatTfController.dispose();
+    _chatLVController!.dispose();
+    _chatTfController!.dispose();
     super.dispose();
   }
 
@@ -190,32 +190,32 @@ class _ChatPageState extends State<ChatPage> {
                       }
 
                       if (cnt != 0) {
-                        bool isContinue = (chatRecvMessageModel.from == _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].from) &&
-                            (chatRecvMessageModel.date == _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].date);
+                        bool isContinue = (chatRecvMessageModel.from == _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].from) &&
+                            (chatRecvMessageModel.date == _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].date);
                         if (true == isContinue) {
-                          _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].isContinue = false;
+                          _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].isContinue = false;
                         } else {
-                          _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].isContinue = true;
+                          _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[cnt - 1].isContinue = true;
                         }
                       }
-                      _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.insert(0 + cnt++, chatRecvMessageModel);
+                      _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.insert(0 + cnt++, chatRecvMessageModel);
                     }
 
                     //날짜 데이터 모두 삭제
-                    for(int i = 0 ; i < _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length ; ++i){
-                      if(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i].roomName == 'DATE_CHAT'){
-                        _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.removeAt(i);
+                    for(int i = 0 ; i < _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length ; ++i){
+                      if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i].roomName == 'DATE_CHAT'){
+                        _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.removeAt(i);
                       }
                     }
 
                     //날짜 데이터 다시 세팅
-                    for(int i = 0 ; i < _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length ; ++i){
-                      ChatRecvMessageModel message = _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i];
-                      ChatRecvMessageModel next = (i + 1) <= (_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length -1 ) ? _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i + 1] : null;
+                    for(int i = 0 ; i < _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length ; ++i){
+                      ChatRecvMessageModel message = _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i];
+                      ChatRecvMessageModel? next = (i + 1) <= (_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length -1 ) ? _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i + 1] : null;
 
                       //맨 처음 데이터의 날짜
                       if (message.from != CENTER_MESSAGE && i == 0) {
-                        _chatGlobal.insertChatDateData(ChatGlobal.currentRoomIndex, message.updatedAt);
+                        _chatGlobal!.insertChatDateData(ChatGlobal.currentRoomIndex, message.updatedAt);
                         continue;
                       }
 
@@ -224,7 +224,7 @@ class _ChatPageState extends State<ChatPage> {
                         if(message.updatedAt != null && next.updatedAt != null){
                           if (ChatGlobal().getRoomChatDate(message.updatedAt) != ChatGlobal().getRoomChatDate(next.updatedAt)) {
                             i += 1;
-                            _chatGlobal.insertChatDateData(ChatGlobal.currentRoomIndex, next.updatedAt, chatIndex: i);
+                            _chatGlobal!.insertChatDateData(ChatGlobal.currentRoomIndex, next.updatedAt, chatIndex: i);
                           }
                         }
                       }
@@ -240,7 +240,7 @@ class _ChatPageState extends State<ChatPage> {
                 },
                 child: Scaffold(
                     key: scaffoldKey,
-                    appBar: chatUserList.length <= 1 && ChatGlobal.currentRoomIndex >= 0 && _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type != ROOM_TYPE_TEAM?
+                    appBar: chatUserList.length <= 1 && ChatGlobal.currentRoomIndex >= 0 && _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type != ROOM_TYPE_TEAM ?
                     SheepsAppBar(
                       context,
                       widget.titleName,
@@ -260,7 +260,7 @@ class _ChatPageState extends State<ChatPage> {
                         ],
                         GestureDetector(
                           onTap: () {
-                            scaffoldKey.currentState.openEndDrawer();
+                            scaffoldKey.currentState!.openEndDrawer();
                             unFocus(context);
                           },
                           child: Padding(
@@ -296,7 +296,7 @@ class _ChatPageState extends State<ChatPage> {
                         ],
                         GestureDetector(
                           onTap: () {
-                            scaffoldKey.currentState.openEndDrawer();
+                            scaffoldKey.currentState!.openEndDrawer();
                             unFocus(context);
                           },
                           child: Padding(
@@ -393,17 +393,17 @@ class _ChatPageState extends State<ChatPage> {
                                         if (alarmText == "알림끄기") {
                                           svgAlarm = "assets/images/Chat/alarmOff.svg";
                                           alarmText = "알림켜기";
-                                          _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].isAlarm = 0;
+                                          _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].isAlarm = 0;
                                           ApiProvider().post('/Room/Update/Alarm', jsonEncode({
-                                            "id" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomUserID,
+                                            "id" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomUserID,
                                             "alarm" : 0
                                           }));
                                         } else {
                                           svgAlarm = "assets/images/Chat/alarmOn.svg";
                                           alarmText = "알림끄기";
-                                          _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].isAlarm = 1;
+                                          _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].isAlarm = 1;
                                           ApiProvider().post('/Room/Update/Alarm', jsonEncode({
-                                            "id" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomUserID,
+                                            "id" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomUserID,
                                             "alarm" : 1
                                           }));
                                         }
@@ -431,7 +431,7 @@ class _ChatPageState extends State<ChatPage> {
                                       if (widget.leaderID == -1)
                                         {Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(widget.targetID)))}
                                       else
-                                        {Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByID(widget.targetID), byChat: true,)).then((value) => {
+                                        {Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByID(widget.targetID), byChat: true,))?.then((value) => {
                                           if(ChatGlobal.removeUserList.length != 0 && (ChatGlobal.removeUserList[0] == GlobalProfile.loggedInUser.userID)){
                                             needCallPopFunc(), Get.back()
                                           }
@@ -450,7 +450,7 @@ class _ChatPageState extends State<ChatPage> {
                                         }
                                     }
                                   }),
-                              if(ChatGlobal.currentRoomIndex != -1 && _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type != ROOM_TYPE_TEAM  ) ... [
+                              if(ChatGlobal.currentRoomIndex != -1 && _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type != ROOM_TYPE_TEAM  ) ... [
                                 if(isMain) ... [
                                   if(recruitInviteController.getCurrRecruitInvite == null) ... [
                                     SizedBox(
@@ -473,13 +473,13 @@ class _ChatPageState extends State<ChatPage> {
                                             Function func = () {
                                               ApiProvider().post('/Room/Leave', jsonEncode({
                                                 "userID" : GlobalProfile.loggedInUser.userID,
-                                                "roomID" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID,
+                                                "roomID" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID,
                                                 "userName" : GlobalProfile.loggedInUser.name,
                                                 "recruitID" : -1, //게시글의 주인일경우 초대장인 이미 파괴
-                                                "type" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type
+                                                "type" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type
                                               }));
 
-                                              ChatGlobal.willRemoveRoom = _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex];
+                                              ChatGlobal.willRemoveRoom = _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex];
 
                                               ChatDBHelper().deleteDataByRoomName(widget.roomName);
 
@@ -535,13 +535,13 @@ class _ChatPageState extends State<ChatPage> {
                                           Function func = () {
                                             ApiProvider().post('/Room/Leave', jsonEncode({
                                               "userID" : GlobalProfile.loggedInUser.userID,
-                                              "roomID" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID,
+                                              "roomID" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID,
                                               "userName" : GlobalProfile.loggedInUser.name,
-                                              "recruitID" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL ? personalInviteRecruitID : recruitInviteController.getCurrRecruitInvite == null ? -1 : recruitInviteController.getCurrRecruitInvite.id,
-                                              "type" : _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type
+                                              "recruitID" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL ? personalInviteRecruitID : recruitInviteController.getCurrRecruitInvite == null ? -1 : recruitInviteController.getCurrRecruitInvite.id,
+                                              "type" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type
                                             }));
 
-                                            ChatGlobal.willRemoveRoom = _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex];
+                                            ChatGlobal.willRemoveRoom = _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex];
 
                                             ChatDBHelper().deleteDataByRoomName(widget.roomName);
 
@@ -590,13 +590,13 @@ class _ChatPageState extends State<ChatPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(width: 360 * sizeUnit, height: 0.5, decoration: BoxDecoration(color: sheepsColorGrey)),
-                            if (ChatGlobal.currentRoomIndex != -1 && _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) ...[
+                            if (ChatGlobal.currentRoomIndex != -1 && _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) ...[
                               _interviewBanner(true)
-                            ] else if (ChatGlobal.currentRoomIndex != -1 && _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL_SEEK_TEAM) ...[
+                            ] else if (ChatGlobal.currentRoomIndex != -1 && _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL_SEEK_TEAM) ...[
                               _interviewBanner(false)
                             ],
                             _chatList(),
-                            if(ChatGlobal.currentRoomIndex != -1 && _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomUserID != -1) ...[
+                            if(ChatGlobal.currentRoomIndex != -1 && _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomUserID != -1) ...[
                               Container(width: 360 * sizeUnit, height: 0.5, decoration: BoxDecoration(color: sheepsColorGrey)),
                               _bottomChatArea(),
                             ]
@@ -611,7 +611,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _initMessageData() async {
-    if (_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].isAlarm == 0) {
+    if (_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].isAlarm == 0) {
       svgAlarm = "assets/images/Chat/alarmOff.svg";
       alarmText = "알림켜기";
     } else {
@@ -619,32 +619,32 @@ class _ChatPageState extends State<ChatPage> {
       alarmText = "알림끄기";
     }
 
-    if (null != _chatGlobal.getRoomInfoList) {
-      for (int i = 0; i < _chatGlobal.getRoomInfoList.length; ++i) {
-        if (widget.roomName != _chatGlobal.getRoomInfoList[i].roomName) continue;
-        if (null == _chatGlobal.getRoomInfoList[i].chatList) return;
+    if (null != _chatGlobal!.getRoomInfoList) {
+      for (int i = 0; i < _chatGlobal!.getRoomInfoList.length; ++i) {
+        if (widget.roomName != _chatGlobal!.getRoomInfoList[i].roomName) continue;
+        if (null == _chatGlobal!.getRoomInfoList[i].chatList) return;
 
-        _chatGlobal.getRoomInfoList[i].messageCount = 0;
+        _chatGlobal!.getRoomInfoList[i].messageCount = 0;
 
         bool isReadPoint = false;
         bool isRebuild = false;
 
-        for (int j = _chatGlobal.getRoomInfoList[i].chatList.length - 1; j >= 0; --j) {
-          if (_chatGlobal.getRoomInfoList[i].chatList[j].message == "여기까지 읽었습니다.") {
-            _chatGlobal.getRoomInfoList[i].chatList.removeAt(j);
+        for (int j = _chatGlobal!.getRoomInfoList[i].chatList.length - 1; j >= 0; --j) {
+          if (_chatGlobal!.getRoomInfoList[i].chatList[j].message == "여기까지 읽었습니다.") {
+            _chatGlobal!.getRoomInfoList[i].chatList.removeAt(j);
             break;
           }
         }
 
         await ChatDBHelper().updateRoomData(widget.roomName, 1);
 
-        for (int j = 0; j < _chatGlobal.getRoomInfoList[i].chatList.length; ++j) {
-          ChatRecvMessageModel message = _chatGlobal.getRoomInfoList[i].chatList[j];
-          ChatRecvMessageModel next = (j + 1) <= (_chatGlobal.getRoomInfoList[i].chatList.length -1 ) ? _chatGlobal.getRoomInfoList[i].chatList[j + 1] : null;
+        for (int j = 0; j < _chatGlobal!.getRoomInfoList[i].chatList.length; ++j) {
+          ChatRecvMessageModel message = _chatGlobal!.getRoomInfoList[i].chatList[j];
+          ChatRecvMessageModel? next = (j + 1) <= (_chatGlobal!.getRoomInfoList[i].chatList.length -1 ) ? _chatGlobal!.getRoomInfoList[i].chatList[j + 1] : null;
 
           //맨 처음 데이터의 날짜
           if (message.from != CENTER_MESSAGE && message.roomName != 'DATE_CHAT' && j == 0) {
-            _chatGlobal.insertChatDateData(i, message.updatedAt);
+            _chatGlobal!.insertChatDateData(i, message.updatedAt);
             continue;
           }
           //다른 데이터면 날짜 표시
@@ -654,16 +654,16 @@ class _ChatPageState extends State<ChatPage> {
               if( ChatGlobal().getRoomChatDate(message.updatedAt) != ChatGlobal().getRoomChatDate(next.updatedAt)){
                 j += 1;
                 isAddDATE = true;
-                _chatGlobal.insertChatDateData(i, next.updatedAt, chatIndex: j);
+                _chatGlobal!.insertChatDateData(i, next.updatedAt, chatIndex: j);
               }
             }
           }
 
-          if ((_chatGlobal.getRoomInfoList[i].chatList.length - 1) == j) isRebuild = true;
+          if ((_chatGlobal!.getRoomInfoList[i].chatList.length - 1) == j) isRebuild = true;
 
           //안읽은 데이터 체크
           if (message.isRead == 0 && j != 0) {
-            _chatGlobal.getRoomInfoList[i].chatList[j].isRead = 1;
+            _chatGlobal!.getRoomInfoList[i].chatList[j].isRead = 1;
 
             if (false == isReadPoint) {
               chatStartIndex = j;
@@ -677,7 +677,7 @@ class _ChatPageState extends State<ChatPage> {
 
         //읽은 중단 점 표시
         if (isReadPoint) {
-          ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(to: CENTER_MESSAGE.toString(), from: CENTER_MESSAGE, roomName: widget.roomName, message: "여기까지 읽었습니다.", isImage: 0, date: "00:00", isRead: 1);
+          ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(to: CENTER_MESSAGE.toString(), from: CENTER_MESSAGE, roomName: widget.roomName, message: "여기까지 읽었습니다.", isImage: 0, date: "00:00", isRead: 1, chatId: 0);
 
           _addRecvMessage(0, chatRecvMessageModel, chatStartIndex, true);
         }
@@ -685,7 +685,7 @@ class _ChatPageState extends State<ChatPage> {
       }
     }
 
-    if (_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) {
+    if (_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT) {
       var res = await ApiProvider().post('/Matching/Select/InvitingTeamMemberRecruitByID', jsonEncode({
         "id": widget.roomName.substring(widget.roomName.lastIndexOf('D') + 1, widget.roomName.length)
       }));
@@ -695,9 +695,9 @@ class _ChatPageState extends State<ChatPage> {
 
         recruitInviteController.setCurrRecruitInvite(0, recruitInvite: recruitInvite);
       }else{
-        recruitInviteController.currRecruitInvite = null;
+        //recruitInviteController.currRecruitInvite = null;
       }
-    }else if(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL_SEEK_TEAM) {
+    }else if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL_SEEK_TEAM) {
       var res = await ApiProvider().post('/Matching/Select/InvitingPersonalSeekTeamUserByID', jsonEncode({
         "id" : widget.roomName.substring(widget.roomName.lastIndexOf('D') + 1, widget.roomName.length)
       }));
@@ -707,15 +707,15 @@ class _ChatPageState extends State<ChatPage> {
 
         recruitInviteController.setCurrRecruitInvite(0, recruitInvite: recruitInvite);
       }else{
-        recruitInviteController.currRecruitInvite = null;
+        //recruitInviteController.currRecruitInvite = null;
       }
-    }else if(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL){
+    }else if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL){
       var res = await ApiProvider().post('/Room/Invite/TargetSelect', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "inviteID": chatUserList[0].userID}));
 
       if (res != null || res['res'] != 0){
         personalInviteRecruitID = res['recruitID'];
       }else{
-        recruitInviteController.currRecruitInvite = null;
+        //recruitInviteController.currRecruitInvite = null;
       }
     }
 
@@ -757,7 +757,7 @@ class _ChatPageState extends State<ChatPage> {
                   isImage: chatMessage.from == CENTER_MESSAGE ? false : chatMessage.isImage.isOdd,
                   chatIconName: GlobalProfile.getUserByUserID(socket.getChatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[index].from) == null
                       ? ''
-                      : GlobalProfile.getUserByUserID(socket.getChatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[index].from).profileImgList[0].imgUrl,
+                      : GlobalProfile.getUserByUserID(socket.getChatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[index].from).profileImgList[0].imgUrl, key: null,
                 ),
               );
             },
@@ -780,18 +780,21 @@ class _ChatPageState extends State<ChatPage> {
                 context,
                 cameraFunc: () async {
                   Get.back();
-                  PickedFile imagePicked = await ImagePicker().getImage(source: ImageSource.camera); //camera -> gallery
+                  final ImagePicker picker = ImagePicker();
+                  late final XFile? selectedImage;
 
-                  _socket.socket.emit('resumed',[{
+                  selectedImage = await picker.pickImage(source: ImageSource.gallery);
+
+                  _socket!.socket.emit('resumed',[{
                     "userID" : GlobalProfile.loggedInUser.userID.toString(),
                     "roomStatus" : ROOM_STATUS_CHAT,
                   }] );
 
-                  if (imagePicked == null) return;
+                  if (selectedImage == null) return;
 
                   var imageID = await ApiProvider().get('/ChatLog/Count/Image');
 
-                  File file = File(imagePicked.path);
+                  File file = File(selectedImage.path);
                   List<int> imageBytes = await file.readAsBytes();
 
                   if (isBigFile(imageBytes.length)) {
@@ -813,10 +816,10 @@ class _ChatPageState extends State<ChatPage> {
                   String dateTimeString = replacLocalUTCDate(DateTime.now().toUtc().toString());
 
                   //보내는 날짜가 다르면
-                  if(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length != 0){
-                    if( ChatGlobal().getRoomChatDate(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1].updatedAt) !=
+                  if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length != 0){
+                    if( ChatGlobal().getRoomChatDate(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1].updatedAt) !=
                         ChatGlobal().getRoomChatDate(dateTimeString)){
-                      _chatGlobal.insertChatDateData(ChatGlobal.currentRoomIndex, dateTimeString, chatIndex: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length);
+                      _chatGlobal!.insertChatDateData(ChatGlobal.currentRoomIndex, dateTimeString, chatIndex: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length);
                     }
                   }
 
@@ -830,31 +833,34 @@ class _ChatPageState extends State<ChatPage> {
                       isImage: imageID['id'] + 1,
                       updatedAt: dateTimeString,
                       createdAt: dateTimeString,
-                      roomId: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID
+                      roomId: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID, chatId: 0
                   );
                   chatRecvMessageModel.isRead = 1;
 
-                  _socket..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
+                  _socket!..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
 
                   chatRecvMessageModel.date = dateUtc.toLocal().hour.toString() + ":" + dateUtc.toLocal().minute.toString();
 
-                  _addRecvMessage(0, chatRecvMessageModel, _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1, true);
+                  _addRecvMessage(0, chatRecvMessageModel, _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1, true);
                   unFocus(context);
                 },
                 galleryFunc: () async {
                   Get.back();
-                  PickedFile imagePicked = await ImagePicker().getImage(source: ImageSource.gallery); //camera -> gallery
+                  final ImagePicker picker = ImagePicker();
+                  late final XFile? selectedImage;
 
-                  _socket.socket.emit('resumed',[{
+                  selectedImage = await picker.pickImage(source: ImageSource.gallery);
+
+                  _socket!.socket.emit('resumed',[{
                     "userID" : GlobalProfile.loggedInUser.userID.toString(),
                     "roomStatus" : ROOM_STATUS_CHAT,
                   }] );
 
-                  if (imagePicked == null) return;
+                  if (selectedImage == null) return;
 
                   var imageID = await ApiProvider().get('/ChatLog/Count/Image');
 
-                  File file = File(imagePicked.path);
+                  File file = File(selectedImage.path);
                   List<int> imageBytes = await file.readAsBytes();
 
                   if (isBigFile(imageBytes.length)) {
@@ -876,10 +882,10 @@ class _ChatPageState extends State<ChatPage> {
                   String dateTimeString = replacLocalUTCDate(DateTime.now().toUtc().toString());
 
                   //보내는 날짜가 다르면
-                  if(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length != 0){
-                    if( ChatGlobal().getRoomChatDate(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1].updatedAt) !=
+                  if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length != 0){
+                    if( ChatGlobal().getRoomChatDate(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1].updatedAt) !=
                         ChatGlobal().getRoomChatDate(dateTimeString)){
-                      _chatGlobal.insertChatDateData(ChatGlobal.currentRoomIndex, dateTimeString, chatIndex: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length);
+                      _chatGlobal!.insertChatDateData(ChatGlobal.currentRoomIndex, dateTimeString, chatIndex: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length);
                     }
                   }
 
@@ -893,15 +899,15 @@ class _ChatPageState extends State<ChatPage> {
                       isImage: imageID['id'] + 1,
                       updatedAt: dateTimeString,
                       createdAt: dateTimeString,
-                      roomId: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID
+                      roomId: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID, chatId: 0
                   );
                   chatRecvMessageModel.isRead = 1;
 
-                  _socket..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
+                  _socket!..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
 
                   chatRecvMessageModel.date = dateUtc.toLocal().hour.toString() + ":" + dateUtc.toLocal().minute.toString();
 
-                  _addRecvMessage(0, chatRecvMessageModel, _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1, true);
+                  _addRecvMessage(0, chatRecvMessageModel, _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1, true);
                   unFocus(context);
                 },
               );
@@ -968,7 +974,7 @@ class _ChatPageState extends State<ChatPage> {
                           width: 28 * sizeUnit,
                           height: 28 * sizeUnit,
                           decoration: BoxDecoration(
-                            color: _chatTfController.text.length > 0 ? sheepsColorGreen : sheepsColorGrey,
+                            color: _chatTfController!.text.length > 0 ? sheepsColorGreen : sheepsColorGrey,
                             borderRadius: BorderRadius.circular(20 * sizeUnit),
                           ),
                           child: Icon(
@@ -988,10 +994,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   int getRealMessageCount() {
-    int realCnt = _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length;
+    int realCnt = _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length;
 
-    for (int i = 0; i < _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length; ++i) {
-      if (_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i].from == CENTER_MESSAGE) {
+    for (int i = 0; i < _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length; ++i) {
+      if (_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[i].from == CENTER_MESSAGE) {
         realCnt -= 1;
       }
     }
@@ -1000,7 +1006,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _sendButtonTap() async {
-    if (_chatTfController.text.isEmpty) {
+    if (_chatTfController!.text.isEmpty) {
       return;
     }
 
@@ -1017,10 +1023,10 @@ class _ChatPageState extends State<ChatPage> {
     String dateTimeString = replacLocalUTCDate(DateTime.now().toUtc().toString());
 
     //보내는 날짜가 다르면
-    if(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length != 0){
-      if( ChatGlobal().getRoomChatDate(_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[_chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1].updatedAt) !=
+    if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length != 0){
+      if( ChatGlobal().getRoomChatDate(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList[_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1].updatedAt) !=
           ChatGlobal().getRoomChatDate(dateTimeString)){
-        _chatGlobal.insertChatDateData(ChatGlobal.currentRoomIndex, dateTimeString, chatIndex: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length);
+        _chatGlobal!.insertChatDateData(ChatGlobal.currentRoomIndex, dateTimeString, chatIndex: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length);
       }
     }
 
@@ -1030,26 +1036,26 @@ class _ChatPageState extends State<ChatPage> {
         from: GlobalProfile.loggedInUser.userID,
         fromName: GlobalProfile.loggedInUser.name,
         roomName: widget.roomName,
-        message: _chatTfController.text,
+        message: _chatTfController!.text,
         isImage: 0,
         date: date,
         updatedAt: dateTimeString,
         createdAt: dateTimeString,
-        roomId: _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID
+        roomId: _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID, chatId: 0
     );
 
     chatRecvMessageModel.isRead = 1;
 
-    _socket..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
+    _socket!..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
 
     chatRecvMessageModel.date = dateUtc.toLocal().hour.toString() + ":" + dateUtc.toLocal().minute.toString();
 
-    _addRecvMessage(0, chatRecvMessageModel, _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1, true);
+    _addRecvMessage(0, chatRecvMessageModel, _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.length - 1, true);
     _clearMessage();
   }
 
   _clearMessage() {
-    _chatTfController.text = '';
+    _chatTfController!.text = '';
   }
 
   _addRecvMessage(id, ChatRecvMessageModel chatRecvMessageModel, int prevIndex, isRebuild) async {
@@ -1058,16 +1064,16 @@ class _ChatPageState extends State<ChatPage> {
     chatRecvMessageModel.isContinue = chatRecvMessageModel.from == CENTER_MESSAGE ? false : true;
 
     if (chatRecvMessageModel.from == CENTER_MESSAGE) {
-      _chatGlobal.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.insert(prevIndex, chatRecvMessageModel);
+      _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].chatList.insert(prevIndex, chatRecvMessageModel);
     } else {
-      await _chatGlobal.addChatRecvMessage(chatRecvMessageModel, ChatGlobal.currentRoomIndex, doSort: false);
+      await _chatGlobal!.addChatRecvMessage(chatRecvMessageModel, ChatGlobal.currentRoomIndex, doSort: false);
     }
 
     setContinue(chatRecvMessageModel, prevIndex, isRebuild);
   }
 
   void setContinue(ChatRecvMessageModel chatRecvMessageModel, int prevIndex, bool isRebuild) {
-    _chatGlobal.setContinue(chatRecvMessageModel, prevIndex, ChatGlobal.currentRoomIndex);
+    _chatGlobal!.setContinue(chatRecvMessageModel, prevIndex, ChatGlobal.currentRoomIndex);
 
     if (this.mounted && isRebuild) {
       setState(() {});
@@ -1081,8 +1087,8 @@ class _ChatPageState extends State<ChatPage> {
   /// Scroll the Chat List when it goes to bottom
   _chatListScrollToBottom() {
     Future.delayed(const Duration(milliseconds: 100), () {
-      if(_chatLVController.hasClients){
-        _chatLVController.jumpTo(_chatLVController.position.maxScrollExtent);
+      if(_chatLVController!.hasClients){
+        _chatLVController!.jumpTo(_chatLVController!.position.maxScrollExtent);
       }
     });
   }
@@ -1111,12 +1117,14 @@ class _ChatPageState extends State<ChatPage> {
                 onTap: () {
                   Get.to(() => DetailProfile(index: 0, user: user));
                 },
-                child: Badge(
-                    shape: BadgeShape.circle,
-                    position: BadgePosition.topStart(top: 26 * sizeUnit, start: 26 * sizeUnit),
-                    toAnimate: false,
-                    badgeColor: sheepsColorGreen,
-                    padding: EdgeInsets.all(1),
+                child: badges.Badge(
+                    badgeStyle: badges.BadgeStyle(
+                      shape : badges.BadgeShape.circle,
+                      badgeColor : sheepsColorGreen,
+                      elevation : 0,
+                      padding : EdgeInsets.all(1 * sizeUnit),
+                    ),
+                    position: badges.BadgePosition.topStart(top: 26 * sizeUnit, start: 26 * sizeUnit),
                     badgeContent: SvgPicture.asset(
                       svgLeader,
                     ),
@@ -1170,12 +1178,14 @@ class _ChatPageState extends State<ChatPage> {
                 onTap: () {
                   Get.to(() => DetailProfile(index: 0, user: user));
                 },
-                child: Badge(
-                  shape: BadgeShape.circle,
-                  position: BadgePosition.topStart(top: 28 * sizeUnit, start: 28 * sizeUnit),
-                  badgeColor: sheepsColorGreen,
-                  toAnimate: false,
-                  padding: EdgeInsets.all(1),
+                child: badges.Badge(
+                  badgeStyle: badges.BadgeStyle(
+                    shape : badges.BadgeShape.circle,
+                    badgeColor : sheepsColorGreen,
+                    elevation : 0,
+                    padding : EdgeInsets.all(1 * sizeUnit),
+                  ),
+                  position: badges.BadgePosition.topStart(top: 28 * sizeUnit, start: 28 * sizeUnit),
                   badgeContent: SvgPicture.asset(
                     svgLeader,
                   ),
@@ -1250,7 +1260,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget settingColumn(String svg, String text, Function func) {
     return GestureDetector(
-      onTap: func,
+      onTap: () => func,
       behavior: HitTestBehavior.translucent,
       child: Container(
         width: 360 * sizeUnit,
@@ -1280,8 +1290,8 @@ class _ChatPageState extends State<ChatPage> {
     String state;
     String contents;
     String photoURL;
-    PersonalSeekTeam personalSeekTeam;
-    TeamMemberRecruit teamMemberRecruit;
+    PersonalSeekTeam? personalSeekTeam;
+    TeamMemberRecruit? teamMemberRecruit;
 
     if (isRecruit) {
       int firstIndex = "teamMemberID".length;
