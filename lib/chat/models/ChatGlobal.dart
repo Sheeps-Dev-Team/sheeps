@@ -26,16 +26,16 @@ class ChatGlobal extends GetxController {
   List<RoomInfo> get getRoomInfoList => roomInfoList;
 
 
-  static UserData toChatUser;
-  static String roomName;
+  static UserData? toChatUser;
+  static String? roomName;
   static bool bCheck = false;
   static int currentRoomIndex = -1;
-  static SocketProvider socket;
+  static SocketProvider? socket;
   static List<int> removeUserList = [];
 
-  static RoomInfo willRemoveRoom;
+  static RoomInfo? willRemoveRoom;
 
-  static ScrollController scrollController;
+  static ScrollController? scrollController;
 
   Future<String> addChatRecvMessage(ChatRecvMessageModel chatRecvMessageModel, int index, {doSort = true}) async{
     if(chatRecvMessageModel.isRead.isOdd){
@@ -145,15 +145,15 @@ class ChatGlobal extends GetxController {
     if(scrollController == null) return;
 
     Future.delayed(const Duration(milliseconds: 100), () {
-      if(scrollController.hasClients){
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      if(scrollController!.hasClients){
+        scrollController!.jumpTo(scrollController!.position.maxScrollExtent);
       }
     });
   }
 
   static void kickOutTeamMemberInRoom(String roomName, int userID){
 
-    RoomInfo roomInfo;
+    RoomInfo? roomInfo;
     //방 찾아서, 팀원삭제하고 대화 인원이 없으면 방 폭파!
     roomInfoList.forEach((element) {
       if(element.roomName == roomName){
@@ -165,7 +165,7 @@ class ChatGlobal extends GetxController {
     });
 
     if(roomInfo != null ){
-      willRemoveRoom = roomInfo;
+      willRemoveRoom = roomInfo!;
     }
 
     removeUserList.add(userID);
@@ -178,9 +178,9 @@ class ChatGlobal extends GetxController {
         roomName: "DATE_CHAT",
         message: roomCreateDate[0] + roomCreateDate[1] + roomCreateDate[2] + roomCreateDate[3] + "년 " + roomCreateDate[4] + roomCreateDate[5] + "월 " + roomCreateDate[6] + roomCreateDate[7] + "일",
         isImage: 0,
-        date: null,
+        date: '',
         isRead: 1,
-        updatedAt: roomCreateDate
+        updatedAt: roomCreateDate, chatId: 0
     );
 
     roomInfoList[index].chatList.insert(chatIndex, roomCreateTime);
@@ -218,6 +218,6 @@ Future<String> base64ToFileURL(String base, String id) async {
     var fileUrl = file.path;
     return fileUrl;
   } catch (e) {
-    return null;
+    return '';
   }
 }

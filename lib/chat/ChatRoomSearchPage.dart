@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,15 +36,15 @@ class ChatRoomSearchPage extends StatefulWidget {
 class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTickerProviderStateMixin {
   final searchController = TextEditingController();
   final NavigationNum navigationNum = Get.put(NavigationNum());
-  AnimationController extendedController;
+  AnimationController? extendedController;
 
-  ChatGlobal _chatGlobal;
-  SocketProvider _socket;
+  ChatGlobal? _chatGlobal;
+  SocketProvider? _socket;
 
   List<RoomInfo> chatRoomList = [];
 
   String get svgGreyMyPageButton => 'assets/images/Public/GreyMyPageButton.svg';
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   @override
   void initState() {
@@ -92,7 +92,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
     if(_chatGlobal == null) _chatGlobal = ChatGlobal.to;
     if (null == _socket) {
       _socket = SocketProvider.to;
-      _socket.setRoomStatus(ROOM_STATUS_ROOM);
+      _socket!.setRoomStatus(ROOM_STATUS_ROOM);
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -149,9 +149,9 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                             GlobalProfile.setModifyPersonalProfile(UserData.fromJson(user));
                                           }
 
-                                          Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(chatRoomList[index].chatUserIDList[0]))).then((value) {
+                                          Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(chatRoomList[index].chatUserIDList[0])))?.then((value) {
                                             setState(() {
-                                              _chatGlobal.sortLocalRoomInfoList();
+                                              _chatGlobal!.sortLocalRoomInfoList();
                                             });
                                           });
                                         } else {
@@ -165,9 +165,9 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                             GlobalProfile.setModifyTeamProfile(resTeam);
                                           }
 
-                                          Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByRoomName(chatRoomList[index].roomName))).then((value) {
+                                          Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByRoomName(chatRoomList[index].roomName)))?.then((value) {
                                             setState(() {
-                                              _chatGlobal.sortLocalRoomInfoList();
+                                              _chatGlobal!.sortLocalRoomInfoList();
                                             });
                                           });
                                         }
@@ -175,12 +175,14 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                       child: chatRoomList[index].profileImage == 'BasicImage'
                                           ?
                                       chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ||  chatRoomList[index].type == ROOM_TYPE_PERSONAL_SEEK_TEAM ?
-                                      Badge(
-                                        shape: BadgeShape.circle,
-                                        position: BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
-                                        badgeColor: chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
-                                        padding: EdgeInsets.all(4),
-                                        toAnimate: false,
+                                      badges.Badge(
+                                        badgeStyle: badges.BadgeStyle(
+                                          shape : badges.BadgeShape.circle,
+                                          badgeColor : chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
+                                          elevation : 0,
+                                          padding : EdgeInsets.all(4 * sizeUnit),
+                                        ),
+                                        position: badges.BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
                                         badgeContent: SvgPicture.asset(
                                           chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? 'assets/images/NavigationBar/TeamRecruitIcon.svg' : svgSearchIcon,
                                           width: 8 * sizeUnit,
@@ -225,12 +227,14 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                       )
                                       :
                                       chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ||  chatRoomList[index].type == ROOM_TYPE_PERSONAL_SEEK_TEAM ?
-                                      Badge(
-                                        shape: BadgeShape.circle,
-                                        position: BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
-                                        badgeColor: chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
-                                        padding: EdgeInsets.all(4),
-                                        toAnimate: false,
+                                      badges.Badge(
+                                        badgeStyle: badges.BadgeStyle(
+                                          shape : badges.BadgeShape.circle,
+                                          badgeColor : chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? sheepsColorGreen  : sheepsColorBlue,
+                                          elevation : 0,
+                                          padding : EdgeInsets.all(4 * sizeUnit),
+                                        ),
+                                        position: badges.BadgePosition.topStart(top: 32 * sizeUnit, start: 32 * sizeUnit),
                                         badgeContent: SvgPicture.asset(
                                           chatRoomList[index].type == ROOM_TYPE_TEAM_MEMBER_RECRUIT ? 'assets/images/NavigationBar/TeamRecruitIcon.svg' : svgSearchIcon,
                                           width: 8 * sizeUnit,
@@ -247,7 +251,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                           child: ClipRRect(
                                               borderRadius: new BorderRadius.circular(12 * sizeUnit),
                                               child: FittedBox(
-                                                child: getExtendedImage(chatRoomList[index].profileImage, 60, extendedController),
+                                                child: getExtendedImage(chatRoomList[index].profileImage, 60, extendedController!),
                                                 fit: BoxFit.cover,
                                               )),
                                         ),
@@ -262,7 +266,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                         child: ClipRRect(
                                             borderRadius: new BorderRadius.circular(12 * sizeUnit),
                                             child: FittedBox(
-                                              child: getExtendedImage(chatRoomList[index].profileImage, 60, extendedController),
+                                              child: getExtendedImage(chatRoomList[index].profileImage, 60, extendedController!),
                                               fit: BoxFit.cover,
                                             )),
                                       ),
@@ -275,7 +279,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                             case ROOM_TYPE_PERSONAL:
                                             case ROOM_TYPE_TEAM:
                                               {
-                                                _socket.setRoomStatus(ROOM_STATUS_CHAT);
+                                                _socket!.setRoomStatus(ROOM_STATUS_CHAT);
                                                 bool isChange = false;
 
                                                 DialogBuilder(context).showLoadingIndicator();
@@ -330,8 +334,8 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                                   titleName: chatRoomList[index].name,
                                                   chatUserList: GlobalProfile.getUserListByUserIDList(chatRoomList[index].chatUserIDList),
                                                   targetID: targetID,
-                                                  leaderID: leaderID,
-                                                )).then((value) {
+                                                  leaderID: leaderID, isNeedCallPop: false,
+                                                ))?.then((value) {
                                                   setState(() {
                                                     ChatGlobal.sortRoomInfoList();
                                                     ChatGlobal.currentRoomIndex = -1;
@@ -343,7 +347,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                                       ChatGlobal.willRemoveRoom = null;
                                                     }
 
-                                                    _socket.setRoomStatus(ROOM_STATUS_ROOM);
+                                                    _socket!.setRoomStatus(ROOM_STATUS_ROOM);
                                                   });
                                                 });
                                               }
@@ -351,7 +355,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                             case ROOM_TYPE_PERSONAL_SEEK_TEAM:
                                             case ROOM_TYPE_TEAM_MEMBER_RECRUIT:
                                               {
-                                                _socket.setRoomStatus(ROOM_STATUS_CHAT);
+                                                _socket!.setRoomStatus(ROOM_STATUS_CHAT);
                                                 bool isChange = false;
 
                                                 DialogBuilder(context).showLoadingIndicator();
@@ -406,8 +410,8 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                                   titleName: chatRoomList[index].name,
                                                   chatUserList: GlobalProfile.getUserListByUserIDList(chatRoomList[index].chatUserIDList),
                                                   targetID: targetID,
-                                                  leaderID: leaderID,
-                                                )).then((value) {
+                                                  leaderID: leaderID, isNeedCallPop: false,
+                                                ))?.then((value) {
                                                   setState(() {
                                                     ChatGlobal.sortRoomInfoList();
                                                     ChatGlobal.currentRoomIndex = -1;
@@ -419,7 +423,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                                       ChatGlobal.willRemoveRoom = null;
                                                     }
 
-                                                    _socket.setRoomStatus(ROOM_STATUS_ROOM);
+                                                    _socket!.setRoomStatus(ROOM_STATUS_ROOM);
                                                   });
                                                 });
                                               }
@@ -555,7 +559,7 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                             child: TextField(
                               onSubmitted: (val) {
 
-                                chatRoomList = _chatGlobal.getRoomInfoList.where((element) => element.name.camelCase.contains(val.camelCase)).toList();
+                                chatRoomList = _chatGlobal!.getRoomInfoList.where((element) => element.name.camelCase!.contains(val.camelCase as Pattern)).toList();
                                 setState(() {
 
                                 });

@@ -12,7 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:kakao_flutter_sdk/all.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -44,20 +44,20 @@ import 'package:sheeps_app/Recruit/RecruitPage.dart';
 import 'config/SheepsTextStyle.dart';
 import 'network/ApiProvider.dart';
 import 'config/constants.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 
 
 class LifeCycleManager extends StatefulWidget {
   final Widget child;
-  LifeCycleManager({Key key, this.child}) : super(key: key);
+  LifeCycleManager({Key? key, required this.child}) : super(key: key);
 
   _LifeCycleManagerState createState() => _LifeCycleManagerState();
 }
 
 class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBindingObserver{
 
-  SocketProvider socket;
-  ChatGlobal _chatGlobal;
+  SocketProvider? socket;
+  ChatGlobal? _chatGlobal;
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     debugPrint('state = $state');
 
     List<StoppableService> services = [
-      socket,
+      socket!,
     ];
 
     services.forEach((service) {
@@ -137,7 +137,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
                     replaceModel = await SetNotificationData(notificationModel, chatList);
                   }
                   else{
-                    replaceModel = await SetNotificationData(notificationModel, null);
+                    replaceModel = await SetNotificationData(notificationModel, []);
                   }
 
                   if(isSaveNoti(replaceModel)){
@@ -179,19 +179,19 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
                         if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
                           message.isRead = 0;
                           bool DoSort = true;
-                          if(socket.getRoomStatus == ROOM_STATUS_CHAT){
+                          if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
                             DoSort = false;
                             if(ChatGlobal.currentRoomIndex == i){
                               message.isRead = 1;
                             }
                           }
                           message.isContinue = true;
-                          await _chatGlobal.addChatRecvMessage(message, i, doSort: DoSort);
+                          await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
 
                           int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
 
-                          _chatGlobal.setContinue(message, prevIndex, i);
-                          _chatGlobal.chatListScrollToBottom();
+                          _chatGlobal!.setContinue(message, prevIndex, i);
+                          _chatGlobal!.chatListScrollToBottom();
 
                         }
                       }
@@ -204,19 +204,19 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
                       if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
                         message.isRead = 0;
                         bool DoSort = true;
-                        if(socket.getRoomStatus == ROOM_STATUS_CHAT){
+                        if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
                           DoSort = false;
                           if(ChatGlobal.currentRoomIndex == i){
                             message.isRead = 1;
                           }
                         }
                         message.isContinue = true;
-                        await _chatGlobal.addChatRecvMessage(message, i, doSort: DoSort);
+                        await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
 
                         int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
 
-                        _chatGlobal.setContinue(message, prevIndex, i);
-                        _chatGlobal.chatListScrollToBottom();
+                        _chatGlobal!.setContinue(message, prevIndex, i);
+                        _chatGlobal!.chatListScrollToBottom();
                       }
                     }
                   }
@@ -275,7 +275,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -347,7 +347,7 @@ void main() async{
   final configData = await json.decode(config);
 
   //카카오 네이티브앱 키
-  KakaoContext.clientId = configData['items'][0]['data'];
+  KakaoSdk.init(nativeAppKey: configData['items'][0]['data']);
 
   runApp(MyApp());
 }
@@ -378,6 +378,7 @@ class _MyAppState extends State<MyApp> {
         statusBarColor: Colors.white
     ));
     return LifeCycleManager(
+      key: null,
       child: GetMaterialApp(
         defaultTransition: Transition.cupertino,
         debugShowCheckedModeBanner: false,
@@ -456,10 +457,10 @@ class _MainPageState extends State<MainPage> {
   final String svgChatRoomIcon = 'assets/images/NavigationBar/ChatRoomIcon.svg';
   final String svgTeamRecruitIcon = 'assets/images/NavigationBar/TeamRecruitIcon.svg';
 
-  static DateTime currentBackPressTime;
+  static DateTime? currentBackPressTime;
   _isEnd(){
     DateTime now = DateTime.now();
-    if(currentBackPressTime == null || now.difference(currentBackPressTime) > Duration(seconds: 2)){
+    if(currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)){
       currentBackPressTime = now;
       showSheepsToast(context: context, text: '뒤로 가기를 한 번 더 입력하시면 종료됩니다.');
 
@@ -501,7 +502,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    sizeUnit = SheepsTextStyle.sizeUnitStandard(context).fontSize;
+    sizeUnit = SheepsTextStyle.sizeUnitStandard(context).fontSize!;
 
     return WillPopScope(
       onWillPop: ()async {
@@ -611,23 +612,24 @@ class _MainPageState extends State<MainPage> {
                         BottomNavigationBarItem(
                             icon: Column(
                               children: [
-                                Badge(
+                                badges.Badge(
                                   badgeContent : Text(
                                     chatGlobal.getMessageTotalCount() > 99
                                         ? '99+'
                                         : chatGlobal.getMessageTotalCount().toString(),
                                     style: TextStyle(fontSize: 9*sizeUnit, color: Colors.white, height: 1.35, fontWeight: FontWeight.bold),
                                   ),
-                                  badgeColor: sheepsColorRed,
-                                  elevation: 0,
-                                  toAnimate: false,
-                                  shape: BadgeShape.circle,
-                                  padding: chatGlobal.getMessageTotalCount() > 9
-                                      ? EdgeInsets.all(3.5*sizeUnit)
-                                      : EdgeInsets.all(6*sizeUnit),
+                                  badgeStyle: badges.BadgeStyle(
+                                    shape : badges.BadgeShape.circle,
+                                    badgeColor : sheepsColorRed,
+                                    elevation : 0,
+                                    padding : chatGlobal.getMessageTotalCount() > 9
+                                        ? EdgeInsets.all(3.5*sizeUnit)
+                                        : EdgeInsets.all(6*sizeUnit),
+                                  ),
                                   position: chatGlobal.getMessageTotalCount() > 9
-                                      ? BadgePosition(bottom: 8, start: 11)
-                                      : BadgePosition(bottom: 5, start: 11),
+                                      ? badges.BadgePosition.bottomStart(bottom: 8,start: 11)
+                                      : badges.BadgePosition.bottomStart(bottom: 5, start: 11),
                                   showBadge: chatGlobal.getMessageTotalCount() == 0 ? false : true,
                                   child: SvgPicture.asset(
                                     svgChatRoomIcon,

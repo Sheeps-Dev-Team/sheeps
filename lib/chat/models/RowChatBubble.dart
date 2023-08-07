@@ -13,7 +13,7 @@ class RowChatBubble extends StatelessWidget {
   final bool isContinue;
   final ChatRecvMessageModel message;
 
-  RowChatBubble({@required this.isMe, @required this.isContinue, @required this.message});
+  RowChatBubble({required this.isMe, required this.isContinue, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class RowChatBubble extends StatelessWidget {
             
             String checkPattern = message.message.contains('http://') ? 'http://' : 'https://';
             String subTemp = message.message.substring(message.message.indexOf(checkPattern),message.message.length);
-            String checkLastPattern = subTemp.contains(' ') ? ' ' : subTemp.contains('\n') ? '\n' : null;
+            String? checkLastPattern = subTemp.contains(' ') ? ' ' : subTemp.contains('\n') ? '\n' : null;
             String hyperURL = message.message.substring(message.message.indexOf(checkPattern), checkLastPattern == null ? message.message.length : message.message.indexOf(checkLastPattern));
 
             launch(hyperURL);
@@ -67,7 +67,7 @@ class RowChatBubble extends StatelessWidget {
   }
 
   Widget _bubbleEndWidget(BuildContext context, bool isMe) {
-    String date = isMe ? setDateAmPm(message.date, false, null) + ' ' : ' ' + setDateAmPm(message.date, false, null);
+    String date = isMe ? setDateAmPm(message.date, false, '') + ' ' : ' ' + setDateAmPm(message.date, false, '');
     return Column(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
