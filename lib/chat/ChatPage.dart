@@ -785,7 +785,7 @@ class _ChatPageState extends State<ChatPage> {
 
                   selectedImage = await picker.pickImage(source: ImageSource.gallery);
 
-                  _socket!.socket.emit('resumed',[{
+                  _socket!.socket!.emit('resumed',[{
                     "userID" : GlobalProfile.loggedInUser.userID.toString(),
                     "roomStatus" : ROOM_STATUS_CHAT,
                   }] );
@@ -837,7 +837,7 @@ class _ChatPageState extends State<ChatPage> {
                   );
                   chatRecvMessageModel.isRead = 1;
 
-                  _socket!..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
+                  _socket!..socket!.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
 
                   chatRecvMessageModel.date = dateUtc.toLocal().hour.toString() + ":" + dateUtc.toLocal().minute.toString();
 
@@ -851,7 +851,7 @@ class _ChatPageState extends State<ChatPage> {
 
                   selectedImage = await picker.pickImage(source: ImageSource.gallery);
 
-                  _socket!.socket.emit('resumed',[{
+                  _socket!.socket!.emit('resumed',[{
                     "userID" : GlobalProfile.loggedInUser.userID.toString(),
                     "roomStatus" : ROOM_STATUS_CHAT,
                   }] );
@@ -903,7 +903,7 @@ class _ChatPageState extends State<ChatPage> {
                   );
                   chatRecvMessageModel.isRead = 1;
 
-                  _socket!..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
+                  _socket!..socket!.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
 
                   chatRecvMessageModel.date = dateUtc.toLocal().hour.toString() + ":" + dateUtc.toLocal().minute.toString();
 
@@ -1046,7 +1046,7 @@ class _ChatPageState extends State<ChatPage> {
 
     chatRecvMessageModel.isRead = 1;
 
-    _socket!..socket.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
+    _socket!..socket!.emit("roomChatMessage", [chatRecvMessageModel.toJson()]);
 
     chatRecvMessageModel.date = dateUtc.toLocal().hour.toString() + ":" + dateUtc.toLocal().minute.toString();
 
