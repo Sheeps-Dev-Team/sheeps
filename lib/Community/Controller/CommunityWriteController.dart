@@ -74,15 +74,15 @@ class CommunityWriteController extends GetxController {
 
     title.value = community.title;
     contents.value = community.contents;
-    if(community.imageUrl1 != null && community.imageUrl1.isNotEmpty){
+    if(community.imageUrl1 != null && community.imageUrl1!.isNotEmpty){
       imgUrlFilePathList.add(community.imageUrl1);
       isFilePathList.add(false);
     }
-    if(community.imageUrl2 != null && community.imageUrl2.isNotEmpty){
+    if(community.imageUrl2 != null && community.imageUrl2!.isNotEmpty){
       imgUrlFilePathList.add(community.imageUrl2);
       isFilePathList.add(false);
     }
-    if(community.imageUrl3 != null && community.imageUrl3.isNotEmpty){
+    if(community.imageUrl3 != null && community.imageUrl3!.isNotEmpty){
       imgUrlFilePathList.add(community.imageUrl3);
       isFilePathList.add(false);
     }
@@ -140,7 +140,7 @@ class CommunityWriteController extends GetxController {
 
   // 카테고리에 맞는 bool 매칭
   bool matchingBool(String selectedCategory){
-    bool result;
+    bool result = false;
 
     switch(selectedCategory){
       case '회사' :{

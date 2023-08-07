@@ -18,14 +18,14 @@ import 'package:sheeps_app/config/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 Widget SheepsCommunityItem({
-  @required BuildContext context,
-  @required Community community,
-  @required int index,
-  @required AnimationController extendedController,
-  @required bool isLike,
-  @required bool isMorePhoto,
-  @required Function tapPhotoFunc,
-  @required Function tapLikeFunc,
+  required BuildContext context,
+  required Community community,
+  required int index,
+  required AnimationController extendedController,
+  required bool isLike,
+  required bool isMorePhoto,
+  required Function tapPhotoFunc,
+  required Function tapLikeFunc,
 }) {
   return Container(
     height: 141 * sizeUnit,
@@ -43,7 +43,7 @@ Widget SheepsCommunityItem({
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8 * sizeUnit, vertical: 1.5 * sizeUnit),
                     child: Text(
-                      community.category == null ? "null" : "${community.category}",
+                      "${community.category}",
                       textAlign: TextAlign.center,
                       style: SheepsTextStyle.cat1(),
                     ),
@@ -95,7 +95,7 @@ Widget SheepsCommunityItem({
                                 width: 260 * sizeUnit,
                                 height: 16 * sizeUnit,
                                 child: Text(
-                                  community.title == null ? "null" : '${community.title}',
+                                  '${community.title}',
                                   overflow: TextOverflow.ellipsis,
                                   style: SheepsTextStyle.h4(),
                                 ),
@@ -106,7 +106,7 @@ Widget SheepsCommunityItem({
                                   width: 260 * sizeUnit,
                                   height: 48 * sizeUnit,
                                   child: Text(
-                                    community.contents == null ? "null" : '${community.contents}',
+                                    '${community.contents}',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 3,
                                     style: SheepsTextStyle.b4().copyWith(
@@ -170,7 +170,7 @@ Widget SheepsCommunityItem({
                                           fit: BoxFit.cover,
                                           child: FadeInImage.memoryNetwork(
                                             placeholder: kTransparentImage,
-                                            image: getOptimizeImageURL(community.imageUrl1, 60),
+                                            image: getOptimizeImageURL(community.imageUrl1!, 60),
                                           ),
                                         ),
                                       ),
@@ -178,7 +178,7 @@ Widget SheepsCommunityItem({
                               ),
                               if (community.imageUrl2 != null) ...[
                                 GestureDetector(
-                                  onTap: tapPhotoFunc,
+                                  onTap: () => tapPhotoFunc(),
                                   child: AnimatedContainer(
                                       duration: Duration(seconds: 1000),
                                       curve: Curves.easeInOut,
@@ -276,7 +276,7 @@ Widget SheepsCommunityItem({
                           color: Colors.transparent,
                           child: InkWell(
                             splashColor: Colors.transparent,
-                            onTap: tapLikeFunc,
+                            onTap: () => tapLikeFunc(),
                             child: Container(
                               height: 14 * sizeUnit,
                               child: Row(

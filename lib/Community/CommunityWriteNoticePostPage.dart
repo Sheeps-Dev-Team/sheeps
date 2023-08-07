@@ -31,7 +31,7 @@ class CommunityWriteNoticePostPage extends StatefulWidget {
   final bool isEdit; //수정일때만 true
   final Community community; //수정일때만 받음
 
-  const CommunityWriteNoticePostPage({Key key, this.isEdit = false, this.community}) : super(key: key);
+  const CommunityWriteNoticePostPage({Key? key, this.isEdit = false, required this.community}) : super(key: key);
 
   @override
   _CommunityWriteNoticePostPageState createState() => _CommunityWriteNoticePostPageState();
@@ -43,10 +43,10 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
   TextEditingController contentsController = TextEditingController();
   MultipartImgFilesController _filesController = Get.put(MultipartImgFilesController());
 
-  AnimationController extendedController;
+  late AnimationController extendedController;
 
   bool isFinishFileLoading = false; //파일생성 완료 전 이미지변경방지
-  Community community;
+  late Community community;
 
   @override
   void initState() {
@@ -58,9 +58,9 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
 
     community = widget.community;
 
-    File f;
+    // File f;
     _filesController.filesList.clear();
-    _filesController.filesList.add(f);
+    // _filesController.filesList.add(f);
 
     if (widget.isEdit) {
       controller.loading(widget.community);
@@ -366,7 +366,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
                                         DialogBuilder(context).showLoadingIndicator();
 
                                         var res;
-                                        Community modifiedCommunity = Community();
+                                        late Community modifiedCommunity;
 
                                         try {
                                           res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Modify', data: formData);
@@ -390,7 +390,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
 
                                         } on DioError catch (e) {
                                           DialogBuilder(context).hideOpenDialog();
-                                          throw FetchDataException(e.message);
+                                          throw FetchDataException(e.message ?? '');
                                         }
 
                                         DialogBuilder(context).hideOpenDialog();
@@ -420,12 +420,12 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
                                         DialogBuilder(context).showLoadingIndicator();
 
                                         var res;
-                                        Community newCommunity = Community();
+                                        late Community newCommunity;
                                         try {
                                           res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Insert', data: formData);
                                         } on DioError catch (e) {
                                           DialogBuilder(context).hideOpenDialog();
-                                          throw FetchDataException(e.message);
+                                          throw FetchDataException(e.message ?? '');
                                         }
                                         newCommunity = Community.fromJson(json.decode(res.toString()), isNotice: true);
                                         GlobalProfile.noticeCommunityList.insert(0, newCommunity);
@@ -456,7 +456,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
     );
   }
 
-  Widget categorySelectContainer({@required String text, @required bool isSelected}) {
+  Widget categorySelectContainer({required String text, required bool isSelected}) {
     return Container(
       height: 24 * sizeUnit,
       decoration: BoxDecoration(

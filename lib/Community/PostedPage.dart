@@ -16,13 +16,15 @@ import 'package:sheeps_app/userdata/GlobalProfile.dart';
 import 'package:sheeps_app/config/GlobalWidget.dart';
 
 class PostedPage extends StatefulWidget {
-  List<Community> _communityList;
-  String _title;
+  final List<Community> a_communityList;
+  final String a_title;
 
-  PostedPage(List<Community> community, String title) {
-    _communityList = community;
-    _title = title;
-  }
+  const PostedPage({super.key, required this.a_communityList, required this.a_title});
+
+  // PostedPage(List<Community> community, String title) {
+  //   _communityList = community;
+  //   _title = title;
+  // }
   @override
   _PostedPageState createState() => _PostedPageState();
 }
@@ -32,7 +34,7 @@ class _PostedPageState extends State<PostedPage> with SingleTickerProviderStateM
   final String svgWriteIcon = 'assets/images/Community/GreenPencilWriteIcon.svg';
 
   ScrollController _scrollController = ScrollController();
-  AnimationController extendedController;
+  late AnimationController extendedController;
   List<bool> visibleList = [];
   bool isCanTapLike = true;
   int tapLikeDelayMilliseconds = 500;
@@ -41,7 +43,7 @@ class _PostedPageState extends State<PostedPage> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    communityList = widget._communityList;
+    communityList = widget.a_communityList;
 
     extendedController = AnimationController(
         vsync: this,
@@ -68,7 +70,7 @@ class _PostedPageState extends State<PostedPage> with SingleTickerProviderStateM
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.white,
-              appBar: SheepsAppBar(context,widget._title),
+              appBar: SheepsAppBar(context,widget.a_title),
               body: communityList.length > 0
                 ? ListView.builder(
                     controller: _scrollController,
@@ -92,14 +94,14 @@ class _PostedPageState extends State<PostedPage> with SingleTickerProviderStateM
                       );
                   })
                   : noSearchResultsPage(
-                  widget._title == '내가 쓴 글' ? '아직 쓴 글이 없어요!\n글쓰기 버튼을 눌러\n첫 게시글을 써보시겠어요?' :
-                      widget._title == '댓글 단 글' ? '아직 댓글 단 글이 없어요!\n의견을 나누고 싶은 글이 있다면,\n댓글을 달아보세요.💬' :
-                          widget._title == '좋아요 한 글' ? '아직 좋아요 한 글이 없어요!\n글이 마음에 든다면, 좋아요를 눌러주세요.👍' : null
+                  widget.a_title == '내가 쓴 글' ? '아직 쓴 글이 없어요!\n글쓰기 버튼을 눌러\n첫 게시글을 써보시겠어요?' :
+                      widget.a_title == '댓글 단 글' ? '아직 댓글 단 글이 없어요!\n의견을 나누고 싶은 글이 있다면,\n댓글을 달아보세요.💬' :
+                          widget.a_title == '좋아요 한 글' ? '아직 좋아요 한 글이 없어요!\n글이 마음에 든다면, 좋아요를 눌러주세요.👍' : null
               ),
               floatingActionButton:
-              widget._title == '내가 쓴 글' ?
+              widget.a_title == '내가 쓴 글' ?
               FloatingActionButton(
-                onPressed: () => Get.to(() => CommunityWritePage()).then((value) => setState(() {})),
+                onPressed: () => Get.to(() => CommunityWritePage())?.then((value) => setState(() {})),
                 backgroundColor: sheepsColorGreen,
                 child: SvgPicture.asset(svgWriteIcon, color: Colors.white, width: 30 * sizeUnit, height: 30 * sizeUnit),
               )

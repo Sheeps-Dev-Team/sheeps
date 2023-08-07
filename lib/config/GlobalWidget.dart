@@ -136,7 +136,7 @@ getExtendedImage(String url, int size, AnimationController controller, {bool isR
   );
 }
 
-Widget SheepsAppBar(BuildContext context, String title, {String subText = '', bool isBackButton = true, Function backFunc, List<Widget> actions, bool bottomLine = false}) {
+PreferredSizeWidget SheepsAppBar(BuildContext context, String title, {String subText = '', bool isBackButton = true, Function? backFunc, List<Widget>? actions, bool bottomLine = false}) {
   return PreferredSize(
     preferredSize: Size.fromHeight(44 * sizeUnit),
     child: AppBar(
@@ -151,7 +151,7 @@ Widget SheepsAppBar(BuildContext context, String title, {String subText = '', bo
                     ? () {
                         Get.back();
                       }
-                    : backFunc,
+                    : () => backFunc(),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: SvgPicture.asset(
@@ -204,8 +204,8 @@ Widget SheepsSimpleListItemBox(BuildContext context, Widget _child) {
 }
 
 showSheepsDialog(
-    {@required BuildContext context,
-    @required String title,
+    {required BuildContext context,
+    required String title,
     String imgUrl,
     String description,
     String okText = '확인',
@@ -319,7 +319,7 @@ showSheepsDialog(
       });
 }
 
-Future SheepsBottomSheetForImg(BuildContext context, {@required Function cameraFunc, @required Function galleryFunc}) {
+Future SheepsBottomSheetForImg(BuildContext context, {required Function cameraFunc, required Function galleryFunc}) {
   return showModalBottomSheet(
       shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.only(
@@ -473,7 +473,7 @@ Widget SheepsProfileVerificationStateIcon(BuildContext context, int state) {
   );
 }
 
-Widget SheepsPersonalProfileCard(BuildContext context, UserData person, int index, {Color basicImgColor = sheepsColorBlue, @required Function onTap}) {
+Widget SheepsPersonalProfileCard(BuildContext context, UserData person, int index, {Color basicImgColor = sheepsColorBlue, required Function onTap}) {
   person.location = abbreviateForLocation(person.location); //지명 약어화 함수
   bool isLike = false;
 
@@ -644,7 +644,7 @@ Widget SheepsPersonalProfileCard(BuildContext context, UserData person, int inde
   );
 }
 
-Widget SheepsTeamProfileCard(BuildContext context, Team team, int index, {bool proposedTeam = false, @required Function onTap}) {
+Widget SheepsTeamProfileCard(BuildContext context, Team team, int index, {bool proposedTeam = false, required Function onTap}) {
   team.location = abbreviateForLocation(team.location); //지명약어화 함수
   bool isLike = false;
 
@@ -915,9 +915,9 @@ Widget SheepsFilterItem(BuildContext context, String name, bool isCheck, {Color 
 }
 
 Widget SheepsBottomButton({
-  @required BuildContext context,
-  @required Function function,
-  @required String text,
+  required BuildContext context,
+  required Function function,
+  required String text,
   Color color = sheepsColorGreen,
   bool isOK = true,
 }) {
@@ -941,19 +941,19 @@ Widget SheepsBottomButton({
 
 Widget sheepsTextField(
   BuildContext context, {
-  String title,
-  @required TextEditingController controller,
-  String hintText,
-  String errorText,
+  String? title,
+  required TextEditingController controller,
+  String? hintText,
+  String? errorText,
   bool obscureText = false,
   bool autofocus = false,
-  int maxLength,
-  Function onChanged,
-  Function onSubmitted,
-  Function onPressClear,
+  int? maxLength,
+  Function? onChanged,
+  Function? onSubmitted,
+  Function? onPressClear,
   TextInputType keyboardType = TextInputType.text,
   Color borderColor = sheepsColorGreen,
-  TextStyle errorTextStyle,
+  TextStyle? errorTextStyle,
 }) {
   return Container(
     width: double.infinity,
@@ -980,7 +980,7 @@ Widget sheepsTextField(
                           ? () {
                               controller.clear();
                             }
-                          : onPressClear,
+                          : () => onPressClear,
                       icon: Icon(
                         Icons.clear,
                         color: sheepsColorDarkGrey,
@@ -1002,8 +1002,8 @@ Widget sheepsTextField(
         autofocus: autofocus,
         autocorrect: false,
         maxLength: maxLength,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
+        onChanged: (value) => onChanged,
+        onSubmitted: (value) => onSubmitted,
       ),
     ),
   );
@@ -1016,8 +1016,8 @@ Widget SheepsAnimatedTabBar2(
   double thickness,
   int duration = 500,
   Curve curve = Curves.easeInOut,
-  @required int barIndex,
-  @required List<Widget> listTabItem,
+  required int barIndex,
+  required List<Widget> listTabItem,
 }) {
   if (height == null) height = 40 * sizeUnit;
   if (width == null) width = 320 * sizeUnit;
@@ -1079,7 +1079,7 @@ class SheepsAnimatedTabBar extends StatefulWidget {
   final List<double> listTabItemWidth; //각 탭 너비 리스트
   final List<bool> listTabItemBoolean;
 
-  SheepsAnimatedTabBar({Key key, @required this.barIndex, @required this.pageController, @required this.insidePadding, @required this.listTabItemTitle, @required this.listTabItemWidth, this.listTabItemBoolean,})
+  SheepsAnimatedTabBar({Key key, required this.barIndex, required this.pageController, required this.insidePadding, required this.listTabItemTitle, required this.listTabItemWidth, this.listTabItemBoolean,})
       : super(key: key);
 
   @override
@@ -1310,7 +1310,7 @@ showSheepsCustomDialog({
   );
 }
 
-showAddFailDialog({@required String title, Color okButtonColor = sheepsColorGreen}) {
+showAddFailDialog({required String title, Color okButtonColor = sheepsColorGreen}) {
   return showSheepsCustomDialog(
     title: Text(
       title + ' 추가에\n실패 했어요!😢',
@@ -1489,9 +1489,9 @@ showTeamBadgeDialog({
 }
 
 showEnterLinkDialog({
-  @required String title,
-  @required RxString linkUrl,
-  @required TextEditingController controller,
+  required String title,
+  required RxString linkUrl,
+  required TextEditingController controller,
   Color okButtonColor = sheepsColorGreen,
 }) {
   bool isHavePrefix = false;
@@ -1667,14 +1667,14 @@ showEditCancelDialog({Color okButtonColor = sheepsColorGreen, int numberOfBack =
 }
 
 Widget multiLineTextField({
-  int maxTextLength,
-  TextEditingController controller,
-  String hintText,
-  String errorText,
-  Function onChange,
+  int? maxTextLength,
+  TextEditingController? controller,
+  String? hintText,
+  String? errorText,
+  Function? onChange,
   Color borderColor = sheepsColorGreen,
   bool isOneLine = false,
-  TextStyle errorTextStyle,
+  TextStyle? errorTextStyle,
 }) {
   return TextField(
     controller: controller,
@@ -1744,7 +1744,7 @@ Widget gradationBox() {
   );
 }
 
-Widget noSearchResultsPage(String descriptionText) {
+Widget noSearchResultsPage(String? descriptionText) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -1793,8 +1793,8 @@ Widget pickDateContainer({String text, Color color = sheepsColorGreen, bool isNe
 }
 
 Widget dragAndDropList({
-  @required List list,
-  @required int id, //같은 페이지 내 다른 드래그 리스트랑 구별
+  required List list,
+  required int id, //같은 페이지 내 다른 드래그 리스트랑 구별
 }) {
   Widget authItem(String contents, int auth) {
     return Row(
@@ -1981,7 +1981,7 @@ Widget dragAndDropList({
   );
 }
 
-Widget sheepsSelectContainer({@required String text, @required bool isSelected, Color color = sheepsColorGreen}) {
+Widget sheepsSelectContainer({required String text, required bool isSelected, Color color = sheepsColorGreen}) {
   return Container(
     height: 32 * sizeUnit,
     decoration: BoxDecoration(
@@ -2004,7 +2004,7 @@ Widget sheepsSelectContainer({@required String text, @required bool isSelected, 
   );
 }
 
-Widget multipleSelectionWrap({@required List<String> inputList, @required List selectedList, @required int maxSelect, bool isCanSelectAll = false, Color color = sheepsColorGreen}) {
+Widget multipleSelectionWrap({required List<String> inputList, required List selectedList, required int maxSelect, bool isCanSelectAll = false, Color color = sheepsColorGreen}) {
   return Wrap(
     spacing: 10 * sizeUnit,
     runSpacing: 10 * sizeUnit,
@@ -2104,8 +2104,8 @@ Widget authItem(String contents, int auth, {Color iconColor = sheepsColorGreen})
 }
 
 Widget linkItem({
-  @required String title,
-  @required String linkUrl,
+  required String title,
+  required String linkUrl,
   Color color = sheepsColorBlue,
 }) {
   return GestureDetector(
@@ -2161,7 +2161,7 @@ Text communityExceptionText({bool bigFont = false}) {
   );
 }
 
-bool blindCheck({@required declareLength, @required likeLength}) {
+bool blindCheck({required declareLength, required likeLength}) {
   bool result = false;
 
   if (declareLength >= minimumDeclareForBlind && declareLength > likeLength) result = true;
@@ -2169,7 +2169,7 @@ bool blindCheck({@required declareLength, @required likeLength}) {
 }
 
 // 리쿠르트 포스트 카드
-Widget sheepsRecruitPostCard({@required bool isRecruit, @required Function dataSetFunc, @required Function press, @required RecruitController controller}) {
+Widget sheepsRecruitPostCard({required bool isRecruit, required Function dataSetFunc, required Function press, required RecruitController controller}) {
   dataSetFunc(); // 포스트 카드 데이터 set
 
   return GestureDetector(
@@ -2324,7 +2324,7 @@ Container recruitWrapItem(String text, {bool isRecruit = true, bool isColor = fa
 }
 
 // 새로고침 위젯
-Widget sheepsCustomRefreshIndicator({@required Widget child, @required Future<void> onRefresh(), Color indicatorColor = sheepsColorGreen}) {
+Widget sheepsCustomRefreshIndicator({required Widget child, required Future<void> onRefresh(), Color indicatorColor = sheepsColorGreen}) {
   return CustomRefreshIndicator(
     onRefresh: () async {
       await onRefresh();
@@ -2369,7 +2369,7 @@ Widget sheepsCustomRefreshIndicator({@required Widget child, @required Future<vo
   );
 }
 
-Widget customShapeButton({@required Function press, @required String text, Color color = Colors.black}) {
+Widget customShapeButton({required Function press, required String text, Color color = Colors.black}) {
   return GestureDetector(
     onTap: press,
     child: Container(
@@ -2390,7 +2390,7 @@ Widget customShapeButton({@required Function press, @required String text, Color
   );
 }
 
-Widget communityPostCard({@required Community community, bool lastAddedPost = false, @required bool likeCheckFunc, Map<String, dynamic> typeCheck, @required Function press}) {
+Widget communityPostCard({required Community community, bool lastAddedPost = false, required bool likeCheckFunc, Map<String, dynamic> typeCheck, required Function press}) {
   UserData user = GlobalProfile.getUserByUserID(community.userID); // 유저정보 가져오기
   bool isLike = likeCheckFunc; // 좋아요 여부 체크
   Map<String, dynamic> communityType = typeCheck; // 타입 체크
@@ -2517,7 +2517,7 @@ Container buildCommunityProfileImg(Community community) {
 }
 
 // 새로운 팀을 만들고 싶으신가요? 위젯
-Widget createTeamCard({@required Function press, bool shortCard = false}) {
+Widget createTeamCard({required Function press, bool shortCard = false}) {
   return GestureDetector(
     onTap: press,
     child: Stack(

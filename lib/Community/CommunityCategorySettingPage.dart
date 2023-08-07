@@ -18,7 +18,7 @@ class CommunityCategorySettingPage extends StatefulWidget {
 }
 
 class _CommunityCategorySettingPageState extends State<CommunityCategorySettingPage> {
-  List<DragAndDropList> _list;
+  List<DragAndDropList> _list = [];
 
   _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -31,7 +31,7 @@ class _CommunityCategorySettingPageState extends State<CommunityCategorySettingP
       communityCategoryList.addAll(['전체', '인기']);
 
       _list[newListIndex].children.forEach((element) {
-        Key value = element.child.key;
+        Key? value = element.child.key;
 
         communityCategoryList.add((value as ValueKey).value);
       });

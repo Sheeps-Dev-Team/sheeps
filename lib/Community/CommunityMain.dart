@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sheeps_app/Community/CommunityCategorySettingPage.dart';
@@ -44,14 +43,15 @@ class _CommunityMainState extends State<CommunityMain> {
           canCallOffset = false;
 
           if (controller.isSearch) {
-            return controller.searchEvent(context, textEditingController.text, isOffset: true).then((value) => setState(() {}));
+            controller.searchEvent(context, textEditingController.text, isOffset: true).then((value) => setState(() {}));
           } else {
-            if (controller.selectedCategory.value == '전체')
-              return controller.basicMaxScrollEvent().then((value) => setState(() {}));
-            else if (controller.selectedCategory.value == '인기')
-              return controller.popularMaxScrollEvent().then((value) => setState(() {}));
-            else
-              return controller.categoryMaxScrollEvent().then((value) => setState(() {}));
+            if (controller.selectedCategory.value == '전체') {
+              controller.basicMaxScrollEvent().then((value) => setState(() {}));
+            } else if (controller.selectedCategory.value == '인기') {
+              controller.popularMaxScrollEvent().then((value) => setState(() {}));
+            } else {
+              controller.categoryMaxScrollEvent().then((value) => setState(() {}));
+            }
           }
         }
 
@@ -104,7 +104,7 @@ class _CommunityMainState extends State<CommunityMain> {
                     ],
                   ),
                   floatingActionButton: FloatingActionButton(
-                    onPressed: () => Get.to(() => CommunityWritePage(selectedCategory: controller.selectedCategory.value)).then((value) => setState(() {})),
+                    onPressed: () => Get.to(() => CommunityWritePage(selectedCategory: controller.selectedCategory.value))?.then((value) => setState(() {})),
                     backgroundColor: sheepsColorGreen,
                     child: SvgPicture.asset(svgWriteIcon, color: Colors.white, width: 30 * sizeUnit, height: 30 * sizeUnit),
                   ),
@@ -169,15 +169,10 @@ class _CommunityMainState extends State<CommunityMain> {
                         var tmp = await controller.getReply(context, community);
                         DialogBuilder(context).hideOpenDialog();
 
-                        if (tmp != null) Get.to(() => CommunityMainDetail(community)).then((value) => setState(() {}));
+                        if (tmp != null) Get.to(() => CommunityMainDetail(community))?.then((value) => setState(() {}));
                       }
 
-                      if (community.category == '공지')
-                        return communityNoticePostCard(
-                          community: community,
-                          lastAddedPost: lastAddedPost,
-                          press: goToDetail
-                        );
+                      if (community.category == '공지') return communityNoticePostCard(community: community, lastAddedPost: lastAddedPost, press: goToDetail);
 
                       return communityPostCard(
                         community: community,
@@ -192,9 +187,9 @@ class _CommunityMainState extends State<CommunityMain> {
     );
   }
 
-  Widget communityNoticePostCard({@required Community community, @required bool lastAddedPost, @required Function press}) {
+  Widget communityNoticePostCard({required Community community, required bool lastAddedPost, required Function press}) {
     return GestureDetector(
-      onTap: press,
+      onTap: () => press,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -323,15 +318,15 @@ class _CommunityMainState extends State<CommunityMain> {
     );
   }
 
-  Widget categorySettingItem(){
+  Widget categorySettingItem() {
     return GestureDetector(
       onTap: () {
         List<String> prevList = [...communityCategoryList];
 
-        Get.to(() => CommunityCategorySettingPage()).then((value) {
+        Get.to(() => CommunityCategorySettingPage())?.then((value) {
           // 카테고리 순서가 바뀌었는지 확인 (i가 2인 이유는 전체, 인기 때문)
-         for(int i = 2; i < prevList.length; i++){
-            if(prevList[i] != communityCategoryList[i]) {
+          for (int i = 2; i < prevList.length; i++) {
+            if (prevList[i] != communityCategoryList[i]) {
               showSheepsToast(context: context, text: '적용되었습니다.');
               setState(() {});
               break;
@@ -346,9 +341,7 @@ class _CommunityMainState extends State<CommunityMain> {
           padding: EdgeInsets.symmetric(horizontal: 12 * sizeUnit),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16 * sizeUnit),
-            border: Border.all(
-              color: sheepsColorDarkGrey
-            ),
+            border: Border.all(color: sheepsColorDarkGrey),
             color: Colors.white,
           ),
           child: Column(
@@ -461,7 +454,7 @@ class _CommunityMainState extends State<CommunityMain> {
                 width: 12 * sizeUnit,
               ),
               GestureDetector(
-                onTap: () => Get.to(() => MyPage()).then((value) => setState(() {})),
+                onTap: () => Get.to(() => MyPage())?.then((value) => setState(() {})),
                 child: SvgPicture.asset(
                   svgGreyMyPageButton,
                   width: 28 * sizeUnit,

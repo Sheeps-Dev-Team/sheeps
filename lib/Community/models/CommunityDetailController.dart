@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sheeps_app/Community/models/Community.dart';
 import 'package:sheeps_app/network/ApiProvider.dart';
@@ -28,7 +27,7 @@ class CommunityDetailController extends GetxController{
   }
 
   // 삭제된 게시글 동기화
-  void syncDeletedList({@required List<Community> communityList, @required Community community}){
+  void syncDeletedList({required List<Community> communityList, required Community community}){
     for (int i = 0; i < communityList.length; i++) {
       if (communityList[i].id == community.id) {
         communityList.removeAt(i);
@@ -38,7 +37,7 @@ class CommunityDetailController extends GetxController{
   }
 
   // 좋아요 삽입 동기화
-  void syncLikeListOnInsert({@required List<Community> communityList, @required Community community,  @required CommunityLike tmpLike}){
+  void syncLikeListOnInsert({required List<Community> communityList, required Community community,  required CommunityLike tmpLike}){
     for (int i = 0; i < communityList.length; i++) {
       if (communityList[i].id == community.id) {
         communityList[i].communityLike.add(tmpLike);
@@ -47,7 +46,7 @@ class CommunityDetailController extends GetxController{
   }
 
   // 좋아요 삭제 동기화
-  void syncLikeListOnDelete({@required List<Community> communityList, @required Community community}){
+  void syncLikeListOnDelete({required List<Community> communityList, required Community community}){
     for (int i = 0; i < communityList.length; i++) {
       int idx1 = -1;
       int idx2 = -1;
@@ -101,7 +100,7 @@ class CommunityDetailController extends GetxController{
 
       if (!isReplyLike) {
         if (result != null) {
-          CommunityReplyLike user = InsertReplyLike.fromJson(result)?.item;
+          CommunityReplyLike user = InsertReplyLike.fromJson(result).item;
           communityReply.communityReplyLike.add(user);
         }
       } else {
