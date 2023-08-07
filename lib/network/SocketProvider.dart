@@ -21,7 +21,7 @@ class SocketProvider extends GetxController with  StoppableService{
   void start() {
     super.start();
     if(this._fromUser != null && stopCheck){
-      socket.emit('resumed',[{
+      socket!.emit('resumed',[{
         "userID" : GlobalProfile.loggedInUser.userID.toString(),
         "roomStatus" : roomStatus,
       }] );
@@ -38,27 +38,27 @@ class SocketProvider extends GetxController with  StoppableService{
     super.stop();
     if(this._fromUser != null){
       stopCheck = true;
-      socket.emit('paused',[{
+      socket!.emit('paused',[{
         "userID" : GlobalProfile.loggedInUser.userID.toString(),
         "roomStatus" : roomStatus,
       }] );
     }
   }
 
-  Socket socket;
+  Socket? socket;
 
-  UserData _fromUser;
+  UserData? _fromUser;
 
-  int roomStatus;
-  int prevRoomStatus;
-  int get getRoomStatus => roomStatus;
+  int? roomStatus;
+  int? prevRoomStatus;
+  int get getRoomStatus => roomStatus!;
 
   bool stopCheck = false;
 
-  ChatGlobal _chatGlobal;
-  ChatGlobal get getChatGlobal => _chatGlobal;
-  LocalNotification _localNotification;
-  SharedPreferences prefs;
+  ChatGlobal? _chatGlobal;
+  ChatGlobal get getChatGlobal => _chatGlobal!;
+  LocalNotification? _localNotification;
+  SharedPreferences? prefs;
 
   static String _providerserverIP = 'ws://61.101.55.40';
   static int PROVIDER_SERVER_PORT = 20001;
@@ -82,9 +82,9 @@ class SocketProvider extends GetxController with  StoppableService{
     socket = io(ApiProvider().getChatUrl,
         OptionBuilder()
             .setTransports(['websocket'])
-            .setExtraHeaders({'from' : _fromUser.userID}).build());
+            .setExtraHeaders({'from' : _fromUser!.userID}).build());
 
-    socket.connect();
+    socket!.connect();
 
     roomStatus = ROOM_STATUS_ETC;
     prevRoomStatus = roomStatus;
@@ -94,7 +94,7 @@ class SocketProvider extends GetxController with  StoppableService{
   }
 
   setChatEvent(){
-    socket.on(SocketProvider.CHAT_RECEIVED_EVENT, (data) async {
+    socket!.on(SocketProvider.CHAT_RECEIVED_EVENT, (data) async {
       switch(roomStatus){ //ROOM_STATUS_ROOM
         case ROOM_STATUS_ROOM: //
           ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel.fromJson(data);
@@ -112,7 +112,7 @@ class SocketProvider extends GetxController with  StoppableService{
           for(int i = 0 ; i < ChatGlobal.roomInfoList.length; ++i){
             if( ChatGlobal.roomInfoList[i].roomName == chatRecvMessageModel.roomName){
               chatRecvMessageModel.isRead = 0;
-              await _chatGlobal.addChatRecvMessage(chatRecvMessageModel, i);
+              await _chatGlobal!.addChatRecvMessage(chatRecvMessageModel, i);
               break;
             }
           }
@@ -135,25 +135,25 @@ class SocketProvider extends GetxController with  StoppableService{
             if( ChatGlobal.roomInfoList[i].roomName == chatRecvMessageModel.roomName){
               if(ChatGlobal.roomName == chatRecvMessageModel.roomName){
                 chatRecvMessageModel.isRead = 1;
-                _chatGlobal.setContinue(chatRecvMessageModel, ChatGlobal.roomInfoList[i].chatList.length - 1, i);
+                _chatGlobal!.setContinue(chatRecvMessageModel, ChatGlobal.roomInfoList[i].chatList.length - 1, i);
 
                 if(ChatGlobal.roomInfoList[i].chatList.length != 0){
                   if(ChatGlobal().getRoomChatDate(chatRecvMessageModel.updatedAt) != ChatGlobal().getRoomChatDate(ChatGlobal.roomInfoList[i].chatList[ChatGlobal.roomInfoList[i].chatList.length - 1].updatedAt)){
-                    _chatGlobal.insertChatDateData(ChatGlobal.currentRoomIndex, chatRecvMessageModel.updatedAt, chatIndex: ChatGlobal.roomInfoList[i].chatList.length );
+                    _chatGlobal!.insertChatDateData(ChatGlobal.currentRoomIndex, chatRecvMessageModel.updatedAt, chatIndex: ChatGlobal.roomInfoList[i].chatList.length );
                   }
                 }
 
-                await  _chatGlobal.addChatRecvMessage(chatRecvMessageModel, i, doSort: false);
-                _chatGlobal.chatListScrollToBottom();
+                await  _chatGlobal!.addChatRecvMessage(chatRecvMessageModel, i, doSort: false);
+                _chatGlobal!.chatListScrollToBottom();
               }else{
                 chatRecvMessageModel.isRead = 0;
-                await  _chatGlobal.addChatRecvMessage(chatRecvMessageModel, i, doSort: false);
+                await  _chatGlobal!.addChatRecvMessage(chatRecvMessageModel, i, doSort: false);
                 String notiMessage = chatRecvMessageModel.isImage != 0 ? "사진을 보냈습니다." : chatRecvMessageModel.message;
 
                 globalNotificationType = "CHATROOM";
 
                 if(FirebaseNotifications.isChatting == true && stopCheck == false && ChatGlobal.roomInfoList[i].isAlarm == 1){
-                  Future.microtask(() async => await _localNotification.showNoti(title: GlobalProfile.getUserByUserID(chatRecvMessageModel.from).name, des: notiMessage, payload: chatRecvMessageModel.roomName));  
+                  Future.microtask(() async => await _localNotification!.showNoti(title: GlobalProfile.getUserByUserID(chatRecvMessageModel.from).name, des: notiMessage, payload: chatRecvMessageModel.roomName));
                 }
               }
               break;
@@ -179,7 +179,7 @@ class SocketProvider extends GetxController with  StoppableService{
             if( ChatGlobal.roomInfoList[i].roomName == chatRecvMessageModel.roomName){
               chatRecvMessageModel.isRead = 0;
               roomIndex = i;
-              await _chatGlobal.addChatRecvMessage(chatRecvMessageModel, i);
+              await _chatGlobal!.addChatRecvMessage(chatRecvMessageModel, i);
               break;
             }
           }
@@ -190,7 +190,7 @@ class SocketProvider extends GetxController with  StoppableService{
 
           //채팅 세팅 알람, background상태 체크, 해당 room 알림 체크
           if(FirebaseNotifications.isChatting == true && stopCheck == false && ChatGlobal.roomInfoList[roomIndex].isAlarm == 1){
-            Future.microtask(() async => await _localNotification.showNoti(title: GlobalProfile.getUserByUserID(chatRecvMessageModel.from).name, des: notiMessage,payload:  chatRecvMessageModel.roomName));  
+            Future.microtask(() async => await _localNotification!.showNoti(title: GlobalProfile.getUserByUserID(chatRecvMessageModel.from).name, des: notiMessage,payload:  chatRecvMessageModel.roomName));
           }
           break;
       }
@@ -208,9 +208,9 @@ class SocketProvider extends GetxController with  StoppableService{
 
   disconnect() async {
     this._fromUser = null;
-    socket.off(SocketProvider.CHAT_RECEIVED_EVENT);
-    socket.off(SocketProvider.FORCE_LOGOUT_EVENT);
-    socket.disconnect();
+    socket!.off(SocketProvider.CHAT_RECEIVED_EVENT);
+    socket!.off(SocketProvider.FORCE_LOGOUT_EVENT);
+    socket!.disconnect();
   }
 
   setRoomStatus(int status){
@@ -228,9 +228,5 @@ class SocketProvider extends GetxController with  StoppableService{
 
   setChatGlobal(ChatGlobal chatGlobal){
     _chatGlobal = chatGlobal;
-  }
-
-  SocketProvider(){
-
   }
 }
