@@ -31,7 +31,7 @@ bool isFirebaseCheck = false;
 bool isLoadFirebase = false;
 //Firebase관련 class
 class FirebaseNotifications {
-  static FirebaseMessaging _firebaseMessaging;
+  static FirebaseMessaging? _firebaseMessaging;
   static String _fcmToken = '';
 
   static bool isMarketing = false;
@@ -40,19 +40,16 @@ class FirebaseNotifications {
   static bool isCommunity = false;
 
 
-  FirebaseMessaging get getFirebaseMessaging => _firebaseMessaging;
-  SocketProvider socket;
-  ChatGlobal _chatGlobal;
-  LocalNotification localNotification;
+  FirebaseMessaging get getFirebaseMessaging => _firebaseMessaging!;
+  SocketProvider? socket;
+  ChatGlobal? _chatGlobal;
+  LocalNotification? localNotification;
   String get getFcmToken => _fcmToken;
 
 
   void setFcmToken (String token) {
     _fcmToken = token;
     isFirebaseCheck = false;
-  }
-
-  FirebaseNotifications(){
   }
 
   void setUpFirebase(BuildContext context) {
@@ -75,7 +72,7 @@ class FirebaseNotifications {
       return FirebaseMessaging.instance;
     }) .then((_) async{
       if(_fcmToken == ''){
-        _fcmToken = await _.getToken();
+        _fcmToken = (await _.getToken())!;
         var res = await ApiProvider().post('/Fcm/Token/Save', jsonEncode({
           "userID" : GlobalProfile.loggedInUser.userID,
           "token" : _fcmToken,
@@ -115,7 +112,7 @@ class FirebaseNotifications {
         debugPrint(value)
     );
 
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage message) {
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
       if(message != null){
         debugPrint(message.data.toString());
       }
@@ -148,7 +145,7 @@ class FirebaseNotifications {
         notificationModel.teamRoomName = strList[8];
 
         if(strList[8] != null && strList[8] == 'null'){
-          notificationModel.teamRoomName = null;
+          notificationModel.teamRoomName = '';
         }
       }
 
@@ -180,7 +177,7 @@ class FirebaseNotifications {
         replaceModel = await SetNotificationData(notificationModel, chatList);
       }
       else{
-        replaceModel = await SetNotificationData(notificationModel, null);
+        replaceModel = await SetNotificationData(notificationModel, []);
       }
 
       if(isSaveNoti(replaceModel)){
@@ -193,7 +190,7 @@ class FirebaseNotifications {
         if(isPossibleAlarm(notificationModel.type)){
           String payload = notificationModel.type == NOTI_EVENT_POST_REPLY_REPLY ? notificationModel.tableIndex.toString() + '|' + notificationModel.targetIndex.toString() : notificationModel.tableIndex.toString();
 
-          await localNotification.showNoti(title: message.data['title'], des: message.data['notibody'], payload: payload);
+          await localNotification!.showNoti(title: message.data['title'], des: message.data['notibody'], payload: payload);
         }
       }
     });
@@ -240,7 +237,7 @@ class FirebaseNotifications {
               replaceModel = await SetNotificationData(notificationModel, chatList);
             }
             else {
-              replaceModel = await SetNotificationData(notificationModel, null);
+              replaceModel = await SetNotificationData(notificationModel, []);
             }
 
             if(isSaveNoti(replaceModel)){
@@ -282,19 +279,19 @@ class FirebaseNotifications {
                     if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
                       message.isRead = 0;
                       bool DoSort = true;
-                      if(socket.getRoomStatus == ROOM_STATUS_CHAT){
+                      if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
                         DoSort = false;
                         if(ChatGlobal.currentRoomIndex == i){
                           message.isRead = 1;
                         }
                       }
                       message.isContinue = true;
-                      await _chatGlobal.addChatRecvMessage(message, i, doSort: DoSort);
+                      await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
 
                       int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
 
-                      _chatGlobal.setContinue(message, prevIndex, i);
-                      _chatGlobal.chatListScrollToBottom();
+                      _chatGlobal!.setContinue(message, prevIndex, i);
+                      _chatGlobal!.chatListScrollToBottom();
 
                     }
                   }
@@ -307,19 +304,19 @@ class FirebaseNotifications {
                   if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
                     message.isRead = 0;
                     bool DoSort = true;
-                    if(socket.getRoomStatus == ROOM_STATUS_CHAT){
+                    if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
                       DoSort = false;
                       if(ChatGlobal.currentRoomIndex == i){
                         message.isRead = 1;
                       }
                     }
                     message.isContinue = true;
-                    await _chatGlobal.addChatRecvMessage(message, i, doSort: DoSort);
+                    await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
 
                     int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
 
-                    _chatGlobal.setContinue(message, prevIndex, i);
-                    _chatGlobal.chatListScrollToBottom();
+                    _chatGlobal!.setContinue(message, prevIndex, i);
+                    _chatGlobal!.chatListScrollToBottom();
 
                   }
                 }
@@ -341,7 +338,7 @@ class FirebaseNotifications {
 
     screen = message['screen'] as String;
 
-    socket.socket.emit('resumed',[{
+    socket!.socket!.emit('resumed',[{
       "userID" : GlobalProfile.loggedInUser.userID.toString(),
       "roomStatus" : ROOM_STATUS_ETC,
     }] );
@@ -349,7 +346,7 @@ class FirebaseNotifications {
     if(screen == 'CHATROOM'){
       var roomName = message['body'];
 
-      socket.setRoomStatus(ROOM_STATUS_CHAT);
+      socket!.setRoomStatus(ROOM_STATUS_CHAT);
 
       for(int i = 0; i < ChatGlobal.roomInfoList.length; ++i){
         if(roomName == ChatGlobal.roomInfoList[i].roomName){
@@ -358,13 +355,13 @@ class FirebaseNotifications {
             RoomInfo roomInfo = ChatGlobal.roomInfoList[i];
 
             Navigator.push(
-                navigatorKey.currentContext,
+                navigatorKey.currentContext!,
                 MaterialPageRoute(
                     builder: (context) => new ChatPage(
                         roomName: roomInfo.roomName,
                         titleName: roomInfo.name,
-                        chatUserList: GlobalProfile.getUserListByUserIDList(roomInfo.chatUserIDList)))).then((value){
-              socket.setPrevStatus();
+                        chatUserList: GlobalProfile.getUserListByUserIDList(roomInfo.chatUserIDList), isNeedCallPop: false, targetID: 0, leaderID: 0,))).then((value){
+              socket!.setPrevStatus();
             });
             break;
           }else if(ChatGlobal.currentRoomIndex == i){
@@ -393,7 +390,7 @@ class FirebaseNotifications {
         case "NOTIFICATION":
           {
             Navigator.push(
-                navigatorKey.currentContext,
+                navigatorKey.currentContext!,
                 // 기본 파라미터, SecondRoute로 전달
                 MaterialPageRoute(
                     builder: (context) =>
@@ -425,7 +422,7 @@ class FirebaseNotifications {
             }
 
             Navigator.push(
-                navigatorKey.currentContext, // 기본 파라미터, SecondRoute로 전달
+                navigatorKey.currentContext!, // 기본 파라미터, SecondRoute로 전달
                 MaterialPageRoute(
                     builder: (context) =>
                         CommunityMainDetail(community)));
@@ -448,7 +445,7 @@ class FirebaseNotifications {
             if (tmp == null) return;
 
             GlobalProfile.communityReply = [];
-            CommunityReply reply;
+            CommunityReply? reply;
             for (int i = 0; i < tmp.length; i++) {
               Map<String, dynamic> data = tmp[i];
               CommunityReply tmpReply = CommunityReply.fromJson(data);
@@ -457,7 +454,7 @@ class FirebaseNotifications {
               if(int.parse(list[5]) == tmpReply.id) reply = tmpReply;
             }
 
-            Get.to(() => CommunityReplyPage(communityReply: reply, community: community));
+            Get.to(() => CommunityReplyPage(communityReply: reply!, community: community));
           }
           break;
       }
