@@ -20,7 +20,7 @@ class ImageChatBubble extends StatefulWidget {
   final bool isContinue;
   final ChatRecvMessageModel message;
 
-  ImageChatBubble({@required this.isMe, @required this.isContinue, @required this.message});
+  ImageChatBubble({required this.isMe, required this.isContinue, required this.message});
 
   @override
   _ImageChatBubbleState createState() => _ImageChatBubbleState();
@@ -47,7 +47,7 @@ class _ImageChatBubbleState extends State<ImageChatBubble> {
 
   getSize() {
     if(viewKey.currentContext != null){
-      RenderBox viewBox = viewKey.currentContext.findRenderObject();
+      RenderBox viewBox = viewKey.currentContext!.findRenderObject() as RenderBox;
       Offset offset = viewBox.localToGlobal(Offset.zero);
 
       dx = offset.dx;
@@ -140,7 +140,7 @@ class _ImageChatBubbleState extends State<ImageChatBubble> {
       crossAxisAlignment: widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: <Widget>[
         widget.message.isContinue ? Text(
-          setDateAmPm(widget.message.date, false, null),
+          setDateAmPm(widget.message.date, false, ''),
           style: SheepsTextStyle.b4().copyWith(fontSize: 10*sizeUnit),
         ) : Container(),
       ],

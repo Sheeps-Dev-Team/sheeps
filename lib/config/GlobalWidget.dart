@@ -136,7 +136,7 @@ getExtendedImage(String url, int size, AnimationController controller, {bool isR
   );
 }
 
-Widget SheepsAppBar(BuildContext context, String title, {String subText = '', bool isBackButton = true, Function backFunc, List<Widget> actions, bool bottomLine = false}) {
+PreferredSizeWidget SheepsAppBar(BuildContext context, String title, {String subText = '', bool isBackButton = true, Function backFunc, List<Widget> actions, bool bottomLine = false}) {
   return PreferredSize(
     preferredSize: Size.fromHeight(44 * sizeUnit),
     child: AppBar(

@@ -21,7 +21,7 @@ class ChatItem extends StatelessWidget {
   final bool isImage;
   final String chatIconName;
 
-  const ChatItem({Key key, @required this.message, @required this.isContinue, @required this.isImage, @required this.chatIconName}) : super(key : key);
+  const ChatItem({Key? key, required this.message,required this.isContinue, required this.isImage, required this.chatIconName}) : super(key : key);
 
   @override
   Widget build(BuildContext context) {
