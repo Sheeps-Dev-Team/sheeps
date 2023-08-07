@@ -46,7 +46,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/sign_in_with_apple-3.3.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_app_badger-1.5.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_android-2.0.11" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-15.1.0+1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/uni_links-0.5.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/device_info_plus-9.0.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_linux-0.2.1" />
@@ -64,6 +63,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging-14.6.5" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/app_tracking_transparency-2.0.4" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image_gallery_saver-2.0.3" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-9.9.1" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

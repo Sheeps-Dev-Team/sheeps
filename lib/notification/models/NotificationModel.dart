@@ -51,19 +51,20 @@ class NotificationModel {
   bool isLoad;
 
   NotificationModel(
-      {this.id,
-      this.from,
-      this.to,
-      this.type,
-      this.tableIndex,
-      this.targetIndex,
-      this.teamIndex,
-      this.time,
-      this.teamRoomName,
-      this.isRead,
-      this.isSend,
-      this.createdAt,
-      this.updatedAt,
+      {
+        this.id = 0,
+      this.from = 0,
+      this.to = 0,
+      this.type = 0,
+      this.tableIndex = 0,
+      this.targetIndex = 0,
+      this.teamIndex = 0,
+      this.time = '',
+      this.teamRoomName = '',
+      this.isRead = 0,
+      this.isSend = 0,
+      this.createdAt = '',
+      this.updatedAt = '',
       this.isLoad = false});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -80,7 +81,7 @@ class NotificationModel {
         isSend: 0,
         createdAt: replaceUTCDate(json["createdAt"] as String),
         updatedAt: replaceUTCDate(json["updatedAt"] as String),
-        teamRoomName: null);
+        teamRoomName: '');
   }
 
   Map<String, dynamic> toJson(String roomName, int response) => {
@@ -171,7 +172,7 @@ Future setTeamIDAtNotiTeamRoomName() async {
 }
 
 //로컬에서 알림 추가할 때
-addLocalNotification(int type, {int teamIndex}) {
+addLocalNotification(int type, {required int teamIndex}) {
   NotificationModel notification = NotificationModel(
     type: type,
     from: -1,
@@ -532,7 +533,7 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
                 message: user.name + " 이 팀을 나갔습니다.",
                 isImage: 0,
                 date: "",
-                isRead: 1,
+                isRead: 1, chatId: 0,
               );
               chatRecvMessageModel.isContinue = true;
             });
@@ -569,7 +570,7 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
                   message: user.name + " 이 팀을 나갔습니다.",
                   isImage: 0,
                   date: "",
-                  isRead: 1,
+                  isRead: 1, chatId: 0,
                 );
                 chatRecvMessageModel.isContinue = true;
 
@@ -589,11 +590,11 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
             //채팅 방을 나간 곳이 현재 대화를 나누던 중인 방이면 지역 초대장 초기화
             if(ChatGlobal.roomName == element.roomName){
               RecruitInviteController recruitInviteController = Get.put(RecruitInviteController());
-              recruitInviteController.currRecruitInvite = null;
+              //recruitInviteController.currRecruitInvite = null;
             }
 
             ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(
-                to: CENTER_MESSAGE.toString(), from: CENTER_MESSAGE, roomName: element.roomName, message: user.name + " 이 채팅방을 나갔습니다.", isImage: 0, date: "", isRead: 1, updatedAt: model.updatedAt);
+                to: CENTER_MESSAGE.toString(), from: CENTER_MESSAGE, roomName: element.roomName, message: user.name + " 이 채팅방을 나갔습니다.", isImage: 0, date: "", isRead: 1, updatedAt: model.updatedAt, chatId: 0);
 
             chatRecvMessageModel.isContinue = true;
 
@@ -626,7 +627,7 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
             message: user.name + " 이 팀에 가입하였습니다.",
             isImage: 0,
             date: "",
-            isRead: 1,
+            isRead: 1, chatId: 0,
           );
           chatRecvMessageModel.isContinue = true;
 
@@ -859,7 +860,7 @@ Future notiClickEvent(BuildContext context, NotificationModel notificationModel,
         }
 
         Navigator.push(
-            navigatorKey.currentContext, // 기본 파라미터, SecondRoute로 전달
+            navigatorKey.currentContext!, // 기본 파라미터, SecondRoute로 전달
             CupertinoPageRoute(builder: (context) => CommunityMainDetail(community)));
       }
       break;
@@ -1202,18 +1203,18 @@ void setInternalNotification() async {
       GlobalProfile.loggedInUser.userWinList.length > 0) isHaveAuth = true;
 
   if (GlobalProfile.loggedInUser.part.isEmpty) {
-    addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_1);
+    addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_1, teamIndex: 0);
   } else if (GlobalProfile.loggedInUser.profileImgList[0].imgUrl == 'BasicImage') {
-    addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_2);
+    addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_2, teamIndex: 0);
   } else if (!isHaveAuth) {
     runOnProbability(0.3, () {
-      addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_3);
+      addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_3, teamIndex: 0);
     });
   }
 
   //커뮤니티 활동해보세요. 랜덤
   runOnProbability(0.1, () {
-    addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_COMMUNITY);
+    addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_COMMUNITY, teamIndex: 0);
   });
 
   //개인 리쿠르트 관련
@@ -1226,11 +1227,11 @@ void setInternalNotification() async {
     bool isRun = false;
     runOnProbability(0.2, () {
       runOnProbability(0.5, () {
-        addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_RECRUIT_WRITE);
+        addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_RECRUIT_WRITE, teamIndex: 0);
         isRun = true;
       });
       if (!isRun) {
-        addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_RECRUIT_READ);
+        addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_RECRUIT_READ, teamIndex: 0);
       }
     });
   }
@@ -1248,7 +1249,7 @@ void setInternalNotification() async {
   var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
   if (leaderList == null && teamList == null) isHaveNoTeam = true;
 
-  if (isHaveNoTeam) addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_PROFILE_1);
+  if (isHaveNoTeam) addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_PROFILE_1, teamIndex: 0);
 
   for (int i = 0; i < leaderTeamList.length; i++) {
     bool isHaveTeamAuth = false;
@@ -1276,11 +1277,11 @@ void setInternalNotification() async {
       bool isRun = false;
       runOnProbability(0.2, () {
         runOnProbability(0.5, () {
-          addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_RECRUIT_WRITE);
+          addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_RECRUIT_WRITE, teamIndex: 0);
           isRun = true;
         });
         if (!isRun) {
-          addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_RECRUIT_READ);
+          addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_RECRUIT_READ, teamIndex: 0);
         }
       });
     }

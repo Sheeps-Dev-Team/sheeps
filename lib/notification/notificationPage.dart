@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_slidable/flutter_slidable.dart' ;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -34,11 +34,10 @@ class TotalNotificationPage extends StatefulWidget {
 class _TotalNotificationPageState extends State<TotalNotificationPage> {
   final RecruitInviteController recruitInviteController = Get.put(RecruitInviteController());
   final NavigationNum navigationNum = Get.put(NavigationNum());
-  SlidableController slidableController;
-  Animation<double> _rotationAnimation;
+  Animation<double>? _rotationAnimation;
   Color _fabColor = Colors.blue;
 
-  ProfileState profileState;
+  ProfileState? profileState;
 
   void handleSlideAnimationChanged(Animation<double> slideAnimation) {
     setState(() {
@@ -58,10 +57,6 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
 
     profileState = Get.put(ProfileState());
 
-    slidableController = SlidableController(
-      onSlideAnimationChanged: handleSlideAnimationChanged,
-      onSlideIsOpenChanged: handleSlideIsOpenChanged,
-    );
   }
 
   @override
@@ -91,13 +86,15 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Badge(
+                    badges.Badge(
+                      badgeStyle: badges.BadgeStyle(
+                        shape : badges.BadgeShape.circle,
+                        badgeColor : sheepsColorRed,
+                        elevation : 0,
+                        padding : EdgeInsets.all(3 * sizeUnit),
+                      ),
                       showBadge: unReadNotiList.length > 0,
-                      position: BadgePosition.topStart(top: 8 * sizeUnit, start: 92 * sizeUnit),
-                      padding: EdgeInsets.all(3 * sizeUnit),
-                      badgeColor: sheepsColorRed,
-                      elevation: 0,
-                      toAnimate: false,
+                      position: badges.BadgePosition.topStart(top: 8 * sizeUnit, start: 92 * sizeUnit),
                       child: Container(
                         padding: EdgeInsets.fromLTRB(16 * sizeUnit, 8 * sizeUnit, 0, 8 * sizeUnit),
                         color: Colors.white,
@@ -123,23 +120,25 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
                               itemBuilder: (BuildContext context, int index) {
                                 return Slidable(
                                   key: Key(unReadNotiList[index].id.toString()),
-                                  controller: slidableController,
-                                  actionPane: SlidableBehindActionPane(),
-                                  actionExtentRatio: 0.20,
+                                  startActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    extentRatio: 0.20,
+                                    dismissible: DismissiblePane(onDismissed: () {}),
+                                    children: [
+                                      SlidableAction(
+                                        foregroundColor: Colors.grey.shade200,
+                                        icon: Icons.check,
+                                        onPressed: (BuildContext context) {
+                                          setState(() {
+                                            notiList[notiList.indexOf(unReadNotiList[index])].isRead = 1;
+                                          });
+                                          NotiDBHelper().updateDate(notiList[notiList.indexOf(unReadNotiList[index])].id, 1);
+                                        },
+                                      ),
+                                    ],
+
+                                  ),
                                   child: getNotificationListitem(unReadNotiList[index]),
-                                  secondaryActions: <Widget>[
-                                    IconSlideAction(
-                                      color: Colors.grey.shade200,
-                                      icon: Icons.check,
-                                      onTap: () {
-                                        setState(() {
-                                          notiList[notiList.indexOf(unReadNotiList[index])].isRead = 1;
-                                        });
-                                        NotiDBHelper().updateDate(notiList[notiList.indexOf(unReadNotiList[index])].id, 1);
-                                      },
-                                      closeOnTap: false,
-                                    ),
-                                  ],
                                 );
                               }),
                         ),
@@ -174,21 +173,24 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return Slidable(
                                     key: Key(readNotiList[index].id.toString()),
-                                    controller: slidableController,
-                                    actionPane: SlidableBehindActionPane(),
-                                    actionExtentRatio: 0.20,
-                                    child: getNotificationListitem(readNotiList[index], isRead: true),
-                                    secondaryActions: <Widget>[
-                                      IconSlideAction(
-                                          color: sheepsColorRed,
-                                          icon: Icons.delete,
-                                          onTap: () {
+                                    endActionPane: ActionPane(
+                                      motion: const ScrollMotion(),
+                                      extentRatio: 0.20,
+                                      dismissible: DismissiblePane(onDismissed: () {}),
+                                      children: [
+                                        SlidableAction(
+                                          foregroundColor: Colors.grey.shade200,
+                                          icon: Icons.check,
+                                          onPressed: (BuildContext context) {
                                             setState(() {
                                               notiList.remove(readNotiList[index]);
                                             });
                                             NotiDBHelper().deleteData(readNotiList[index].id);
-                                          }),
-                                    ],
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    child: getNotificationListitem(readNotiList[index], isRead: true),
                                   );
                                 }),
                           ),
@@ -269,7 +271,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
                 children: [
                   InkWell(
                     onTap: () async {
-                      await notiClickEvent(context, notificationModel, profileState, navigationNum, recruitInviteController).then((value) => {
+                      await notiClickEvent(context, notificationModel, profileState!, navigationNum, recruitInviteController).then((value) => {
                         setState(() {
                           notiList[notiList.indexOf(notificationModel)].isRead = 1;
                           NotiDBHelper().updateDate(notiList[notiList.indexOf(notificationModel)].id, 1);

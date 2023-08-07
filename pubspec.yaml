@@ -51,7 +51,7 @@ dependencies:
   sqflite: ^2.3.0 #로컬 db
   path_provider: ^2.0.15  #getDocumentDirectory... 가져옴
   page_transition: ^2.0.9 #페이지 넘어갈때 action
-  flutter_local_notifications: ^15.1.0+1 #폰 켜져있을 때 알림
+  flutter_local_notifications: ^9.7.0 #폰 켜져있을 때 알림
   vibration: ^1.8.1 #진동
   image_picker: ^1.0.2 #카메라 라이브러리가져오는
   flutter_reorderable_grid_view: ^4.0.0 #사진 애니메이션

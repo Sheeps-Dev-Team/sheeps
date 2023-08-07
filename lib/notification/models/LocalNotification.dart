@@ -21,10 +21,10 @@ import 'package:vibration/vibration.dart';
 
 class ReceivedNotification {
   ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.payload,
   });
 
   final int id;
@@ -37,9 +37,9 @@ class LocalNotification {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject = BehaviorSubject<ReceivedNotification>();
   BehaviorSubject<String> selectNotificationSubject = BehaviorSubject<String>();
-  String selectedNotificationPayload;
+  String selectedNotificationPayload = '';
 
-  NotificationDetails platformChannelSpecifics;
+  NotificationDetails? platformChannelSpecifics;
   bool hasCheck = false;
 
   Future<bool> init() async {
@@ -50,9 +50,10 @@ class LocalNotification {
         requestAlertPermission: false,
         requestBadgePermission: false,
         requestSoundPermission: false,
-        onDidReceiveLocalNotification: (int id, String title, String body, String payload) async {
-          didReceiveLocalNotificationSubject.add(ReceivedNotification(id: id, title: title, body: body, payload: payload));
+        onDidReceiveLocalNotification: (int? id, String? title, String? body, String? payload) async {
+          didReceiveLocalNotificationSubject.add(ReceivedNotification(id: id!, title: title!, body: body!, payload: payload!));
         });
+
 
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
@@ -67,12 +68,12 @@ class LocalNotification {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String payload) async {
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {
       if (payload != null) {
         debugPrint('notification payload: $payload');
       }
-      selectedNotificationPayload = payload;
-      selectNotificationSubject.add(payload);
+      selectedNotificationPayload = payload!;
+      selectNotificationSubject.add(payload!);
     });
 
     _configureSelectNotificationSubject();
@@ -87,7 +88,7 @@ class LocalNotification {
         case "NOTIFICATION":
           {
             Navigator.push(
-                navigatorKey.currentContext,
+                navigatorKey.currentContext!,
                 // 기본 파라미터, SecondRoute로 전달
                 CupertinoPageRoute(builder: (context) => TotalNotificationPage()));
           }
@@ -96,17 +97,17 @@ class LocalNotification {
           {
             var roomName = payload;
 
-            ChatGlobal.socket.setRoomStatus(ROOM_STATUS_CHAT);
+            ChatGlobal.socket!.setRoomStatus(ROOM_STATUS_CHAT);
 
             for (int i = 0; i < ChatGlobal.roomInfoList.length; ++i) {
               if (roomName == ChatGlobal.roomInfoList[i].roomName) {
                 if (ChatGlobal.currentRoomIndex != i) {
                   RoomInfo roomInfo = ChatGlobal.roomInfoList[i];
 
-                  Navigator.push(navigatorKey.currentContext,
-                          CupertinoPageRoute(builder: (context) => new ChatPage(roomName: roomInfo.roomName, titleName: roomInfo.name, chatUserList: GlobalProfile.getUserListByUserIDList(roomInfo.chatUserIDList))))
+                  Navigator.push(navigatorKey.currentContext!,
+                          CupertinoPageRoute(builder: (context) => new ChatPage(roomName: roomInfo.roomName, titleName: roomInfo.name, chatUserList: GlobalProfile.getUserListByUserIDList(roomInfo.chatUserIDList), isNeedCallPop: false, targetID: 0, leaderID: 0,)))
                       .then((value) {
-                    ChatGlobal.socket.setPrevStatus();
+                    ChatGlobal.socket!.setPrevStatus();
                   });
                   break;
                 }
@@ -152,7 +153,7 @@ class LocalNotification {
             if (tmp == null) return;
 
             GlobalProfile.communityReply = [];
-            CommunityReply reply;
+            CommunityReply? reply;
             for (int i = 0; i < tmp.length; i++) {
               Map<String, dynamic> data = tmp[i];
               CommunityReply tmpReply = CommunityReply.fromJson(data);
@@ -161,7 +162,7 @@ class LocalNotification {
               if (int.parse(list[1]) == tmpReply.id) reply = tmpReply;
             }
 
-            Get.to(() => CommunityReplyPage(communityReply: reply, community: community));
+            Get.to(() => CommunityReplyPage(communityReply: reply!, community: community));
           }
           break;
       }
@@ -182,9 +183,7 @@ class LocalNotification {
           );
     }
     await flutterLocalNotificationsPlugin.show(0, title, des, platformChannelSpecifics, payload: payload);
-    if (await Vibration.hasVibrator()) {
-      await Vibration.vibrate();
-    }
+
     return true;
   }
 
@@ -238,7 +237,7 @@ class LocalNotification {
     var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
   }
 
-  Future<void> targetNotiCancel({int targetIndex}) async => await flutterLocalNotificationsPlugin.cancel(targetIndex);
+  Future<void> targetNotiCancel({required int targetIndex}) async => await flutterLocalNotificationsPlugin.cancel(targetIndex);
 
   Future<void> allNotiCancel() async => await flutterLocalNotificationsPlugin.cancelAll();
 }
