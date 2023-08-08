@@ -16,7 +16,7 @@ class UserCareer {
   String createdAt;
   String updatedAt;
 
-  UserCareer({this.auth, this.contents, this.done, this.isNow, this.start, this.updatedAt, this.createdAt, this.id, this.imgUrl, this.userID});
+  UserCareer({this.auth = 0, this.contents = '', this.done = '', this.isNow = false, this.start = '', this.updatedAt = '', this.createdAt = '', this.id = 0, this.imgUrl = '', this.userID = 0});
 
   factory UserCareer.fromJson(Map<String, dynamic> json) {
     return UserCareer(
@@ -44,7 +44,7 @@ class UserLicense {
   String createdAt;
   String updatedAt;
 
-  UserLicense({this.auth, this.contents, this.createdAt, this.updatedAt, this.id, this.imgUrl, this.userID});
+  UserLicense({this.auth = 0, this.contents = '', this.createdAt = '', this.updatedAt = '', this.id = 0, this.imgUrl = '', this.userID = 0});
 
   factory UserLicense.fromJson(Map<String, dynamic> json) {
     return UserLicense(
@@ -69,7 +69,7 @@ class UserWin {
   String createdAt;
   String updatedAt;
 
-  UserWin({this.auth, this.contents, this.updatedAt, this.createdAt, this.id, this.imgUrl, this.userID});
+  UserWin({this.auth = 0, this.contents = '', this.updatedAt = '', this.createdAt = '', this.id = 0, this.imgUrl = '', this.userID = 0});
 
   factory UserWin.fromJson(Map<String, dynamic> json) {
     return UserWin(
@@ -94,7 +94,7 @@ class UserEducation {
   String createdAt;
   String updatedAt;
 
-  UserEducation({this.id, this.userID, this.contents, this.imgUrl, this.auth, this.createdAt, this.updatedAt});
+  UserEducation({this.id = 0, this.userID = 0, this.contents = '', this.imgUrl = '', this.auth = 0, this.createdAt = '', this.updatedAt = ''});
 
   factory UserEducation.fromJson(Map<String, dynamic> json) {
     return UserEducation(
@@ -190,9 +190,9 @@ class SampleUser {
   String name;
   String part;
   String location;
-  UserProfileImg profileImg;
+  UserProfileImg? profileImg;
 
-  SampleUser({this.userID, this.name, this.part, this.location, this.profileImg});
+  SampleUser({this.userID = 0, this.name = '', this.part = '', this.location = '', this.profileImg});
 
   factory SampleUser.fromJson(Map<String, dynamic> json) {
     List<UserProfileImg> profileImgList = [];
@@ -245,35 +245,36 @@ class UserData {
 
   int loginType;
 
-  UserLink userLink = UserLink();
+  UserLink? userLink;
 
   UserData({
-    this.userID,
-    this.id,
-    this.name,
-    this.information,
-    this.job,
-    this.part,
-    this.subJob,
-    this.subPart,
-    this.location,
-    this.subLocation,
-    this.profileImgList,
-    this.badge1,
-    this.badge2,
-    this.badge3,
-    this.createdAt,
-    this.updatedAt,
-    this.accessToken,
-    this.badgeList,
-    this.userCareerList,
-    this.userLicenseList,
-    this.userEducationList,
-    this.userWinList,
-    this.marketingAgree,
-    this.marketingAgreeTime,
-    this.loginType,
-    this.userLink,
+    this.userID = 0,
+    this.id = '',
+    this.name = '',
+    this.information = '',
+    this.job = '',
+    this.part = '',
+    this.subJob = '',
+    this.subPart = '',
+    this.location = '',
+    this.subLocation = '',
+    this.profileImgList = const [],
+    this.badge1 = 0,
+    this.badge2 = 0,
+    this.badge3 = 0,
+    this.createdAt = '',
+    this.updatedAt = '',
+    this.accessToken = '',
+    this.badgeList = const [],
+    this.userCareerList = const [],
+    this.userLicenseList = const [],
+    this.userEducationList = const [],
+    this.userWinList = const [],
+    this.marketingAgree = false,
+    this.marketingAgreeTime = '',
+    this.loginType = 0,
+    this.phoneNumber = '',
+    this.userLink
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {

@@ -46,14 +46,14 @@ class GlobalProfile {
   //커뮤니티 댓글
   static List<CommunityReply> communityReply = [];
 
-  static UserData loggedInUser;
+  static UserData? loggedInUser;
   static UserData nullUser = UserData(userID: nullInt);
-  static String accessToken;
-  static String refreshToken;
-  static String accessTokenExpiredAt;
+  static String? accessToken;
+  static String? refreshToken;
+  static String? accessTokenExpiredAt;
 
-  static Future<UserData> getFutureUserByUserID(int userID) async {
-    if (loggedInUser.userID == userID) return Future.value(loggedInUser);
+  static Future<UserData?> getFutureUserByUserID(int userID) async {
+    if (loggedInUser!.userID == userID) return Future.value(loggedInUser);
 
     for (int i = 0; i < personalProfile.length; ++i) {
       if (personalProfile[i].userID == userID) {
@@ -73,9 +73,9 @@ class GlobalProfile {
   }
 
   static UserData getUserByUserID(int userID) {
-    if (loggedInUser.userID == userID) return loggedInUser;
+    if (loggedInUser!.userID == userID) return loggedInUser!;
 
-    UserData user;
+    UserData? user;
     for (int i = 0; i < personalProfile.length; ++i) {
       if (personalProfile[i].userID == userID) {
         user = personalProfile[i];
@@ -84,29 +84,29 @@ class GlobalProfile {
 
     //받아온 데이터 중에서 없으면
     if (null == user) {
-      if (loggedInUser.userID == userID) {
+      if (loggedInUser!.userID == userID) {
         user = loggedInUser;
       } else {
         Future.microtask(() async => {user = await GlobalProfile().selectAndAddUser(userID)});
       }
     }
 
-    return user;
+    return user!;
   }
 
   static UserData getUserByUserIDAndloggedInUser(int userID) {
-    UserData user = null;
+    UserData? user;
     user = getUserByUserID(userID);
 
-    if (null == user && loggedInUser.userID == userID) {
+    if (null == user && loggedInUser!.userID == userID) {
       user = loggedInUser;
     }
 
-    return user;
+    return user!;
   }
 
   //데이터를 받아와 저장함
-  Future<UserData> selectAndAddUser(int userID) async {
+  Future<UserData?> selectAndAddUser(int userID) async {
     var res = await ApiProvider().post('/Personal/Select/User', jsonEncode({"userID": userID}));
 
     if (res == null) {
@@ -133,7 +133,7 @@ class GlobalProfile {
     return userList;
   }
 
-  static CommunityReply getReplyByIndex(int index) {
+  static CommunityReply? getReplyByIndex(int index) {
     if (index >= communityReply.length) return null;
 
     return communityReply[index];
@@ -187,7 +187,7 @@ class GlobalProfile {
   }
 
   static Team getTeamByID(int id) {
-    Team team;
+    Team? team;
 
     for (int i = 0; i < teamProfile.length; ++i) {
       if (teamProfile[i].id == id) {
@@ -200,9 +200,9 @@ class GlobalProfile {
       GlobalProfile().selectAndAddTeam(id).then((value) {
         return value;
       });
-    } else {
-      return team;
     }
+
+    return team!;
   }
 
   static void setModifyPersonalProfile(UserData user) {
@@ -232,7 +232,7 @@ class GlobalProfile {
   }
 
   //데이터를 받아와 저장함
-  Future<Team> selectAndAddTeam(int id) async {
+  Future<Team?> selectAndAddTeam(int id) async {
     await ApiProvider().post('/Team/Profile/SelectID', jsonEncode({"id": id})).then((value) {
       if (value == null) return null;
 
@@ -278,28 +278,29 @@ class GlobalProfile {
   }
 
   static void profileSort({bool isTeam = false}) {
-    List<dynamic> list = isTeam ? teamProfile : personalProfile;
-
-    list.sort((a, b) {
-      return int.parse(b.updatedAt).compareTo(int.parse(a.updatedAt));
-    });
-
-    // ignore: unnecessary_statements
-    isTeam ? teamProfile : personalProfile = list;
+    if(isTeam){
+      teamProfile.sort((a, b) {
+        return int.parse(b.updatedAt).compareTo(int.parse(a.updatedAt));
+      });
+    }else{
+      personalProfile.sort((a, b) {
+        return int.parse(b.updatedAt).compareTo(int.parse(a.updatedAt));
+      });
+    }
   }
 
   static void accessTokenCheck() {
     Timer.periodic(Duration(minutes: 5), (timer) {
       debugPrint("call acessToken Expired timer");
-      if(ChatGlobal.socket != null && ChatGlobal.socket.stopCheck != true){
-        ChatGlobal.socket.socket.emit('resumed',[{
-          "userID" : GlobalProfile.loggedInUser.userID.toString(),
-          "roomStatus" : ChatGlobal.socket.roomStatus,
+      if(ChatGlobal.socket != null && ChatGlobal.socket!.stopCheck != true){
+        ChatGlobal.socket!.socket!.emit('resumed',[{
+          "userID" : GlobalProfile.loggedInUser!.userID.toString(),
+          "roomStatus" : ChatGlobal.socket!.roomStatus,
         }]);
       }
-      if (int.parse(accessTokenExpiredAt) < int.parse(DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10))) {
+      if (int.parse(accessTokenExpiredAt!) < int.parse(DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10))) {
         Future.microtask(() async {
-          var res = await ApiProvider().post('/Personal/Select/Login/Token', jsonEncode({"userID": loggedInUser.userID, "refreshToken": refreshToken}));
+          var res = await ApiProvider().post('/Personal/Select/Login/Token', jsonEncode({"userID": loggedInUser!.userID, "refreshToken": refreshToken}));
 
           if (res != null) {
             accessToken = res['AccessToken'] as String;
