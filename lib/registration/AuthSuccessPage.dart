@@ -23,7 +23,7 @@ import 'package:sheeps_app/registration/model/RegistrationModel.dart';
 class AuthSuccessPage extends StatefulWidget {
   final int state; //0 실패, 1 성공, 2 중복번호
 
-  AuthSuccessPage({Key key, @required this.state}) : super(key: key);
+  AuthSuccessPage({Key? key, required this.state}) : super(key: key);
 
   @override
   _AuthSuccessPageState createState() => _AuthSuccessPageState();

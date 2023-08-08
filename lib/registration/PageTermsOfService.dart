@@ -21,19 +21,19 @@ import 'package:sheeps_app/registration/model/RegistrationModel.dart';
 class PageTermsOfService extends StatefulWidget {
   final int loginType;
 
-  PageTermsOfService({Key key, @required this.loginType}) : super(key: key);
+  PageTermsOfService({Key? key, required this.loginType}) : super(key: key);
 
   @override
   _PageTermsOfServiceState createState() => _PageTermsOfServiceState();
 }
 
 class _PageTermsOfServiceState extends State<PageTermsOfService> {
-  bool isMustAgree;
-  bool isServiceAgree;
-  bool isPrivacyAgree;
-  bool isCommunityAgree;
-  bool isMarketingAgree;
-  bool isAllAgree;
+  bool? isMustAgree;
+  bool? isServiceAgree;
+  bool? isPrivacyAgree;
+  bool? isCommunityAgree;
+  bool? isMarketingAgree;
+  bool? isAllAgree;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
     switch (widget.loginType) {
       case LOGIN_TYPE_SHEEPS:
         {
-          Get.off(() => RegistrationPage(isMarketingAgree: isMarketingAgree, loginType: LOGIN_TYPE_SHEEPS));
+          Get.off(() => RegistrationPage(isMarketingAgree: isMarketingAgree!, loginType: LOGIN_TYPE_SHEEPS));
         }
         break;
       case LOGIN_TYPE_GOOGLE:
@@ -71,12 +71,12 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
 
   @override
   Widget build(BuildContext context) {
-    if (isServiceAgree && isPrivacyAgree && isCommunityAgree) {
+    if (isServiceAgree! && isPrivacyAgree! && isCommunityAgree!) {
       isMustAgree = true;
     } else {
       isMustAgree = false;
     }
-    if (isServiceAgree && isPrivacyAgree && isCommunityAgree && isMarketingAgree) {
+    if (isServiceAgree! && isPrivacyAgree! && isCommunityAgree! && isMarketingAgree!) {
       isAllAgree = true;
     } else {
       isAllAgree = false;
@@ -125,7 +125,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                               SizedBox(height: 48 * sizeUnit),
                               GestureDetector(
                                 onTap: () {
-                                  if (isAllAgree) {
+                                  if (isAllAgree!) {
                                     isServiceAgree = false;
                                     isPrivacyAgree = false;
                                     isCommunityAgree = false;
@@ -148,7 +148,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                         svgCheck,
                                         height: 16 * sizeUnit,
                                         width: 16 * sizeUnit,
-                                        color: isAllAgree ? sheepsColorGreen : sheepsColorGrey,
+                                        color: isAllAgree! ? sheepsColorGreen : sheepsColorGrey,
                                       ),
                                       SizedBox(width: 8 * sizeUnit),
                                       Text(
@@ -162,7 +162,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                               SizedBox(height: 4 * sizeUnit),
                               Divider(
                                 thickness: 2 * sizeUnit,
-                                color: isAllAgree ? sheepsColorGreen : sheepsColorGrey,
+                                color: isAllAgree! ? sheepsColorGreen : sheepsColorGrey,
                               ),
                               SizedBox(height: 16 * sizeUnit),
                               Row(
@@ -170,7 +170,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                   SizedBox(width: 24 * sizeUnit),
                                   GestureDetector(
                                     onTap: () {
-                                      isServiceAgree = !isServiceAgree;
+                                      isServiceAgree = !isServiceAgree!;
                                       setState(() {});
                                     },
                                     child: Container(
@@ -184,7 +184,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                             svgCheck,
                                             height: 16 * sizeUnit,
                                             width: 16 * sizeUnit,
-                                            color: isServiceAgree ? sheepsColorGreen : sheepsColorGrey,
+                                            color: isServiceAgree! ? sheepsColorGreen : sheepsColorGrey,
                                           ),
                                           SizedBox(width: 8 * sizeUnit),
                                           Text(
@@ -215,7 +215,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                   SizedBox(width: 24 * sizeUnit),
                                   GestureDetector(
                                     onTap: () {
-                                      isPrivacyAgree = !isPrivacyAgree;
+                                      isPrivacyAgree = !isPrivacyAgree!;
                                       setState(() {});
                                     },
                                     child: Container(
@@ -229,7 +229,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                             svgCheck,
                                             height: 16 * sizeUnit,
                                             width: 16 * sizeUnit,
-                                            color: isPrivacyAgree ? sheepsColorGreen : sheepsColorGrey,
+                                            color: isPrivacyAgree! ? sheepsColorGreen : sheepsColorGrey,
                                           ),
                                           SizedBox(width: 8 * sizeUnit),
                                           Text(
@@ -260,7 +260,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                   SizedBox(width: 24 * sizeUnit),
                                   GestureDetector(
                                     onTap: () {
-                                      isCommunityAgree = !isCommunityAgree;
+                                      isCommunityAgree = !isCommunityAgree!;
                                       setState(() {});
                                     },
                                     child: Container(
@@ -274,7 +274,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                             svgCheck,
                                             height: 16 * sizeUnit,
                                             width: 16 * sizeUnit,
-                                            color: isCommunityAgree ? sheepsColorGreen : sheepsColorGrey,
+                                            color: isCommunityAgree! ? sheepsColorGreen : sheepsColorGrey,
                                           ),
                                           SizedBox(width: 8 * sizeUnit),
                                           Text(
@@ -305,7 +305,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                   SizedBox(width: 24 * sizeUnit),
                                   GestureDetector(
                                     onTap: () {
-                                      isMarketingAgree = !isMarketingAgree;
+                                      isMarketingAgree = !isMarketingAgree!;
                                       setState(() {});
                                     },
                                     child: Container(
@@ -319,7 +319,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                             svgCheck,
                                             height: 16 * sizeUnit,
                                             width: 16 * sizeUnit,
-                                            color: isMarketingAgree ? sheepsColorGreen : sheepsColorGrey,
+                                            color: isMarketingAgree! ? sheepsColorGreen : sheepsColorGrey,
                                           ),
                                           SizedBox(width: 8 * sizeUnit),
                                           Text(
@@ -354,8 +354,8 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                       child: SheepsBottomButton(
                           context: context,
                           function: () {
-                            if (isMustAgree) {
-                              if (isMarketingAgree) {
+                            if (isMustAgree!) {
+                              if (isMarketingAgree!) {
                                 nextFunc();
                               } else {
                                 showSheepsCustomDialog(
@@ -383,7 +383,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                             }
                           },
                           text: "다음",
-                          isOK: isMustAgree),
+                          isOK: isMustAgree!),
                     )
                   ],
                 ),

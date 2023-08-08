@@ -810,7 +810,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
         break;
       case NOTI_EVENT_PERSONAL_UNIV_AUTH_UPDATE:
         {
-          UserEducation education = GlobalProfile.loggedInUser.userEducationList.singleWhere((element) => element.id == notificationModel.tableIndex);
+          UserEducation education = GlobalProfile.loggedInUser!.userEducationList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
           //반려
           if (education.auth == 0) {
@@ -873,7 +873,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
         break;
       case NOTI_EVENT_PERSONAL_CAREER_AUTH_UPDATE:
         {
-          UserCareer career = GlobalProfile.loggedInUser.userCareerList.singleWhere((element) => element.id == notificationModel.tableIndex);
+          UserCareer career = GlobalProfile.loggedInUser!.userCareerList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
           //반려
           if (career.auth == 0) {
@@ -933,7 +933,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
         break;
       case NOTI_EVENT_PERSONAL_LICENSE_AUTH_UPDATE:
         {
-          UserLicense license = GlobalProfile.loggedInUser.userLicenseList.singleWhere((element) => element.id == notificationModel.tableIndex);
+          UserLicense license = GlobalProfile.loggedInUser!.userLicenseList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
           //반려
           if (license.auth == 0) {
@@ -993,7 +993,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
         break;
       case NOTI_EVENT_PERSONAL_WIN_AUTH_UPDATE:
         {
-          UserWin win = GlobalProfile.loggedInUser.userWinList.singleWhere((element) => element.id == notificationModel.tableIndex);
+          UserWin win = GlobalProfile.loggedInUser!.userWinList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
           //반려
           if (win.auth == 0) {
