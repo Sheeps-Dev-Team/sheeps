@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:sheeps_app/config/AppConfig.dart';
 import 'package:sheeps_app/config/GlobalWidget.dart';
@@ -13,7 +13,7 @@ import 'package:sheeps_app/config/SheepsTextStyle.dart';
 class AppVersionPage extends StatefulWidget {
   PackageInfo packageInfo;
 
-  AppVersionPage({Key key, @required this.packageInfo}) : super(key: key);
+  AppVersionPage({Key? key, required this.packageInfo}) : super(key: key);
 
   @override
   _AppVersionPageState createState() => _AppVersionPageState();

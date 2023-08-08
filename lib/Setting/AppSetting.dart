@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sheeps_app/Recruit/Controller/FilterController.dart';
 import 'package:sheeps_app/Recruit/Controller/RecruitController.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +25,7 @@ import 'package:sheeps_app/profile/models/FilterState.dart';
 class AppSetting extends StatefulWidget {
   final PackageInfo packageInfo;
 
-  AppSetting({Key key, @required this.packageInfo}) : super(key: key);
+  AppSetting({Key? key, required this.packageInfo}) : super(key: key);
 
   @override
   _AppSettingState createState() => _AppSettingState();

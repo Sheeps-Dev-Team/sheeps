@@ -25,7 +25,7 @@ class WebBanner {
   String createdAt;
   String updatedAt;
 
-  WebBanner({this.id, this.title, this.description, this.webURL, this.imgURL, this.index, this.createdAt, this.updatedAt});
+  WebBanner({this.id = 0, this.title = '', this.description = '', this.webURL = '', this.imgURL = '', this.index = 0, this.createdAt = '', this.updatedAt = ''});
 
   factory WebBanner.fromJson(Map<String, dynamic> json){
     return WebBanner(
@@ -57,7 +57,7 @@ class ClientBanner {
   final String imgURL;
   final String webURL;
 
-  ClientBanner({this.type, this.imgURL, this.webURL});
+  ClientBanner({this.type = 0, this.imgURL = '', this.webURL = ''});
 }
 
 List<ClientBanner> globalClientBannerList = [];

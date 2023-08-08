@@ -28,9 +28,9 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
   final passwordTextField = TextEditingController();
   final passwordCheckTextField = TextEditingController();
 
-  ScrollController passwordScrollController;
+  ScrollController? passwordScrollController;
 
-  int loginType;
+  int? loginType;
   String strLoginType = '';
   String loginEmail = '';
 
@@ -41,8 +41,8 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
   @override
   void initState() {
     super.initState();
-    loginEmail = GlobalProfile.loggedInUser.id;
-    loginType = GlobalProfile.loggedInUser.loginType;
+    loginEmail = GlobalProfile.loggedInUser!.id;
+    loginType = GlobalProfile.loggedInUser!.loginType;
     passwordScrollController = ScrollController(initialScrollOffset: 0.0); //flutter 제공
     switch (loginType) {
       case 1:
@@ -67,7 +67,7 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
     passwordTextField.dispose();
     passwordCheckTextField.dispose();
 
-    passwordScrollController.dispose();
+    passwordScrollController!.dispose();
     super.dispose();
   }
 
@@ -116,7 +116,7 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
                                       onTap: () async {
 
                                         var res = await ApiProvider().post('/Team/Check/LeaderTeam', jsonEncode({
-                                          "userID" : GlobalProfile.loggedInUser.userID
+                                          "userID" : GlobalProfile.loggedInUser!.userID
                                         }));
 
                                         if(res != null){
@@ -124,8 +124,8 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
                                           if(res == true){
                                             Function cancelFunc = () async {
                                               await ApiProvider().post('/Personal/Exit/Member', jsonEncode({
-                                                "userID" : GlobalProfile.loggedInUser.userID,
-                                                "userName" : GlobalProfile.loggedInUser.name,
+                                                "userID" : GlobalProfile.loggedInUser!.userID,
+                                                "userName" : GlobalProfile.loggedInUser!.name,
                                               }));
 
                                               Get.back();
@@ -174,7 +174,7 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
                                 loginType == null ? SizedBox(height: 20 * sizeUnit) : SizedBox.shrink(),
                                 loginType == null
                                     ? Text(
-                                  '로그인 이메일 : ' + GlobalProfile.loggedInUser.id,
+                                  '로그인 이메일 : ' + GlobalProfile.loggedInUser!.id,
                                   style: SheepsTextStyle.h3(),
                                 )
                                     : SizedBox.shrink(),
@@ -205,9 +205,9 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
                                     setState(() {
 
                                       if(isCheckPassword == false){
-                                        if (passwordScrollController.hasClients) {
-                                          passwordScrollController.jumpTo(
-                                            passwordScrollController.position.maxScrollExtent,
+                                        if (passwordScrollController!.hasClients) {
+                                          passwordScrollController!.jumpTo(
+                                            passwordScrollController!.position.maxScrollExtent,
                                           );
                                         }
                                       }
@@ -234,9 +234,9 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
                                         : isCheckPassword = false;
                                     setState(() {
                                       if(isCheckPassword == false){
-                                        if (passwordScrollController.hasClients) {
-                                          passwordScrollController.jumpTo(
-                                            passwordScrollController.position.maxScrollExtent,
+                                        if (passwordScrollController!.hasClients) {
+                                          passwordScrollController!.jumpTo(
+                                            passwordScrollController!.position.maxScrollExtent,
                                           );
                                         }
                                       }
@@ -264,7 +264,7 @@ class _ModifyMemberInformationState extends State<ModifyMemberInformation> {
 
                                 if (isCheckPassword && (controllerForExistingPassword.text != null && controllerForExistingPassword.text != "")) {
                                   var res = await ApiProvider().post('/Personal/Select/ChangePassword',
-                                      jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "password": controllerForExistingPassword.text, "newpassword": passwordTextField.text}));
+                                      jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "password": controllerForExistingPassword.text, "newpassword": passwordTextField.text}));
 
                                   if (res['res'] == "HAVENT_PASSWORD") {
                                     showSheepsToast(context: context, text: '소셜로 가입된 아이디입니다.\n비밀번호 변경이 불가능합니다.');
