@@ -21,7 +21,7 @@ class LoginCheckPage extends StatefulWidget {
 }
 
 class _LoginCheckPageState extends State<LoginCheckPage> {
-  String findID = '';
+  String? findID = '';
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _LoginCheckPageState extends State<LoginCheckPage> {
                           ),
                           SizedBox(height: 20 * sizeUnit),
                           Text(
-                            findID != null ? findID : "본인인증이\n실패했어요.",
+                            findID != null ? findID! : "본인인증이\n실패했어요.",
                             textAlign: TextAlign.center,
                             style: SheepsTextStyle.h5().copyWith(color: Color(0xFF000000), height: 1.6),
                           ),
