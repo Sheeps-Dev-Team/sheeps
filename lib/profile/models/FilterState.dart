@@ -322,7 +322,7 @@ class FilterStateForPersonal extends GetxController {
               "partSearch": partSearch,
               "locationcheckall": locationCheckAll,
               "locationSearch": locationSearch,
-              "userID": GlobalProfile.loggedInUser.userID,
+              "userID": GlobalProfile.loggedInUser!.userID,
               "index": GlobalProfile.personalProfileFiltered.length
             }));
         if (tmp3 != null) {

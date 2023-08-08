@@ -40,19 +40,19 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   ScrollController teamScrollController = ScrollController();
   NavigationNum navigationNum = Get.put(NavigationNum());
 
-  GlobalKey<RefreshIndicatorState> refreshKey;
+  late GlobalKey<RefreshIndicatorState> refreshKey;
 
-  GlobalKey actionKey;
+  late GlobalKey actionKey;
 
-  ProfileState profileState;
+  late ProfileState profileState;
 
-  PageController pageController;
+  late PageController pageController;
 
   final svgGreyFilterIcon = 'assets/images/Profile/GreyFilterIcon.svg';
   final svgGreyMyPageButton = 'assets/images/Public/GreyMyPageButton.svg';
   final svgBlackFilterIcon = 'assets/images/Profile/BlackFilterIcon.svg';
 
-  FilterStateForPersonal _FilterStateForPersonal;
+  late FilterStateForPersonal _FilterStateForPersonal;
 
   Future<void> filterFuncForPersonal() async {
     await _FilterStateForPersonal.filterEventForPersonal();
@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         list = await ApiProvider().post(
             '/Personal/Select/Offset/UserList',
             jsonEncode({
-              'userID': GlobalProfile.loggedInUser.userID,
+              'userID': GlobalProfile.loggedInUser!.userID,
               "index": GlobalProfile.personalProfile.length,
             }));
 
@@ -560,7 +560,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   // 필터 선택해제 위젯
   Widget filterDeselectButton(Function press) {
     return GestureDetector(
-      onTap: press,
+      onTap: () => press(),
       child: Row(
         children: [
           Container(
@@ -927,7 +927,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     GlobalProfile.teamProfile[index] = resTeam;
                   }
 
-                  Get.to(() => DetailTeamProfile(index: index, team: resTeam)).then((value) => setState(() {}));
+                  Get.to(() => DetailTeamProfile(index: index, team: resTeam))?.then((value) => setState(() {}));
                 },
               );
             })),
@@ -999,17 +999,17 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   GlobalProfile.personalProfile[index] = user; //개인 프로필 바뀐 데이터로 전역 데이터 세팅
                 }
 
-                if (person.userID == GlobalProfile.loggedInUser.userID)
-                  Get.to(() => DetailProfile(index: 0, profileStatus: PROFILE_STATUS.MyProfile));
+                if (person.userID == GlobalProfile.loggedInUser!.userID)
+                  Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!, profileStatus: PROFILE_STATUS.MyProfile));
                 else
-                  Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.OtherProfile)).then((value) => setState(() {}));
+                  Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.OtherProfile))?.then((value) => setState(() {}));
               });
             })),
       ),
     );
   }
 
-  Widget myCustomRefreshIndicator({Widget child}) {
+  Widget myCustomRefreshIndicator({required Widget child}) {
     return CustomRefreshIndicator(
       onRefresh: () async {
         //개인프로필상태
@@ -1021,7 +1021,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             await _FilterStateForPersonal.searchEventForPersonal(_controller.text); // 검색 켜져 있을 때
           } else {
             // 리쿠르트에서 프로필 정보를 공유하기 때문에 clear 안하고 중복 체크 함
-            var tmp = await ApiProvider().post('/Personal/Select/UserList', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+            var tmp = await ApiProvider().post('/Personal/Select/UserList', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
             if (tmp != null) {
               for (int i = 0; i < tmp.length; i++) {
                 UserData _user = UserData.fromJson(tmp[i]);
@@ -1087,7 +1087,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             return Stack(
               alignment: Alignment.topCenter,
               children: [
-                !controller.isDragging && !controller.isHiding && !controller.isIdle
+                // !controller.isDragging && !controller.isHiding && !controller.isIdle
+                !controller.isDragging && !controller.isIdle
                     ? Positioned(
                         top: 10 * sizeUnit * controller.value,
                         child: SizedBox(

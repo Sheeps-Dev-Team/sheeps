@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class ConnectNode{
   static const String END_POINT = "http://121.172.129.206:50002";
 
-  static Future<void> fetchMultipart({@required String path, @required File file}) async{
+  static Future<void> fetchMultipart({required String path, required File file}) async{
     http.MultipartRequest _request = http.MultipartRequest("POST", Uri.parse("$END_POINT$path"));
     _request.files.add(
       new http.MultipartFile(
@@ -23,7 +23,7 @@ class ConnectNode{
 
 
 
-  static Future<void> fetchMultipartArr({@required String path, @required List<File> files}) async{
+  static Future<void> fetchMultipartArr({required String path, required List<File> files}) async{
     http.MultipartRequest _request = http.MultipartRequest("POST", Uri.parse("$END_POINT$path"));
     //header 추가
     Map<String, String> headers = {

@@ -25,14 +25,14 @@ class TeamMemberManagementPage extends StatefulWidget {
   final List<int> teamMemberList;
   final bool byChat;
 
-  const TeamMemberManagementPage({Key key, @required this.team, @required this.teamMemberList, @required this.byChat}) : super(key: key);
+  const TeamMemberManagementPage({Key? key, required this.team, required this.teamMemberList, required this.byChat}) : super(key: key);
 
   @override
   _TeamMemberManagementPageState createState() => _TeamMemberManagementPageState();
 }
 
 class _TeamMemberManagementPageState extends State<TeamMemberManagementPage> {
-  int selectedId;
+  int? selectedId;
   List<int> teamMemberList = [];
 
   @override
@@ -167,7 +167,7 @@ class _TeamMemberManagementPageState extends State<TeamMemberManagementPage> {
         if (selectedId != null) {
           showSheepsCustomDialog(
             title: Text(
-              GlobalProfile.getUserByUserID(selectedId).name + '을(를)\n추방하시겠어요?',
+              GlobalProfile.getUserByUserID(selectedId!).name + '을(를)\n추방하시겠어요?',
               style: SheepsTextStyle.h5(),
               textAlign: TextAlign.center,
             ),
@@ -193,7 +193,7 @@ class _TeamMemberManagementPageState extends State<TeamMemberManagementPage> {
               await ApiProvider().post(
                   '/Team/KickOut/TeamMember',
                   jsonEncode({
-                    "userID": GlobalProfile.loggedInUser.userID,
+                    "userID": GlobalProfile.loggedInUser!.userID,
                     "targetID": selectedId,
                     "teamID": widget.team.id,
                     "teamName": widget.team.name,
@@ -203,7 +203,7 @@ class _TeamMemberManagementPageState extends State<TeamMemberManagementPage> {
 
               //채팅방에서 팀원이 없으면 삭제
               if (widget.byChat) {
-                ChatGlobal.kickOutTeamMemberInRoom(roomName, selectedId);
+                ChatGlobal.kickOutTeamMemberInRoom(roomName, selectedId!);
               } else {
                 ChatGlobal.roomInfoList.removeWhere((element) => element.roomName == roomName);
               }
@@ -213,7 +213,7 @@ class _TeamMemberManagementPageState extends State<TeamMemberManagementPage> {
               widget.team.userList.removeWhere((element) => element == selectedId);
 
               //전역 팀에서 팀원 목록 삭제
-              GlobalProfile().removeTeamMember(widget.team.id, selectedId);
+              GlobalProfile().removeTeamMember(widget.team.id, selectedId!);
 
               Get.back(); //다이얼로그 닫기
 

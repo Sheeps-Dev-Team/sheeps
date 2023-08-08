@@ -25,7 +25,7 @@ class MyTeamProfile extends StatefulWidget {
   _MyTeamProfileState createState() => _MyTeamProfileState();
 }
 
-Team modifyTeamInMyTeamProfile;
+Team? modifyTeamInMyTeamProfile;
 
 class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProviderStateMixin {
   final String svgAddTeamIcon = 'assets/images/Profile/AddTeamIcon.svg';
@@ -43,7 +43,7 @@ class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProvider
     Future.microtask(() async {
       loading = true;
 
-      var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+      var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
       if (leaderList != null) {
         for (int i = 0; i < leaderList.length; ++i) {
@@ -52,7 +52,7 @@ class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProvider
         }
       }
 
-      var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+      var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
       if (teamList != null) {
         for (int i = 0; i < teamList.length; ++i) {
@@ -112,12 +112,12 @@ class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProvider
                                 if (leaderTeamList.length >= MAX_CREATE_TEAM_LENGTH) {
                                   fullTeamDialog(leaderTeamList.length);
                                 } else {
-                                  Get.to(() => TeamProfileManagementPage(isAdd: true, team: Team())).then((value) {
+                                  Get.to(() => TeamProfileManagementPage(isAdd: true, team: Team()))?.then((value) {
                                     setState(() {
                                       if (value != null) {
                                         myTeamList.insert(0, value[0]);
 
-                                        if(value[0].leaderID == GlobalProfile.loggedInUser.userID) {
+                                        if(value[0].leaderID == GlobalProfile.loggedInUser!.userID) {
                                           leaderTeamList.insert(0, value[0]);
                                         }
                                       }
@@ -151,13 +151,13 @@ class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProvider
                               });
                             }
 
-                            Get.to(() => DetailTeamProfile(index: index, team: resTeam, proposedTeam: false)).then((value) async {
+                            Get.to(() => DetailTeamProfile(index: index, team: resTeam, proposedTeam: false))?.then((value) async {
                               if (modifyTeamInMyTeamProfile == null) {
-                                var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+                                var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
                                 //자신이 리더인 팀이 없으면
                                 if (leaderList == null) {
-                                  leaderTeamList.removeWhere((element) => element.leaderID == GlobalProfile.loggedInUser.userID);
+                                  leaderTeamList.removeWhere((element) => element.leaderID == GlobalProfile.loggedInUser!.userID);
                                 } else {
                                   //리더인 팀 목록에 변화가 있으면
                                   if (leaderList.length != leaderTeamList.length) {
@@ -177,12 +177,12 @@ class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProvider
                                 }
                               } else {
                                 for (int i = 0; i < myTeamList.length; i++) {
-                                  if (myTeamList[i].id == modifyTeamInMyTeamProfile.id) {
-                                    myTeamList[i] = modifyTeamInMyTeamProfile;
+                                  if (myTeamList[i].id == modifyTeamInMyTeamProfile!.id) {
+                                    myTeamList[i] = modifyTeamInMyTeamProfile!;
                                   }
                                 }
-                                if (modifyTeamInMyTeamProfile.isTeamMemberChange) {
-                                  myTeamList.removeWhere((element) => element.id == modifyTeamInMyTeamProfile.id);
+                                if (modifyTeamInMyTeamProfile!.isTeamMemberChange) {
+                                  myTeamList.removeWhere((element) => element.id == modifyTeamInMyTeamProfile!.id);
                                 }
                                 setState(() {});
                               }
@@ -297,7 +297,7 @@ class _MyTeamProfileState extends State<MyTeamProfile> with SingleTickerProvider
                                             ),
                                           )
                                         ],
-                                        if (myTeamList[index].leaderID == GlobalProfile.loggedInUser.userID) ...[
+                                        if (myTeamList[index].leaderID == GlobalProfile.loggedInUser!.userID) ...[
                                           Positioned(
                                             top: 9 * sizeUnit,
                                             left: 9 * sizeUnit,

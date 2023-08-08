@@ -115,7 +115,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       SettingColumn(
                         str: "내 프로필",
                         myFunc: () {
-                          Get.to(() => DetailProfile(index: 0, profileStatus: PROFILE_STATUS.MyProfile));
+                          Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!, profileStatus: PROFILE_STATUS.MyProfile));
                         },
                       ),
                       SettingColumn(

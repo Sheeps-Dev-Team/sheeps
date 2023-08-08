@@ -1,4 +1,3 @@
-
 import 'package:sheeps_app/TeamProfileManagement/model/Team.dart';
 import 'package:sheeps_app/userdata/GlobalProfile.dart';
 import 'package:sheeps_app/userdata/User.dart';
@@ -45,14 +44,15 @@ class DetailProfileController {
     });
 
     // 이력 링크가 하나도 없으면
-    if (user.userLink.portfolioUrl.isEmpty &&
-        user.userLink.resumeUrl.isEmpty &&
-        user.userLink.siteUrl.isEmpty &&
-        user.userLink.linkedInUrl.isEmpty &&
-        user.userLink.instagramUrl.isEmpty &&
-        user.userLink.facebookUrl.isEmpty &&
-        user.userLink.gitHubUrl.isEmpty &&
-        user.userLink.notionUrl.isEmpty) showUserUrl = false;
+    if (user.userLink == null ||
+        (user.userLink!.portfolioUrl.isEmpty &&
+            user.userLink!.resumeUrl.isEmpty &&
+            user.userLink!.siteUrl.isEmpty &&
+            user.userLink!.linkedInUrl.isEmpty &&
+            user.userLink!.instagramUrl.isEmpty &&
+            user.userLink!.facebookUrl.isEmpty &&
+            user.userLink!.gitHubUrl.isEmpty &&
+            user.userLink!.notionUrl.isEmpty)) showUserUrl = false;
   }
 
   // 팀 프로필 데이터 set
@@ -81,8 +81,8 @@ class DetailProfileController {
     // 팀 멤버인지 체크
     // print(team.leaderID);
     team.userList.forEach((element) {
-      if(element == GlobalProfile.loggedInUser.userID) {
-        return isTeamMember = true;
+      if (element == GlobalProfile.loggedInUser!.userID) {
+        isTeamMember = true;
       }
     });
   }
