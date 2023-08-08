@@ -47,7 +47,6 @@ class GlobalProfile {
   static List<CommunityReply> communityReply = [];
 
   static UserData? loggedInUser;
-  static UserData nullUser = UserData(userID: nullInt);
   static String? accessToken;
   static String? refreshToken;
   static String? accessTokenExpiredAt;

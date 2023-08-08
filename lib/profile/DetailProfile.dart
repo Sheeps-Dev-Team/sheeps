@@ -50,9 +50,9 @@ class DetailProfile extends StatefulWidget {
   final PROFILE_STATUS profileStatus;
 
   DetailProfile({
-    Key key,
-    @required this.index,
-    this.user,
+    Key? key,
+    required this.index,
+    required this.user,
     this.profileStatus = PROFILE_STATUS.OtherProfile,
   }) : super(key: key);
 
@@ -64,27 +64,27 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
   final DetailProfileController controller = DetailProfileController();
   final RecruitInviteController recruitInviteController = Get.put(RecruitInviteController());
 
-  UserData _user;
+  late UserData _user;
   int currentPage = 0;
   bool lastStatus = true;
   bool lastStatus2 = true;
   bool showLastAccessTime = false;
 
-  String leftButtonWord;
-  String rightButtonWord;
-  Color leftButtonColor;
-  Color rightButtonColor;
+  late String leftButtonWord;
+  late String rightButtonWord;
+  late Color leftButtonColor;
+  late Color rightButtonColor;
 
   // ignore: non_constant_identifier_names
-  PERSONAL_INVITE_STATUS personal_invite_status;
+  late PERSONAL_INVITE_STATUS personal_invite_status;
 
   bool isActiveChat = false;
   String roomName = '';
   int inviteID = 0;
 
-  SocketProvider _socket;
-  ScrollController _scrollController;
-  AnimationController extendedController;
+  late SocketProvider _socket;
+  late ScrollController _scrollController;
+  late AnimationController extendedController;
 
   final String svgWhiteBackArrow = 'assets/images/Profile/WhiteBackArrow.svg';
   final double appBarHeight = Get.height * 0.45;
@@ -95,7 +95,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
   bool loadTeamList = true;
   final Duration teamListDuration = Duration(milliseconds: 300);
 
-  PROFILE_STATUS _profileStatus;
+  late PROFILE_STATUS _profileStatus;
 
   bool isReady = true;
 
@@ -149,8 +149,8 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
   }
 
   Future setPersonalInviteStatus() async {
-    var res = await ApiProvider().post('/Room/Invite/TargetSelect', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "inviteID": _user.userID}));
-    roomName = getRoomName(GlobalProfile.loggedInUser.userID, _user.userID);
+    var res = await ApiProvider().post('/Room/Invite/TargetSelect', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "inviteID": _user.userID}));
+    roomName = getRoomName(GlobalProfile.loggedInUser!.userID, _user.userID);
 
     if (res == null || res['res'] == 0) return;
 
@@ -200,12 +200,12 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
     _profileStatus = widget.profileStatus;
     // 내 프로필이 들어왔나 확인
     if (widget.user != null) {
-      if (widget.user.userID == GlobalProfile.loggedInUser.userID) {
+      if (widget.user.userID == GlobalProfile.loggedInUser!.userID) {
         _profileStatus = PROFILE_STATUS.MyProfile;
       }
     }
     // profileStatus 에 따라 _user 변경
-    _user = _profileStatus == PROFILE_STATUS.MyProfile ? GlobalProfile.loggedInUser : widget.user;
+    _user = _profileStatus == PROFILE_STATUS.MyProfile ? GlobalProfile.loggedInUser! : widget.user;
 
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
@@ -583,14 +583,14 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                                             spacing: 12 * sizeUnit,
                                             runSpacing: 8 * sizeUnit,
                                             children: [
-                                              if (_user.userLink.portfolioUrl.isNotEmpty) linkItem(title: '포트폴리오', linkUrl: _user.userLink.portfolioUrl),
-                                              if (_user.userLink.resumeUrl.isNotEmpty) linkItem(title: '이력서', linkUrl: _user.userLink.resumeUrl),
-                                              if (_user.userLink.siteUrl.isNotEmpty) linkItem(title: 'Site', linkUrl: _user.userLink.siteUrl),
-                                              if (_user.userLink.linkedInUrl.isNotEmpty) linkItem(title: 'LinkedIn', linkUrl: _user.userLink.linkedInUrl, color: Color(0xFF005AB6)),
-                                              if (_user.userLink.instagramUrl.isNotEmpty) linkItem(title: 'Instagram', linkUrl: _user.userLink.instagramUrl, color: Color(0xFFDA4064)),
-                                              if (_user.userLink.facebookUrl.isNotEmpty) linkItem(title: 'Facebook', linkUrl: _user.userLink.facebookUrl, color: Color(0xFF006AEA)),
-                                              if (_user.userLink.gitHubUrl.isNotEmpty) linkItem(title: 'GitHub', linkUrl: _user.userLink.gitHubUrl, color: Color(0xFF191D20)),
-                                              if (_user.userLink.notionUrl.isNotEmpty) linkItem(title: 'Notion', linkUrl: _user.userLink.notionUrl, color: Colors.black),
+                                              if (_user.userLink!.portfolioUrl.isNotEmpty) linkItem(title: '포트폴리오', linkUrl: _user.userLink!.portfolioUrl),
+                                              if (_user.userLink!.resumeUrl.isNotEmpty) linkItem(title: '이력서', linkUrl: _user.userLink!.resumeUrl),
+                                              if (_user.userLink!.siteUrl.isNotEmpty) linkItem(title: 'Site', linkUrl: _user.userLink!.siteUrl),
+                                              if (_user.userLink!.linkedInUrl.isNotEmpty) linkItem(title: 'LinkedIn', linkUrl: _user.userLink!.linkedInUrl, color: Color(0xFF005AB6)),
+                                              if (_user.userLink!.instagramUrl.isNotEmpty) linkItem(title: 'Instagram', linkUrl: _user.userLink!.instagramUrl, color: Color(0xFFDA4064)),
+                                              if (_user.userLink!.facebookUrl.isNotEmpty) linkItem(title: 'Facebook', linkUrl: _user.userLink!.facebookUrl, color: Color(0xFF006AEA)),
+                                              if (_user.userLink!.gitHubUrl.isNotEmpty) linkItem(title: 'GitHub', linkUrl: _user.userLink!.gitHubUrl, color: Color(0xFF191D20)),
+                                              if (_user.userLink!.notionUrl.isNotEmpty) linkItem(title: 'Notion', linkUrl: _user.userLink!.notionUrl, color: Colors.black),
                                             ],
                                           ),
                                         ] else ...[
@@ -652,7 +652,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
     );
   }
 
-  Column profileAuthWidget({@required String title, @required String description, @required List list}) {
+  Column profileAuthWidget({required String title, required String description, required List list}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1047,7 +1047,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                       Function func = () async {
                         //팀 초대 합격
                         int teamID = globalTeamMemberRecruitList.singleWhere((element) => element.id == currRecruitInvite.index).teamId;
-                        String roomName = getRoomName(teamID, GlobalProfile.loggedInUser.userID, roomType: ROOM_TYPE_TEAM);
+                        String roomName = getRoomName(teamID, GlobalProfile.loggedInUser!.userID, roomType: ROOM_TYPE_TEAM);
 
                         ApiProvider().post(
                             '/Team/Pass/Interview',
@@ -1155,7 +1155,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                       if (personal_invite_status == PERSONAL_INVITE_STATUS.POSSIBLE) {
                         Function okFunc = () async {
                           var res = await ApiProvider()
-                              .post('/Room/Invite/Insert', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "inviteID": _user.userID, "userName": GlobalProfile.loggedInUser.name}));
+                              .post('/Room/Invite/Insert', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "inviteID": _user.userID, "userName": GlobalProfile.loggedInUser!.name}));
 
                           if (res['res'] == 0) return;
 
@@ -1222,10 +1222,10 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                           await ApiProvider().post(
                               '/Room/Invite/Response',
                               jsonEncode({
-                                "to": GlobalProfile.loggedInUser.userID,
+                                "to": GlobalProfile.loggedInUser!.userID,
                                 "from": _user.userID,
                                 "tableIndex": inviteID,
-                                "userName": GlobalProfile.loggedInUser.name,
+                                "userName": GlobalProfile.loggedInUser!.name,
                                 "response": 1,
                                 "roomName": roomName
                               }));
@@ -1233,10 +1233,10 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                           NotificationModel notificationmodel = NotificationModel();
 
                           notificationmodel.from = _user.userID;
-                          notificationmodel.to = GlobalProfile.loggedInUser.userID;
+                          notificationmodel.to = GlobalProfile.loggedInUser!.userID;
                           notificationmodel.type = ROOM_TYPE_PERSONAL;
                           notificationmodel.time = DateTime.now().toString();
-                          notificationmodel.teamRoomName = getRoomName(GlobalProfile.loggedInUser.userID, _user.userID);
+                          notificationmodel.teamRoomName = getRoomName(GlobalProfile.loggedInUser!.userID, _user.userID);
 
                           RoomInfo room = await SetRoomInfoData(notificationmodel);
 
@@ -1246,7 +1246,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                             ChatGlobal.roomInfoList.forEach((element) async {
                               if(element.roomName == roomName){
                                 await ApiProvider().post('/Room/Info/Select', jsonEncode({
-                                  "userID" : GlobalProfile.loggedInUser.userID,
+                                  "userID" : GlobalProfile.loggedInUser!.userID,
                                   "roomName" : roomName
                                 })).then((value) => {
                                   if(value != null){
@@ -1322,10 +1322,10 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                           await ApiProvider().post(
                               '/Room/Invite/Response',
                               jsonEncode({
-                                "to": GlobalProfile.loggedInUser.userID,
+                                "to": GlobalProfile.loggedInUser!.userID,
                                 "from": _user.userID,
                                 "tableIndex": inviteID,
-                                "userName": GlobalProfile.loggedInUser.name,
+                                "userName": GlobalProfile.loggedInUser!.name,
                                 "response": 2,
                                 "roomName": roomName
                               }));
@@ -1360,9 +1360,9 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
     );
   }
 
-  GestureDetector bottomButton({@required Function press, @required String text, @required Color color}) {
+  GestureDetector bottomButton({required Function press, required String text, required Color color}) {
     return GestureDetector(
-      onTap: press,
+      onTap: () => press(),
       child: Container(
         width: 160 * sizeUnit,
         height: 54 * sizeUnit,
@@ -1423,7 +1423,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
     );
   }
 
-  AnimatedContainer buildDot({int index}) {
+  AnimatedContainer buildDot({required int index}) {
     return AnimatedContainer(
       duration: kAnimationDuration,
       margin: EdgeInsets.only(right: 4 * sizeUnit),
@@ -1441,8 +1441,8 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
       case PROFILE_STATUS.MyProfile: // myProfile 일때
         return GestureDetector(
           onTap: () {
-            Get.to(() => MyProfileModify()).then((value) => setState(() {
-                  _user = GlobalProfile.loggedInUser;
+            Get.to(() => MyProfileModify())?.then((value) => setState(() {
+                  _user = GlobalProfile.loggedInUser!;
                 }));
           },
           child: SvgPicture.asset(
@@ -1454,7 +1454,7 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
         );
       default:
         {
-          ModelLikes modelLikes;
+          ModelLikes? modelLikes;
           globalPersonalLikeList.forEach((element) {
             if (element.TargetID == _user.userID) modelLikes = element;
           });
@@ -1467,14 +1467,14 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
                   var res = await ApiProvider().post(
                       '/Personal/Insert/Like',
                       jsonEncode({
-                        "userID": GlobalProfile.loggedInUser.userID,
+                        "userID": GlobalProfile.loggedInUser!.userID,
                         "targetID": _user.userID,
                       }));
 
                   if (res['created']) {
                     modelLikes = ModelLikes.fromJson(res['item']);
 
-                    globalPersonalLikeList.add(modelLikes);
+                    globalPersonalLikeList.add(modelLikes!);
                   } else {
                     globalPersonalLikeList.removeWhere((element) => element.TargetID == _user.userID);
                   }
@@ -1506,14 +1506,15 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
           packageName: 'kr.noteasy.sheeps_app',
           minimumVersion: 1, //실행 가능 최소 버전
         ),
-        iosParameters: IosParameters(
+        iosParameters: IOSParameters(
           bundleId: 'kr.noteasy.sheepsApp',
           minimumVersion: '1.0',
           appStoreId: '1558625011',
         ));
 
-    final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
-    final Uri shortUrl = shortDynamicLink.shortUrl;
+    // final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+    // final Uri shortUrl = shortDynamicLink.shortUrl;
+    final Uri shortUrl = parameters.link;
 
     String name = _user.name;
 

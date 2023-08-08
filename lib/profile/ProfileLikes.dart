@@ -3,16 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sheeps_app/TeamProfileManagement/model/Team.dart';
 
 import 'package:sheeps_app/config/AppConfig.dart';
 import 'package:sheeps_app/config/constants.dart';
-import 'package:sheeps_app/config/GlobalAsset.dart';
 import 'package:sheeps_app/config/GlobalWidget.dart';
-import 'package:sheeps_app/config/SheepsTextStyle.dart';
 import 'package:sheeps_app/network/ApiProvider.dart';
 import 'package:sheeps_app/profile/DetailProfile.dart';
 import 'package:sheeps_app/profile/DetailTeamProfile.dart';
@@ -123,7 +119,7 @@ class _ProfileLikesPageState extends State<ProfileLikesPage> {
                       GlobalProfile.personalProfile[index] = user; //개인 프로필 바뀐 데이터로 전역 데이터 세팅
                     }
 
-                    Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.OtherProfile)).then((value) => setState(() {}));
+                    Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.OtherProfile))?.then((value) => setState(() {}));
                   });
                 })),
           )
@@ -157,7 +153,7 @@ class _ProfileLikesPageState extends State<ProfileLikesPage> {
                         GlobalProfile.teamProfile[index] = resTeam;
                       }
 
-                      Get.to(() => DetailTeamProfile(index: index, team: resTeam)).then((value) => setState(() {}));
+                      Get.to(() => DetailTeamProfile(index: index, team: resTeam))?.then((value) => setState(() {}));
                     },
                   );
                 })),

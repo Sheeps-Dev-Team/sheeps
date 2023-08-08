@@ -1111,7 +1111,7 @@ void _handleDynamicLink(Uri deepLink) async {
       {
         int id = int.parse(deepLink.queryParameters['id']!);
         if (id == GlobalProfile.loggedInUser!.userID)
-          Get.to(() => DetailProfile(index: 0, profileStatus: PROFILE_STATUS.MyProfile));
+          Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!, profileStatus: PROFILE_STATUS.MyProfile));
         else
           Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(id), profileStatus: PROFILE_STATUS.OtherProfile));
       }

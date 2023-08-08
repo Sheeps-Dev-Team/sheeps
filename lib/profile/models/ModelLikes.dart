@@ -5,7 +5,7 @@ class ModelLikes {
   String createdAt;
   String updatedAt;
 
-  ModelLikes({this.updatedAt,this.id,this.createdAt,this.TargetID,this.UserID});
+  ModelLikes({required this.updatedAt,required this.id,required this.createdAt,required this.TargetID,required this.UserID});
 
   factory ModelLikes.fromJson(Map<String, dynamic> json){
     return ModelLikes(

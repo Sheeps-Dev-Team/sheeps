@@ -44,7 +44,7 @@ class DetailTeamProfile extends StatefulWidget {
   final bool showBottomButton;
   final bool byChat;
 
-  DetailTeamProfile({Key key, @required this.index, @required this.team, this.proposedTeam = false, this.showBottomButton = true, this.byChat = false}) : super(key: key);
+  DetailTeamProfile({Key? key, required this.index, required this.team, this.proposedTeam = false, this.showBottomButton = true, this.byChat = false}) : super(key: key);
 
   @override
   _DetailTeamProfileState createState() => _DetailTeamProfileState();
@@ -60,23 +60,22 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
   int roomIndex = 0;
   bool isActiveChat = false;
 
-  SocketProvider _socket;
-  ScrollController _scrollController;
-  AnimationController extendedController;
+  late SocketProvider _socket;
+  late ScrollController _scrollController;
+  late AnimationController extendedController;
 
   List<int> totalList = [];
-  Team modifyTeam;
+  late Team modifyTeam;
 
   final String svgWhiteBackArrow = 'assets/images/Profile/WhiteBackArrow.svg';
   final String svgSetting = 'assets/images/ProfileModify/Setting.svg';
   String svgChatIcon = 'assets/images/Chat/chatSmallIcon.svg';
   final GreyXIcon = 'assets/images/Public/GreyXIcon.svg';
 
-  SharedPreferences localStorage;
   String key = 'TeamLikesList';
 
   bool Likes = false;
-  bool showBottomButton; // 바텀 버튼 보여주기 여부
+  late bool showBottomButton; // 바텀 버튼 보여주기 여부
 
   bool isCanTapLike = true;
   int tapLikeDelayMilliseconds = 500;
@@ -84,7 +83,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
   final double appBarHeight = Get.height * 0.45;
 
   bool isReady = true;
-  bool teamMemberLoading;
+  late bool teamMemberLoading;
   bool showLastAccessTime = false;
 
   _scrollListener() {
@@ -524,7 +523,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                                             ],
                                           ),
                                         ] else ...[
-                                          if (modifyTeam.leaderID == GlobalProfile.loggedInUser.userID) ...[
+                                          if (modifyTeam.leaderID == GlobalProfile.loggedInUser!.userID) ...[
                                             Text(
                                               '팀 정보 링크',
                                               style: SheepsTextStyle.h3(),
@@ -579,27 +578,27 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                                                       await ApiProvider().post(
                                                           '/Team/Leave',
                                                           jsonEncode({
-                                                            "userID": GlobalProfile.loggedInUser.userID,
+                                                            "userID": GlobalProfile.loggedInUser!.userID,
                                                             "targetID": modifyTeam.leaderID,
                                                             "teamID": modifyTeam.id,
-                                                            "userName": GlobalProfile.loggedInUser.name,
+                                                            "userName": GlobalProfile.loggedInUser!.name,
                                                             "roomName": roomName
                                                           }));
 
                                                       //채팅방 삭제
                                                       if(widget.byChat){
-                                                        ChatGlobal.kickOutTeamMemberInRoom(roomName, GlobalProfile.loggedInUser.userID);
+                                                        ChatGlobal.kickOutTeamMemberInRoom(roomName, GlobalProfile.loggedInUser!.userID);
                                                       }else{
                                                         ChatGlobal.roomInfoList.removeWhere((element) => element.roomName == roomName);
                                                       }
 
 
                                                       //팀원 목록에서 삭제
-                                                      totalList.removeWhere((element) => element == GlobalProfile.loggedInUser.userID);
-                                                      modifyTeam.userList.removeWhere((element) => element == GlobalProfile.loggedInUser.userID);
+                                                      totalList.removeWhere((element) => element == GlobalProfile.loggedInUser!.userID);
+                                                      modifyTeam.userList.removeWhere((element) => element == GlobalProfile.loggedInUser!.userID);
 
                                                       //전역 팀에서 팀원 목록 삭제
-                                                      GlobalProfile().removeTeamMember(modifyTeam.id, GlobalProfile.loggedInUser.userID);
+                                                      GlobalProfile().removeTeamMember(modifyTeam.id, GlobalProfile.loggedInUser!.userID);
 
                                                       //나가기 버튼 삭제
                                                       controller.isTeamMember = false;
@@ -616,10 +615,10 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                                                   text: '나가기',
                                                 ),
                                               ],
-                                              if (GlobalProfile.loggedInUser.userID == modifyTeam.leaderID) ...[
+                                              if (GlobalProfile.loggedInUser!.userID == modifyTeam.leaderID) ...[
                                                 myTeamButton(
                                                   press: () {
-                                                    Get.to(() => TeamMemberManagementPage(team: modifyTeam, teamMemberList: totalList, byChat: widget.byChat,)).then((value){
+                                                    Get.to(() => TeamMemberManagementPage(team: modifyTeam, teamMemberList: totalList, byChat: widget.byChat,))?.then((value){
                                                       modifyTeamInMyTeamProfile = modifyTeam;//상세팀프로필에서 사용하는 팀 객체 수정
                                                     });
                                                   },
@@ -635,7 +634,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                                   ),
                                   buildTeamMemberInfoProfiles(), // 팀원 정보
                                   SizedBox(height: 95 * sizeUnit),
-                                  if (!totalList.contains(GlobalProfile.loggedInUser.userID)) SizedBox(height: 70 * sizeUnit), // 최근 활동 시간 뜰 때
+                                  if (!totalList.contains(GlobalProfile.loggedInUser!.userID)) SizedBox(height: 70 * sizeUnit), // 최근 활동 시간 뜰 때
                                 ],
                               ),
                             ),
@@ -645,7 +644,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                     ),
                     bottomOpacity(context),
                     // 내가 속한 팀이 아닐 때
-                    if (!totalList.contains(GlobalProfile.loggedInUser.userID)) lastAccessTime(), // 최근 활동시간
+                    if (!totalList.contains(GlobalProfile.loggedInUser!.userID)) lastAccessTime(), // 최근 활동시간
                     if( widget.proposedTeam ) ... [
                       if( recruitInviteController.getCurrRecruitInvite.response == 2 ) ... [
                         responseDoneButton()
@@ -709,9 +708,9 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
     );
   }
 
-  Widget myTeamButton({@required Function press, @required String text}) {
+  Widget myTeamButton({required Function press, required String text}) {
     return GestureDetector(
-      onTap: press,
+      onTap: () => press(),
       child: Container(
         height: 20 * sizeUnit,
         padding: EdgeInsets.symmetric(horizontal: 8 * sizeUnit),
@@ -761,12 +760,12 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
     );
   }
 
-  Column profileAuthWidget({@required String title, @required String description, @required List list}) {
+  Column profileAuthWidget({required String title, required String description, required List list}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // MyProfile 이면 텍스트 무조건 나오기
-        if (modifyTeam.leaderID == GlobalProfile.loggedInUser.userID) ...[
+        if (modifyTeam.leaderID == GlobalProfile.loggedInUser!.userID) ...[
           Text(title, style: SheepsTextStyle.h3()),
           SizedBox(height: 8 * sizeUnit),
           if (list.length == 0) ...[
@@ -795,7 +794,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
             );
           },
         ),
-        if (modifyTeam.leaderID == GlobalProfile.loggedInUser.userID || list.isNotEmpty) SizedBox(height: 16 * sizeUnit),
+        if (modifyTeam.leaderID == GlobalProfile.loggedInUser!.userID || list.isNotEmpty) SizedBox(height: 16 * sizeUnit),
       ],
     );
   }
@@ -823,8 +822,8 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if (totalList[index] == GlobalProfile.loggedInUser.userID) {
-                          Get.to(()=>DetailProfile(index: 0, profileStatus: PROFILE_STATUS.MyProfile));
+                        if (totalList[index] == GlobalProfile.loggedInUser!.userID) {
+                          Get.to(()=>DetailProfile(index: 0, user: GlobalProfile.loggedInUser!, profileStatus: PROFILE_STATUS.MyProfile));
                         } else {
                           Get.to(()=>DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(totalList[index])));
                         }
@@ -942,7 +941,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                         ApiProvider().post(
                             '/Matching/Response/PersonalSeekTeam',
                             jsonEncode({
-                              "to": GlobalProfile.loggedInUser.userID,
+                              "to": GlobalProfile.loggedInUser!.userID,
                               "from": widget.team.leaderID,
                               "tableIndex": recruitInviteController.getCurrRecruitInvite.id,
                               "targetIndex": recruitInviteController.getCurrRecruitInvite.index,
@@ -1005,7 +1004,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                           ApiProvider().post(
                               '/Matching/Response/PersonalSeekTeam',
                               jsonEncode({
-                                "to": GlobalProfile.loggedInUser.userID,
+                                "to": GlobalProfile.loggedInUser!.userID,
                                 "from": widget.team.leaderID,
                                 "tableIndex": currRecruitInvite.id,
                                 "targetIndex": currRecruitInvite.index,
@@ -1017,7 +1016,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                           NotificationModel notificationmodel = NotificationModel();
 
                           notificationmodel.from = widget.team.leaderID;
-                          notificationmodel.to = GlobalProfile.loggedInUser.userID;
+                          notificationmodel.to = GlobalProfile.loggedInUser!.userID;
                           notificationmodel.targetIndex = recruitInviteController.getCurrRecruitInvite.index;
                           notificationmodel.type = ROOM_TYPE_TEAM_MEMBER_RECRUIT;
                           notificationmodel.time = DateTime.now().toString();
@@ -1065,7 +1064,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                           ApiProvider().post(
                               '/Team/Pass/Interview',
                               jsonEncode({
-                                "to": GlobalProfile.loggedInUser.userID,
+                                "to": GlobalProfile.loggedInUser!.userID,
                                 "from": widget.team.leaderID,
                                 "tableIndex": currRecruitInvite.id,
                                 "targetIndex": currRecruitInvite.index,
@@ -1081,7 +1080,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                             NotificationModel notificationmodel = NotificationModel();
 
                             notificationmodel.from = widget.team.leaderID;
-                            notificationmodel.to = GlobalProfile.loggedInUser.userID;
+                            notificationmodel.to = GlobalProfile.loggedInUser!.userID;
                             notificationmodel.targetIndex = currRecruitInvite.index;
                             notificationmodel.type = ROOM_TYPE_TEAM;
                             notificationmodel.time = DateTime.now().toString();
@@ -1099,7 +1098,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                             //팀 전역에 나를 등록
                             GlobalProfile.teamProfile.forEach((element) {
                               if(element.id == widget.team.id){
-                                element.userList.add(GlobalProfile.loggedInUser.userID);
+                                element.userList.add(GlobalProfile.loggedInUser!.userID);
                               }
                             });
                           }else{
@@ -1250,7 +1249,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
     );
   }
 
-  AnimatedContainer buildDot({int index}) {
+  AnimatedContainer buildDot({required int index}) {
     return AnimatedContainer(
       duration: kAnimationDuration,
       margin: EdgeInsets.only(right: 4 * sizeUnit),
@@ -1264,15 +1263,15 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
   }
 
   Widget changeProfileWidget() {
-    ModelLikes modelLikes;
+    ModelLikes? modelLikes;
     globalTeamLikeList.forEach((element) {
       if (element.TargetID == widget.team.id) modelLikes = element;
     });
 
     return GestureDetector(
       onTap: () async {
-        if (modifyTeam.leaderID == GlobalProfile.loggedInUser.userID) {
-          Get.to(() => TeamProfileManagementPage(team: modifyTeam)).then((value) {
+        if (modifyTeam.leaderID == GlobalProfile.loggedInUser!.userID) {
+          Get.to(() => TeamProfileManagementPage(team: modifyTeam))?.then((value) {
             if (value != null) {
               setState(() {
                 modifyTeam = value[0];
@@ -1288,14 +1287,14 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
             var res = await ApiProvider().post(
                 '/Team/InsertLike',
                 jsonEncode({
-                  "userID": GlobalProfile.loggedInUser.userID,
+                  "userID": GlobalProfile.loggedInUser!.userID,
                   "targetID": widget.team.id,
                 }));
 
             if (res['created']) {
               modelLikes = ModelLikes.fromJson(res['item']);
 
-              globalTeamLikeList.add(modelLikes);
+              globalTeamLikeList.add(modelLikes!);
             } else {
               globalTeamLikeList.removeWhere((element) => element.TargetID == widget.team.id);
             }
@@ -1308,7 +1307,7 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
           }
         }
       },
-      child: modifyTeam.leaderID == GlobalProfile.loggedInUser.userID
+      child: modifyTeam.leaderID == GlobalProfile.loggedInUser!.userID
           ? SvgPicture.asset(
               svgSetting,
               color: sheepsColorDarkGrey,
@@ -1333,14 +1332,15 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
           packageName: 'kr.noteasy.sheeps_app',
           minimumVersion: 1, //실행 가능 최소 버전
         ),
-        iosParameters: IosParameters(
+        iosParameters: IOSParameters(
           bundleId: 'kr.noteasy.sheepsApp',
           minimumVersion: '1.0',
           appStoreId: '1558625011',
         ));
 
-    final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
-    final Uri shortUrl = shortDynamicLink.shortUrl;
+    // final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+    // final Uri shortUrl = shortDynamicLink.shortUrl;
+    final Uri shortUrl = parameters.link;
 
     String name = modifyTeam.name;
 
