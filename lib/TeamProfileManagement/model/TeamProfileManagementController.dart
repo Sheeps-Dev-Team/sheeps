@@ -134,10 +134,10 @@ class TeamProfileManagementController extends GetxController {
     certificationList.addAll(team.teamAuthList);
     performancesList.addAll(team.teamPerformList);
     winList.addAll(team.teamWinList);
-    siteUrl.value = team.teamLink.siteUrl ?? '';
-    recruitUrl.value = team.teamLink.recruitUrl ?? '';
-    instagramUrl.value = team.teamLink.instagramUrl ?? '';
-    facebookUrl.value = team.teamLink.facebookUrl ?? '';
+    siteUrl.value = team.teamLink!.siteUrl ?? '';
+    recruitUrl.value = team.teamLink!.recruitUrl ?? '';
+    instagramUrl.value = team.teamLink!.instagramUrl ?? '';
+    facebookUrl.value = team.teamLink!.facebookUrl ?? '';
 
     if(team.profileImgList[0].id == -2){//기본이미지만 담겨있으면.
       profileImgList.clear();

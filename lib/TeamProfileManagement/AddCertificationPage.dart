@@ -28,7 +28,7 @@ class _AddCertificationPageState extends State<AddCertificationPage> {
   final TextEditingController certificationController = TextEditingController();
   final TextEditingController organizationController = TextEditingController();
 
-  File authFile;
+  File? authFile;
 
   @override
   void dispose() {
@@ -109,7 +109,7 @@ class _AddCertificationPageState extends State<AddCertificationPage> {
                                   GestureDetector(
                                     onTap: () {
                                       unFocus(context);
-                                      Get.to(() => AuthFileUploadPage(appBarTitle: '인증 증빙 자료', authFile: authFile)).then((value) {
+                                      Get.to(() => AuthFileUploadPage(appBarTitle: '인증 증빙 자료', authFile: authFile!))?.then((value) {
                                         if (value != null) {
                                           setState(() {
                                             authFile = value[0];
@@ -132,7 +132,7 @@ class _AddCertificationPageState extends State<AddCertificationPage> {
                                             child: Container(
                                               width: 284 * sizeUnit,
                                               child: Text(
-                                                authFile != null ? authFile.path.substring(authFile.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
+                                                authFile != null ? authFile!.path.substring(authFile!.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
                                                 style: SheepsTextStyle.hint4Profile().copyWith(color: authFile != null ? sheepsColorGreen : sheepsColorGrey),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -181,7 +181,7 @@ class _AddCertificationPageState extends State<AddCertificationPage> {
                                 controller.certificationList.add(TeamAuth(
                                   id: -1,
                                   contents: contents,
-                                  imgUrl: authFile.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
+                                  imgUrl: authFile!.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
                                   auth: 2,
                                 ));
                                 Get.back();
