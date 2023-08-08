@@ -23,13 +23,13 @@ class Event {
   Widget bottomWidget = SizedBox.shrink();
 
   Event({
-    @required this.img1,
-    @required this.img2,
-    @required this.buttonFunc,
-    @required this.bottomWidget,
-    @required this.backgroundColor,
-    @required this.buttonTextColor,
-    @required this.buttonColor,
+    required this.img1,
+    required this.img2,
+    required this.buttonFunc,
+    required this.bottomWidget,
+    required this.backgroundColor,
+    required this.buttonTextColor,
+    required this.buttonColor,
   });
 }
 
