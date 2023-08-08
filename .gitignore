@@ -58,3 +58,6 @@ pubspec.lock
 ios/AppStore_kr.sheeps.nolilteo.mobileprovision
 ios/SP72DSGQ5A.cer
 ios/build
+
+# dart sdk
+.idea/libraries/Dart_SDK.xml
