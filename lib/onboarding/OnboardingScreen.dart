@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,11 +17,11 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  static DateTime currentBackPressTime;
+  static DateTime? currentBackPressTime;
 
   _isEnd() {
     DateTime now = DateTime.now();
-    if (currentBackPressTime == null || now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+    if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
       currentBackPressTime = now;
       showSheepsToast(context: context, text: '뒤로 가기를 한 번 더 입력하시면 종료됩니다.');
       return false;
@@ -35,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   List<BoardContents> listBoardContents = [];
 
-  AnimatedContainer buildDot({int index}) {
+  AnimatedContainer buildDot({required int index}) {
     return AnimatedContainer(
       duration: kAnimationDuration,
       margin: EdgeInsets.only(right: 4 * sizeUnit),
@@ -137,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  AnnotatedRegion<SystemUiOverlayStyle>(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: WillPopScope(
         onWillPop: () async {
@@ -162,13 +160,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             Container(
                               height: 288 * sizeUnit,
                               child: PageView.builder(
-                                  onPageChanged: (value) {
-                                    setState(() {
-                                      currentPage = value;
-                                    });
-                                  },
-                                  itemCount: listBoardContents.length,
-                                  itemBuilder: (context, index) => ContentsContainer(boardContents: listBoardContents[index]),
+                                onPageChanged: (value) {
+                                  setState(() {
+                                    currentPage = value;
+                                  });
+                                },
+                                itemCount: listBoardContents.length,
+                                itemBuilder: (context, index) => ContentsContainer(boardContents: listBoardContents[index]),
                               ),
                             ),
                             Row(
@@ -180,7 +178,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: List.generate(
                                 listBoardContents.length,
-                                    (index) => buildDot(index: index),
+                                (index) => buildDot(index: index),
                               ),
                             ),
                             SizedBox(height: 20 * sizeUnit),
@@ -209,7 +207,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 class ContentsContainer extends StatelessWidget {
   final BoardContents boardContents;
 
-  ContentsContainer({Key key, this.boardContents});
+  ContentsContainer({Key? key, required this.boardContents});
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +216,7 @@ class ContentsContainer extends StatelessWidget {
       children: [
         Row(
           children: [
-            SizedBox(width: 16*sizeUnit),
+            SizedBox(width: 16 * sizeUnit),
             SvgPicture.asset(
               boardContents.icon,
               height: 40 * sizeUnit,
@@ -258,8 +256,14 @@ class BoardContents {
   String icon;
   String title1;
   String title2;
-  String title3 = '';
+  String title3;
   List<InlineSpan> contents;
 
-  BoardContents({@required this.icon, @required this.title1, @required this.title2, this.title3, @required this.contents});
+  BoardContents({
+    required this.icon,
+    required this.title1,
+    required this.title2,
+    this.title3 = '',
+    required this.contents,
+  });
 }

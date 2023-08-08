@@ -32,8 +32,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
 
-  Animation<double> animation;
-  AnimationController animationController;
+  late Animation<double> animation;
+  late AnimationController animationController;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     try{
       (() async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        bool res = prefs.getBool('IfNewUser');
+        bool? res = prefs.getBool('IfNewUser');
 
         //todo roy to luen 버전체크 upgrader
 
@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             Get.off(() => OnboardingScreen());
           });
         } else if(res){
-          bool res = prefs.getBool('autoLoginKey');
+          bool? res = prefs.getBool('autoLoginKey');
 
           // ignore: unnecessary_statements
           SocketProvider provider = SocketProvider.to;
@@ -68,14 +68,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               Get.off(() => LoginSelectPage());
             });
           } else {
-            String isSocial = prefs.getString('socialLogin');
+            String? isSocial = prefs.getString('socialLogin');
 
             dynamic result;
             String id = '';
             String pw = '';
             if(isSocial == '0'){
-              id = prefs.getString('autoLoginId');
-              pw = prefs.getString('autoLoginPw');
+              id = prefs.getString('autoLoginId') ?? '';
+              pw = prefs.getString('autoLoginPw') ?? '';
 
               String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
 
@@ -86,8 +86,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   }
               ));
             } else if(isSocial == '1'){
-              id = prefs.getString('autoLoginId');
-              pw = prefs.getString('autoLoginPw');
+              id = prefs.getString('autoLoginId') ?? '';
+              pw = prefs.getString('autoLoginPw') ?? '';
 
               result = await ApiProvider().post('/Personal/Select/SocialLogin', jsonEncode(
                   {
@@ -97,8 +97,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   }
               ));
             }else if(isSocial == '2'){
-              id = prefs.getString('autoLoginAppleId');
-              pw = prefs.getString('autoLoginApplePw');
+              id = prefs.getString('autoLoginAppleId') ?? '';
+              pw = prefs.getString('autoLoginApplePw') ?? '';
 
               result = await ApiProvider().post('/Personal/Select/SocialLogin', jsonEncode(
                   {
@@ -108,8 +108,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   }
               ));
             }else if(isSocial == '3'){
-              id = prefs.getString('autoLoginId');
-              pw = prefs.getString('autoLoginPw');
+              id = prefs.getString('autoLoginId') ?? '';
+              pw = prefs.getString('autoLoginPw') ?? '';
 
               result = await ApiProvider().post('/Personal/Select/SocialLogin', jsonEncode(
                   {
@@ -145,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    sizeUnit = SheepsTextStyle.sizeUnitStandard(context).fontSize;
+    sizeUnit = SheepsTextStyle.sizeUnitStandard(context).fontSize!;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -205,7 +205,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 class AnimatedSheepsLogo extends AnimatedWidget{
   static final _opacityTween = Tween<double>(begin: 0.1, end: 1);
   
-  AnimatedSheepsLogo({Key key, @required Animation<double> animation}) : super(key: key, listenable: animation);
+  AnimatedSheepsLogo({Key? key, required Animation<double> animation}) : super(key: key, listenable: animation);
 
   Widget build(BuildContext context){
     final animation = listenable as Animation<double>;
