@@ -5,7 +5,7 @@ import 'package:sheeps_app/config/constants.dart';
 class SheepsTextStyle {
   static TextStyle sizeUnitStandard(BuildContext context) {
     return TextStyle(
-      fontSize: Theme.of(context).textTheme.bodyText1.fontSize,
+      fontSize: Theme.of(context).textTheme.bodyText1?.fontSize,
     );
   }
 

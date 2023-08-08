@@ -49,7 +49,7 @@ import 'package:sheeps_app/userdata/GlobalProfile.dart';
 import 'package:sheeps_app/userdata/User.dart';
 
 ////////////////////////////공통변수는 여기에 추가//////////////////////////////////
-double sizeUnit;
+double sizeUnit = 1.0;
 bool AllNotification = true;
 bool isNewMember = false;
 bool isRecvData = false;
@@ -91,7 +91,10 @@ String GetWeekDay(String WeekDay) {
     return '금요일';
   else if (WeekDay == 'Saturday')
     return '토요일';
-  else if (WeekDay == 'Sunday') return '일요일';
+  else if (WeekDay == 'Sunday')
+    return '일요일';
+  else
+    return '';
 }
 
 String getYearMonthDayByString(String date) {
@@ -130,7 +133,7 @@ String getPrevRoomDate(String date) {
 }
 
 String setDateAmPm(String date, bool isAmPM, String updatedAt) {
-  if (date == null || date == '') return '';
+  if (date.isEmpty) return '';
 
   int index = date.indexOf(":");
   int sub = int.parse(date.substring(0, index));
@@ -148,7 +151,7 @@ String setDateAmPm(String date, bool isAmPM, String updatedAt) {
     if (sub == 0) sub = 12;
   }
 
-  if (updatedAt == null) {
+  if (updatedAt.isEmpty) {
     if (subRest.length < 2) subRest = '0' + subRest;
 
     return AmOrPM + sub.toString() + ":" + subRest;
@@ -180,25 +183,21 @@ String getRoomName(int ID1, int ID2, {int ID3 = 0, int roomType = ROOM_TYPE_PERS
       {
         return header + lowNum.toString() + "userID" + bigNum.toString();
       }
-      break;
     case ROOM_TYPE_TEAM:
       {
         header = "teamID";
         return header + lowNum.toString() + "userID" + bigNum.toString();
       }
-      break;
     case ROOM_TYPE_PERSONAL_SEEK_TEAM:
       {
         header = "personalID";
         return header + lowNum.toString() + "userID" + bigNum.toString() + "inviteID" + ID3.toString();
       }
-      break;
     case ROOM_TYPE_TEAM_MEMBER_RECRUIT:
       {
         header = "teamMemberID";
         return header + lowNum.toString() + "userID" + bigNum.toString() + "inviteID" + ID3.toString();
       }
-      break;
   }
 
   return header + lowNum.toString() + "userID" + bigNum.toString();
@@ -338,7 +337,7 @@ String getFileRealName(String file) {
   return file.substring(file.lastIndexOf('/'), file.length);
 }
 
-String validNameErrorText(String name) {
+String? validNameErrorText(String name) {
   if (name.isEmpty) return 'empty';
 
   int utf8Length = utf8.encode(name).length;
@@ -358,8 +357,8 @@ String validNameErrorText(String name) {
   return null;
 }
 
-String validEmailErrorText(String email) {
-  String errMsg;
+String? validEmailErrorText(String email) {
+  String? errMsg;
   if (email.isEmpty) return 'empty';
 
   RegExp regExp = RegExp(r'^[0-9a-zA-Z][0-9a-zA-Z\_\-\.\+]+[0-9a-zA-Z]@[0-9a-zA-Z][0-9a-zA-Z\_\-]*[0-9a-zA-Z](\.[a-zA-Z]{2,6}){1,2}$');
@@ -374,8 +373,8 @@ String validEmailErrorText(String email) {
   return errMsg;
 }
 
-String validPasswordErrorText(String password) {
-  String errMsg;
+String? validPasswordErrorText(String password) {
+  String? errMsg;
   if (password.isEmpty) return 'empty';
 
   RegExp exp = RegExp(r"^[A-Za-z\d$@$!%*#?&]{1,}$");
@@ -389,7 +388,7 @@ String validPasswordErrorText(String password) {
   return errMsg;
 }
 
-String validPasswordConfirmErrorText(String password, String passwordConfirm) {
+String? validPasswordConfirmErrorText(String password, String passwordConfirm) {
   if (passwordConfirm == password) {
     return null;
   } else {
@@ -397,7 +396,7 @@ String validPasswordConfirmErrorText(String password, String passwordConfirm) {
   }
 }
 
-String validRealNameErrorText(String name) {
+String? validRealNameErrorText(String name) {
   if (name.isEmpty) return 'empty';
   RegExp regExp = RegExp(r'(^[가-힣]{2,10}$)'); // 2 ~ 10개 한글 입력가능
   if (regExp.hasMatch(name)) {
@@ -407,7 +406,7 @@ String validRealNameErrorText(String name) {
   }
 }
 
-String validPhoneNumErrorText(String number) {
+String? validPhoneNumErrorText(String number) {
   if (number.isEmpty) return 'empty'; // number 빈 값일 때 empty 리턴
   RegExp regExp = RegExp(r'^\d{10,11}$'); // 10 ~ 11개 숫자 입력가능
   if (regExp.hasMatch(number)) {
@@ -418,7 +417,7 @@ String validPhoneNumErrorText(String number) {
 }
 
 //url 유효성 검사
-String urlCheckErrorText(String url) {
+String? urlCheckErrorText(String url) {
   if (url.isEmpty) {
     return null;
   }
@@ -522,7 +521,6 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
       }
     }
 
-
     ChatGlobal.roomInfoList.clear();
     //join된 방들 List 받음
     var list = await ApiProvider().post('/Room/User/Select', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
@@ -599,7 +597,6 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
           roomInfo.profileImage = userData.profileImgList[0].imgUrl;
         } else {
           //전문가
-
         }
 
         List<ChatRecvMessageModel> chatList = (await ChatDBHelper().getRoomData(roomName)).cast<ChatRecvMessageModel>();
@@ -610,15 +607,15 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
             for (int i = 0; i < chatList.length; ++i) {
               if (chatList[i].isImage != 0) {
                 chatList[i].fileMessage = chatList[i].message;
-                if(await File(chatList[i].fileMessage).exists() == false){
+                if (await File(chatList[i].fileMessage).exists() == false) {
                   var getImageData = await ApiProvider().post('/ChatLog/SelectImageData', jsonEncode({"id": chatList[i].isImage}));
 
                   if (getImageData != null) {
                     chatList[i].message = getImageData['Data'];
                     chatList[i].fileMessage = await base64ToFileURL(chatList[i].message, chatList[i].isImage.toString());
                     await ChatDBHelper().updateImageData(chatList[i].fileMessage, chatList[i].isImage);
-                  }else{
-                    chatList[i].fileMessage = null;
+                  } else {
+                    chatList[i].fileMessage = '';
                   }
                 }
               }
@@ -634,20 +631,17 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
           }
         }
 
-        var chatLogList = await ApiProvider().post('/ChatLog/UnSendSelect', jsonEncode({
-          "userID": user.userID,
-          "roomName" : roomName
-        }));
+        List chatLogList = await ApiProvider().post('/ChatLog/UnSendSelect', jsonEncode({"userID": user.userID, "roomName": roomName}));
 
         messageCount += chatLogList.length;
 
         int prevLength = 0;
         int prev_load_max = 20;
         //최적화를 위해 20개 먼저 처리
-        if(chatLogList != null ){
+        if (chatLogList != null) {
           prevLength = chatLogList.length >= prev_load_max ? prev_load_max : chatLogList.length - 1;
           int startIndex = chatList.length;
-          for (int i = chatLogList.length - 1 ; i > chatLogList.length - 1 - prevLength ; --i) {
+          for (int i = chatLogList.length - 1; i > chatLogList.length - 1 - prevLength; --i) {
             ChatRecvMessageModel message = ChatRecvMessageModel(
               chatId: chatLogList[i]['id'],
               roomName: chatLogList[i]['roomName'],
@@ -663,7 +657,7 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
 
             if (message.roomName == roomName) {
               //사진이미지 처리
-              if(message.isImage != 0){
+              if (message.isImage != 0) {
                 var getImageData = await ApiProvider().post('/ChatLog/SelectImageData', jsonEncode({"id": message.isImage}));
 
                 if (getImageData != null) {
@@ -699,10 +693,10 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
 
         //나머지 데이터는 비동기로 처리
         if (chatLogList != null && chatLogList.length > 0) {
-          Future.microtask( () async {
+          Future.microtask(() async {
             int insertIndex = chatList.length - prevLength;
             for (int i = 0; i < chatLogList.length - prevLength; ++i) {
-                ChatRecvMessageModel message = ChatRecvMessageModel(
+              ChatRecvMessageModel message = ChatRecvMessageModel(
                 chatId: chatLogList[i]['id'],
                 roomName: chatLogList[i]['roomName'],
                 to: chatLogList[i]['to'].toString(),
@@ -716,17 +710,17 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
               );
 
               if (message.roomName == roomName) {
-                ChatGlobal.roomInfoList.forEach((element) async{
-                  if(element.roomName == roomName){
+                ChatGlobal.roomInfoList.forEach((element) async {
+                  if (element.roomName == roomName) {
                     //사진이미지 처리
-                    if(message.isImage != 0){
+                    if (message.isImage != 0) {
                       var getImageData = await ApiProvider().post('/ChatLog/SelectImageData', jsonEncode({"id": message.isImage}));
 
                       if (getImageData != null) {
                         message.message = getImageData['Data'];
                         message.fileMessage = await ChatDBHelper().createData(message);
                       }
-                    }else{
+                    } else {
                       await ChatDBHelper().createData(message);
                     }
 
@@ -737,8 +731,8 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
             }
 
             //기존 로드했던거 로컬 데이터에 저장
-            for(int i = chatList.length - prevLength; i < chatList.length; ++i){
-              await ChatDBHelper().createData(chatList[i], isCreated : true);
+            for (int i = chatList.length - prevLength; i < chatList.length; ++i) {
+              await ChatDBHelper().createData(chatList[i], isCreated: true);
             }
           });
         }
@@ -939,7 +933,7 @@ Future globalLogout(bool isSelf, socket) async {
 
   final navigationNum = Get.put(NavigationNum());
   navigationNum.setNum(DASHBOARD_MAIN_PAGE);
-  GlobalProfile.loggedInUser = null;
+  GlobalProfile.loggedInUser = GlobalProfile.nullUser;
   Get.offAll(() => LoginSelectPage());
 }
 
@@ -950,15 +944,10 @@ Future bannerFileDownload() async {
   double progress = 0.0;
 
   var dio = new Dio();
-  dio.download(
-    ApiProvider().getUrl + '/bannerFile.txt',
-    path,
-    onReceiveProgress: (rcv, total) {
-      progress = ((rcv / total) * 100);
-      debugPrint(progress.toString());
-    },
-    deleteOnError: true
-  ).then((value) {
+  dio.download(ApiProvider().getUrl + '/bannerFile.txt', path, onReceiveProgress: (rcv, total) {
+    progress = ((rcv / total) * 100);
+    debugPrint(progress.toString());
+  }, deleteOnError: true).then((value) {
     debugPrint('call dio download done');
     debugPrint(progress.toString());
   });
@@ -1027,55 +1016,38 @@ String revertAbbreviateForLocation(String location) {
   switch (location) {
     case '서울':
       return '서울특별시';
-      break;
     case '인천':
       return '인천광역시';
-      break;
     case '경기':
       return '경기도';
-      break;
     case '강원':
       return '강원도';
-      break;
     case '충남':
       return '충청남도';
-      break;
     case '충북':
       return '충청북도';
-      break;
     case '세종':
       return '세종시';
-      break;
     case '대전':
       return '대전광역시';
-      break;
     case '경북':
       return '경상북도';
-      break;
     case '경남':
       return '경상남도';
-      break;
     case '대구':
       return '대구광역시';
-      break;
     case '부산':
       return '부산광역시';
-      break;
     case '전북':
       return '전라북도';
-      break;
     case '전남':
       return '전라남도';
-      break;
     case '광주':
       return '광주광역시';
-      break;
     case '울산':
       return '울산광역시';
-      break;
     case '제주':
       return '제주특별자치도';
-      break;
   }
   return location;
 }
@@ -1091,7 +1063,7 @@ String cutAuthInfo(String contents) {
 
 //포커스 해제 함수
 void unFocus(BuildContext context) {
-  FocusManager.instance.primaryFocus.unfocus();
+  FocusManager.instance.primaryFocus?.unfocus();
 }
 
 //공백 제어 함수
@@ -1132,29 +1104,29 @@ String removeSpace(String text) {
 
 //다이나믹링크 받는 함수
 void initDynamicLinks() async {
-  FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
-    Uri deepLink = dynamicLink?.link;
-    if (deepLink != null && GlobalProfile.loggedInUser != null) {
-      _handleDynamicLink(deepLink);
-    }
-  }, onError: (OnLinkErrorException e) async {
-    print('onLinkError');
-    print(e.message);
-  });
-
-  final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
-  final Uri deepLink = data?.link;
-
-  if (deepLink != null && GlobalProfile.loggedInUser != null) {
-    _handleDynamicLink(deepLink);
-  }
+  // FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
+  //   Uri deepLink = dynamicLink?.link;
+  //   if (deepLink != null && GlobalProfile.loggedInUser != null) {
+  //     _handleDynamicLink(deepLink);
+  //   }
+  // }, onError: (OnLinkErrorException e) async {
+  //   print('onLinkError');
+  //   print(e.message);
+  // });
+  //
+  // final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
+  // final Uri deepLink = data?.link;
+  //
+  // if (deepLink != null && GlobalProfile.loggedInUser != null) {
+  //   _handleDynamicLink(deepLink);
+  // }
 }
 
 void _handleDynamicLink(Uri deepLink) async {
   switch (deepLink.path) {
     case '/profile_person':
       {
-        int id = int.parse(deepLink.queryParameters['id']);
+        int id = int.parse(deepLink.queryParameters['id']!);
         if (id == GlobalProfile.loggedInUser.userID)
           Get.to(() => DetailProfile(index: 0, profileStatus: PROFILE_STATUS.MyProfile));
         else
@@ -1163,27 +1135,27 @@ void _handleDynamicLink(Uri deepLink) async {
       break;
     case '/profile_team':
       {
-        int id = int.parse(deepLink.queryParameters['id']);
+        int id = int.parse(deepLink.queryParameters['id']!);
         Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByID(id)));
       }
       break;
     case '/recruit_person':
       {
-        int id = int.parse(deepLink.queryParameters['id']);
+        int id = int.parse(deepLink.queryParameters['id']!);
         PersonalSeekTeam personalSeekTeam = await getFuturePersonalSeekTeam(id);
         Get.to(() => RecruitDetailPage(isRecruit: false, data: personalSeekTeam));
       }
       break;
     case '/recruit_team':
       {
-        int id = int.parse(deepLink.queryParameters['id']);
+        int id = int.parse(deepLink.queryParameters['id']!);
         TeamMemberRecruit teamMemberRecruit = await getFutureTeamMemberRecruit(id);
         Get.to(() => RecruitDetailPage(isRecruit: true, data: teamMemberRecruit));
       }
       break;
     case '/community':
       {
-        int id = int.parse(deepLink.queryParameters['id']);
+        int id = int.parse(deepLink.queryParameters['id']!);
         Community community = await GlobalProfile.getFutureCommunityByID(id);
         Get.to(() => CommunityMainDetail(community));
       }
@@ -1193,8 +1165,8 @@ void _handleDynamicLink(Uri deepLink) async {
 
 //커스텀 토스트
 showSheepsToast({
-  @required BuildContext context,
-  @required String text,
+  required BuildContext context,
+  required String text,
 }) {
   FToast fToast = FToast();
   fToast.init(context);

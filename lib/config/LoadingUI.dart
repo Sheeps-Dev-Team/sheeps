@@ -3,14 +3,13 @@ import 'dart:math';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sheeps_app/config/GlobalAsset.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
-import 'package:sheeps_app/config/constants.dart';
 
 class DialogBuilder {
   DialogBuilder(this.context);
 
   final BuildContext context;
 
-    void showLoadingIndicator([String text]) {
+  void showLoadingIndicator([String? text]) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -19,9 +18,7 @@ class DialogBuilder {
         return AlertDialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          content: LoadingIndicator(
-              text: text
-          ),
+          content: text == null ? null : LoadingIndicator(text: text),
         );
       },
     );
@@ -32,20 +29,18 @@ class DialogBuilder {
   }
 }
 
-
 // ignore: must_be_immutable
 class LoadingIndicator extends StatefulWidget {
-
   String text;
 
-  LoadingIndicator({Key key, this.text}) : super(key : key);
+  LoadingIndicator({Key? key, required this.text}) : super(key: key);
 
   @override
   _LoadingIndicatorState createState() => _LoadingIndicatorState();
 }
 
 class _LoadingIndicatorState extends State<LoadingIndicator> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -65,28 +60,20 @@ class _LoadingIndicatorState extends State<LoadingIndicator> with SingleTickerPr
 
     return Container(
         color: Colors.transparent,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedBuilder(
-                  animation: _controller,
-                  builder: (_, child) {
-                    return Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(_controller.value * 4 * pi),
-                      child: child,
-                    );
-              },
-                child: SvgPicture.asset(
-                    svgSheepsLoadingIcon
-                ),
-
-              ),
-              //_getText(widget.text)
-            ]
-        )
-    );
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (_, child) {
+              return Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(_controller.value * 4 * pi),
+                child: child,
+              );
+            },
+            child: SvgPicture.asset(svgSheepsLoadingIcon),
+          ),
+          //_getText(widget.text)
+        ]));
   }
 
   Text _getText(String displayedText) {

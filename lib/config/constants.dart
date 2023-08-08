@@ -40,3 +40,5 @@ const int RECRUIT_LIMIT_PERSON = 2;
 const int RECRUIT_LIMIT_TEAM = 3;
 
 const int MAX_CREATE_TEAM_LENGTH = 3; // 팀 최대 생성 가능 갯수
+
+const nullInt = -100;
