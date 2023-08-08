@@ -158,7 +158,7 @@ class ChatGlobal extends GetxController {
     roomInfoList.forEach((element) {
       if(element.roomName == roomName){
         element.chatUserIDList.removeWhere((element) => element == userID);
-        if(element.chatUserIDList.length == 0 || GlobalProfile.loggedInUser.userID == userID){
+        if(element.chatUserIDList.length == 0 || GlobalProfile.loggedInUser!.userID == userID){
           roomInfo = element;
         }
       }

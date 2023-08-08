@@ -55,7 +55,7 @@ class CommunityDetailController extends GetxController{
         idx1 = i;
 
         for (int j = 0; j < communityList[idx1].communityLike.length; j++) {
-          if ((communityList[idx1].communityLike[j].userID) == GlobalProfile.loggedInUser.userID) {
+          if ((communityList[idx1].communityLike[j].userID) == GlobalProfile.loggedInUser!.userID) {
             idx2 = j;
             break;
           }
@@ -94,7 +94,7 @@ class CommunityDetailController extends GetxController{
       var result = await ApiProvider().post(
           '/CommunityPost/InsertReplyLike',
           jsonEncode({
-            "userID": GlobalProfile.loggedInUser.userID,
+            "userID": GlobalProfile.loggedInUser!.userID,
             "replyID": communityReply.id,
           }));
 
@@ -108,7 +108,7 @@ class CommunityDetailController extends GetxController{
 
         if (result != null) {
           for (int i = 0; i < communityReply.communityReplyLike.length; i++) {
-            if (communityReply.communityReplyLike[i].userID == GlobalProfile.loggedInUser.userID) {
+            if (communityReply.communityReplyLike[i].userID == GlobalProfile.loggedInUser!.userID) {
               idx = i;
               break;
             }
@@ -130,7 +130,7 @@ class CommunityDetailController extends GetxController{
     bool isReplyLike = false;
 
     communityReply.communityReplyLike.forEach((element) {
-      if(element.userID == GlobalProfile.loggedInUser.userID) isReplyLike = true;
+      if(element.userID == GlobalProfile.loggedInUser!.userID) isReplyLike = true;
     });
 
     return isReplyLike;

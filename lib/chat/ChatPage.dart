@@ -101,7 +101,7 @@ class _ChatPageState extends State<ChatPage> {
 
     if (widget.isNeedCallPop == null) widget.isNeedCallPop = false;
 
-    chatSettingUserList.add(GlobalProfile.loggedInUser);
+    chatSettingUserList.add(GlobalProfile.loggedInUser!);
 
     for (int i = 0; i < widget.chatUserList.length; ++i) {
       chatSettingUserList.add(widget.chatUserList[i]);
@@ -116,7 +116,7 @@ class _ChatPageState extends State<ChatPage> {
       if(_chatGlobal!.getRoomInfoList[i].roomInfoID == null || _chatGlobal!.getRoomInfoList[i].roomInfoID == -1){
         Future.microtask(() async {
           await ApiProvider().post('/Room/Info/Select', jsonEncode({
-            "userID" : GlobalProfile.loggedInUser.userID,
+            "userID" : GlobalProfile.loggedInUser!.userID,
             "roomName" : widget.roomName
           })).then((value) => {
             if(value != null){
@@ -345,7 +345,7 @@ class _ChatPageState extends State<ChatPage> {
                                   child: ListView.builder(
                                     itemCount: chatSettingUserList.length,
                                     itemBuilder: (context, index) {
-                                      return settingProfile(chatSettingUserList[index], isMe: chatSettingUserList[index].userID == GlobalProfile.loggedInUser.userID);
+                                      return settingProfile(chatSettingUserList[index], isMe: chatSettingUserList[index].userID == GlobalProfile.loggedInUser!.userID);
                                     },
                                   )),
                               SizedBox(
@@ -366,7 +366,7 @@ class _ChatPageState extends State<ChatPage> {
                                       () => {
                                     {
                                       Get.to(() => PageReport(
-                                        userID: GlobalProfile.loggedInUser.userID,
+                                        userID: GlobalProfile.loggedInUser!.userID,
                                         classification: 'ChatRoom',
                                         reportedID: widget.roomName,
                                       ))
@@ -432,7 +432,7 @@ class _ChatPageState extends State<ChatPage> {
                                         {Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(widget.targetID)))}
                                       else
                                         {Get.to(() => DetailTeamProfile(index: 0, team: GlobalProfile.getTeamByID(widget.targetID), byChat: true,))?.then((value) => {
-                                          if(ChatGlobal.removeUserList.length != 0 && (ChatGlobal.removeUserList[0] == GlobalProfile.loggedInUser.userID)){
+                                          if(ChatGlobal.removeUserList.length != 0 && (ChatGlobal.removeUserList[0] == GlobalProfile.loggedInUser!.userID)){
                                             needCallPopFunc(), Get.back()
                                           }
                                           else{
@@ -472,9 +472,9 @@ class _ChatPageState extends State<ChatPage> {
                                           {
                                             Function func = () {
                                               ApiProvider().post('/Room/Leave', jsonEncode({
-                                                "userID" : GlobalProfile.loggedInUser.userID,
+                                                "userID" : GlobalProfile.loggedInUser!.userID,
                                                 "roomID" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID,
-                                                "userName" : GlobalProfile.loggedInUser.name,
+                                                "userName" : GlobalProfile.loggedInUser!.name,
                                                 "recruitID" : -1, //게시글의 주인일경우 초대장인 이미 파괴
                                                 "type" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type
                                               }));
@@ -534,9 +534,9 @@ class _ChatPageState extends State<ChatPage> {
                                         {
                                           Function func = () {
                                             ApiProvider().post('/Room/Leave', jsonEncode({
-                                              "userID" : GlobalProfile.loggedInUser.userID,
+                                              "userID" : GlobalProfile.loggedInUser!.userID,
                                               "roomID" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].roomInfoID,
-                                              "userName" : GlobalProfile.loggedInUser.name,
+                                              "userName" : GlobalProfile.loggedInUser!.name,
                                               "recruitID" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL ? personalInviteRecruitID : recruitInviteController.getCurrRecruitInvite == null ? -1 : recruitInviteController.getCurrRecruitInvite.id,
                                               "type" : _chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type
                                             }));
@@ -710,7 +710,7 @@ class _ChatPageState extends State<ChatPage> {
         //recruitInviteController.currRecruitInvite = null;
       }
     }else if(_chatGlobal!.getRoomInfoList[ChatGlobal.currentRoomIndex].type == ROOM_TYPE_PERSONAL){
-      var res = await ApiProvider().post('/Room/Invite/TargetSelect', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "inviteID": chatUserList[0].userID}));
+      var res = await ApiProvider().post('/Room/Invite/TargetSelect', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "inviteID": chatUserList[0].userID}));
 
       if (res != null || res['res'] != 0){
         personalInviteRecruitID = res['recruitID'];
@@ -786,7 +786,7 @@ class _ChatPageState extends State<ChatPage> {
                   selectedImage = await picker.pickImage(source: ImageSource.gallery);
 
                   _socket!.socket!.emit('resumed',[{
-                    "userID" : GlobalProfile.loggedInUser.userID.toString(),
+                    "userID" : GlobalProfile.loggedInUser!.userID.toString(),
                     "roomStatus" : ROOM_STATUS_CHAT,
                   }] );
 
@@ -825,8 +825,8 @@ class _ChatPageState extends State<ChatPage> {
 
                   ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(
                       to: userListStr,
-                      from: GlobalProfile.loggedInUser.userID,
-                      fromName: GlobalProfile.loggedInUser.name,
+                      from: GlobalProfile.loggedInUser!.userID,
+                      fromName: GlobalProfile.loggedInUser!.name,
                       roomName: widget.roomName,
                       message: base64Image,
                       date: date,
@@ -852,7 +852,7 @@ class _ChatPageState extends State<ChatPage> {
                   selectedImage = await picker.pickImage(source: ImageSource.gallery);
 
                   _socket!.socket!.emit('resumed',[{
-                    "userID" : GlobalProfile.loggedInUser.userID.toString(),
+                    "userID" : GlobalProfile.loggedInUser!.userID.toString(),
                     "roomStatus" : ROOM_STATUS_CHAT,
                   }] );
 
@@ -891,8 +891,8 @@ class _ChatPageState extends State<ChatPage> {
 
                   ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(
                       to: userListStr,
-                      from: GlobalProfile.loggedInUser.userID,
-                      fromName: GlobalProfile.loggedInUser.name,
+                      from: GlobalProfile.loggedInUser!.userID,
+                      fromName: GlobalProfile.loggedInUser!.name,
                       roomName: widget.roomName,
                       message: base64Image,
                       date: date,
@@ -1033,8 +1033,8 @@ class _ChatPageState extends State<ChatPage> {
     //채팅고유값필요
     ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(
         to: userListStr,
-        from: GlobalProfile.loggedInUser.userID,
-        fromName: GlobalProfile.loggedInUser.name,
+        from: GlobalProfile.loggedInUser!.userID,
+        fromName: GlobalProfile.loggedInUser!.name,
         roomName: widget.roomName,
         message: _chatTfController!.text,
         isImage: 0,
@@ -1304,7 +1304,7 @@ class _ChatPageState extends State<ChatPage> {
 
       title = teamMemberRecruit.title.substring(0,teamMemberRecruit.title.lastIndexOf('||'));
       state = setPeriodState(teamMemberRecruit.recruitPeriodEnd);
-      isMain = team.leaderID == GlobalProfile.loggedInUser.userID ? true : false;
+      isMain = team.leaderID == GlobalProfile.loggedInUser!.userID ? true : false;
       firstWrapList.add(team.part);
       firstWrapList.add(team.location);
       firstWrapList.add(teamMemberRecruit.category);
@@ -1324,7 +1324,7 @@ class _ChatPageState extends State<ChatPage> {
 
       title = personalSeekTeam.title.substring(0, personalSeekTeam.title.lastIndexOf('||'));
       state = personalSeekTeam.seekingState == 1 ? "구직 중" : "구직완료";
-      isMain = personalSeekTeam.userId == GlobalProfile.loggedInUser.userID ? true : false;
+      isMain = personalSeekTeam.userId == GlobalProfile.loggedInUser!.userID ? true : false;
       firstWrapList.add(user.part);
       firstWrapList.add(user.subPart);
       firstWrapList.add(user.location);
@@ -1471,9 +1471,13 @@ class _ChatPageState extends State<ChatPage> {
                         okButtonColor: sheepsColorGreen,
                       );
                     }else{
-                      UserData inviteUser = await GlobalProfile.getFutureUserByUserID(recruitInviteController.getCurrRecruitInvite.targetID);
+                      UserData? inviteUser = await GlobalProfile.getFutureUserByUserID(recruitInviteController.getCurrRecruitInvite.targetID);
 
-                      Get.to(() => DetailProfile(index: 0, user: inviteUser, profileStatus: PROFILE_STATUS.Applicant,));
+                      if(inviteUser != null) {
+                        Get.to(() => DetailProfile(index: 0, user: inviteUser, profileStatus: PROFILE_STATUS.Applicant,));
+                      } else {
+                        if(kDebugMode) print('userData null');
+                      }
                     }
                   }else{
                     if(recruitInviteController.getCurrRecruitInvite == null){

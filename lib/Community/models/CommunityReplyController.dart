@@ -52,7 +52,7 @@ class CommunityReplyController extends GetxController {
   // 댓글 좋아요 체크
   void replyLikeCheck(CommunityReply communityReply) {
     communityReply.communityReplyLike.forEach((element) {
-      if(element.userID == GlobalProfile.loggedInUser.userID) isReplyLike(true);
+      if(element.userID == GlobalProfile.loggedInUser!.userID) isReplyLike(true);
     });
   }
 
@@ -61,7 +61,7 @@ class CommunityReplyController extends GetxController {
     bool isLike = false;
 
     for (CommunityReplyReplyLike c in communityReplyReply.communityReplyReplyLike) {
-      if (c.userID == GlobalProfile.loggedInUser.userID) isLike = true;
+      if (c.userID == GlobalProfile.loggedInUser!.userID) isLike = true;
       break;
     }
 
@@ -191,7 +191,7 @@ class CommunityReplyController extends GetxController {
         var res = await ApiProvider().post(
             '/CommunityPost/InsertReplyReply',
             jsonEncode({
-              "userID": GlobalProfile.loggedInUser.userID,
+              "userID": GlobalProfile.loggedInUser!.userID,
               "replyID": communityReply.id,
               "contents": controlSpace(textEditingController.text),
             }));
@@ -239,7 +239,7 @@ class CommunityReplyController extends GetxController {
       var result = await ApiProvider().post(
           '/CommunityPost/InsertReplyLike',
           jsonEncode({
-            "userID": GlobalProfile.loggedInUser.userID,
+            "userID": GlobalProfile.loggedInUser!.userID,
             "replyID": communityReply.id,
           }));
 
@@ -255,7 +255,7 @@ class CommunityReplyController extends GetxController {
 
         if (result != null) {
           for (int i = 0; i < communityReply.communityReplyLike.length; i++) {
-            if (communityReply.communityReplyLike[i].userID == GlobalProfile.loggedInUser.userID) {
+            if (communityReply.communityReplyLike[i].userID == GlobalProfile.loggedInUser!.userID) {
               idx = i;
               break;
             }
@@ -282,7 +282,7 @@ class CommunityReplyController extends GetxController {
       var result = await ApiProvider().post(
           '/CommunityPost/InsertReplyReplyLike',
           jsonEncode({
-            "userID": GlobalProfile.loggedInUser.userID,
+            "userID": GlobalProfile.loggedInUser!.userID,
             "replyreplyID": communityReplyReply.id,
           }));
 
@@ -298,7 +298,7 @@ class CommunityReplyController extends GetxController {
 
         if (result != null) {
           for (int i = 0; i < communityReplyReply.communityReplyReplyLike.length; i++) {
-            if (communityReplyReply.communityReplyReplyLike[i].userID == GlobalProfile.loggedInUser.userID) {
+            if (communityReplyReply.communityReplyReplyLike[i].userID == GlobalProfile.loggedInUser!.userID) {
               idx = i;
               break;
             }

@@ -97,7 +97,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
     if (_community.imageUrl3 != null) urlList.add(_community.imageUrl3!);
 
     Future.microtask(() async {
-      var res = await ApiProvider().post('/CommunityPost/Select/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser.userID}));
+      var res = await ApiProvider().post('/CommunityPost/Select/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser!.userID}));
 
       if (res != null) {
         isAlarm = true;
@@ -106,7 +106,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
       setState(() {});
     });
 
-    controller.communityLikeCheck(_community, GlobalProfile.loggedInUser.userID);
+    controller.communityLikeCheck(_community, GlobalProfile.loggedInUser!.userID);
 
     communityReplyController.addListener(() {
       controller.checkTextField(removeSpace(communityReplyController.text));
@@ -168,7 +168,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                     actions: [
                       GestureDetector(
                         onTap: () async {
-                          var res = await ApiProvider().post('/CommunityPost/Update/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser.userID}));
+                          var res = await ApiProvider().post('/CommunityPost/Update/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser!.userID}));
 
                           if (res['item'] == 1) {
                             isAlarm = false;
@@ -226,7 +226,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                                           child: Text(
                                             _community.category == "비밀" ? "익명" : user.name,
                                             style: SheepsTextStyle.b3()
-                                                .copyWith(color: _community.category == '비밀' && _community.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack),
+                                                .copyWith(color: _community.category == '비밀' && _community.userID == GlobalProfile.loggedInUser!.userID ? sheepsColorGreen : sheepsColorBlack),
                                           ),
                                         ),
                                         SizedBox(width: 4 * sizeUnit),
@@ -383,7 +383,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                                             await ApiProvider().post(
                                                 '/CommunityPost/InsertReply',
                                                 jsonEncode({
-                                                  "userID": GlobalProfile.loggedInUser.userID,
+                                                  "userID": GlobalProfile.loggedInUser!.userID,
                                                   "postID": _community.id,
                                                   "contents": controlSpace(communityReplyController.text),
                                                 }));
@@ -500,7 +500,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
           SizedBox(height: 12 * sizeUnit),
           Text(
             controller.setReplyWriterName(_community, replyUser),
-            style: SheepsTextStyle.h4().copyWith(color: _community.category == '비밀' && communityReply.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack),
+            style: SheepsTextStyle.h4().copyWith(color: _community.category == '비밀' && communityReply.userID == GlobalProfile.loggedInUser!.userID ? sheepsColorGreen : sheepsColorBlack),
           ),
           SizedBox(height: 12 * sizeUnit),
           if (communityReply.isShow == normalReply) ...[
@@ -620,7 +620,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
             SizedBox(width: 8 * sizeUnit),
             Text(
               _community.category == '비밀' ? '익명' : GlobalProfile.getUserByUserID(communityReplyReply.userID).name,
-              style: SheepsTextStyle.h4().copyWith(color: _community.category == '비밀' && communityReplyReply.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack),
+              style: SheepsTextStyle.h4().copyWith(color: _community.category == '비밀' && communityReplyReply.userID == GlobalProfile.loggedInUser!.userID ? sheepsColorGreen : sheepsColorBlack),
             ),
             SizedBox(width: 8 * sizeUnit),
             Text(
@@ -663,7 +663,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                 if (isCanTapLike) {
                   isCanTapLike = false;
                   if (controller.isCommunityLike.value == false) {
-                    var result = await ApiProvider().post('/CommunityPost/InsertLike', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "postID": _community.id}));
+                    var result = await ApiProvider().post('/CommunityPost/InsertLike', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "postID": _community.id}));
 
                     if (result != null) {
                       CommunityLike tmpLike = InsertLike.fromJson(result).item;
@@ -680,7 +680,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                       controller.isCommunityLike.value = true;
                     }
                   } else {
-                    await ApiProvider().post('/CommunityPost/InsertLike', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "postID": _community.id}));
+                    await ApiProvider().post('/CommunityPost/InsertLike', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "postID": _community.id}));
 
                     // 리스트 동기화
                     controller.syncLikeListOnDelete(communityList: GlobalProfile.globalCommunityList, community: _community);
@@ -740,7 +740,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
   }
 
   Widget _settingDialog() {
-    bool isMe = widget.a_community.userID == GlobalProfile.loggedInUser.userID;
+    bool isMe = widget.a_community.userID == GlobalProfile.loggedInUser!.userID;
 
     return GestureDetector(
       onTap: () => Get.back(),
@@ -925,7 +925,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                         Get.back();
                         Get.to(
                               () => PageReport(
-                            userID: GlobalProfile.loggedInUser.userID,
+                            userID: GlobalProfile.loggedInUser!.userID,
                             reportedID: _community.id.toString(),
                             classification: 'Community',
                             postType: reportForCommunity,

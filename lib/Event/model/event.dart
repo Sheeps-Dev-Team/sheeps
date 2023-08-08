@@ -42,11 +42,11 @@ final Event eventClass101 = Event(
   bottomWidget: SizedBox.shrink(),
   buttonFunc: (BuildContext context) async {
     //발급조건 체크
-    if (GlobalProfile.loggedInUser.profileImgList[0].imgUrl != 'BasicImage') {
+    if (GlobalProfile.loggedInUser!.profileImgList[0].imgUrl != 'BasicImage') {
       var res = await ApiProvider().post(
           '/Personal/Insert/Coupon',
           jsonEncode({
-            "userID": GlobalProfile.loggedInUser.userID,
+            "userID": GlobalProfile.loggedInUser!.userID,
             "type": COUPON_TYPE_NORMAL,
             "couponID": COUPON_ID_CLASS101,
           }));
@@ -75,11 +75,11 @@ final Event eventClass101 = Event(
             '/Badge/Get/EventBadge',
             jsonEncode({
               "id": 2, //클래스 101 뱃지
-              "userID": GlobalProfile.loggedInUser.userID
+              "userID": GlobalProfile.loggedInUser!.userID
             }));
 
         if (res != null) {
-          GlobalProfile.loggedInUser.badgeList.add(BadgeModel.fromJson(res));
+          GlobalProfile.loggedInUser!.badgeList.add(BadgeModel.fromJson(res));
         }
       } else if (result == 'ALREADY') {
         showSheepsDialog(
@@ -151,13 +151,13 @@ final Event eventFav = Event(
     var tmp = await ApiProvider().post(
         '/CommunityPost/SelectUser',
         jsonEncode({
-          "userID": GlobalProfile.loggedInUser.userID,
+          "userID": GlobalProfile.loggedInUser!.userID,
         }));
     if (tmp != null) {
       if (tmp.length > 0) demand1 = true;
     }
 
-    GlobalProfile.loggedInUser.userEducationList.forEach((education) {
+    GlobalProfile.loggedInUser!.userEducationList.forEach((education) {
       if(education.auth == 1){
         if(education.contents.contains('인하대')) demand2 = true;
       }
@@ -170,7 +170,7 @@ final Event eventFav = Event(
       var res = await ApiProvider().post(
           '/Personal/Insert/Coupon',
           jsonEncode({
-            "userID": GlobalProfile.loggedInUser.userID,
+            "userID": GlobalProfile.loggedInUser!.userID,
             "type": COUPON_TYPE_NORMAL,
             "couponID": COUPON_ID_FAV,
           }));

@@ -426,7 +426,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                       description: widget.isEdit ? '게시글을 수정할까요?' : '게시글을 등록할까요?',
                                       okFunc: () async {
                                         Dio dio = new Dio();
-                                        dio.options.headers = {'Content-Type': 'application/json', 'user': GlobalProfile.loggedInUser.userID};
+                                        dio.options.headers = {'Content-Type': 'application/json', 'user': GlobalProfile.loggedInUser!.userID};
 
                                         if (widget.isEdit) {
                                           //게시글 수정
@@ -519,7 +519,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                         } else {
                                           //신규게시글
                                           FormData formData = FormData.fromMap({
-                                            "userid": GlobalProfile.loggedInUser.userID,
+                                            "userid": GlobalProfile.loggedInUser!.userID,
                                             "category": category,
                                             "title": controlSpace(controller.title.value),
                                             "contents": controlSpace(controller.contents.value),

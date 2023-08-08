@@ -341,7 +341,7 @@ class CommunityController extends GetxController {
     bool isLike = false;
 
     for (CommunityLike c in community.communityLike) {
-      if (c.userID == GlobalProfile.loggedInUser.userID) {
+      if (c.userID == GlobalProfile.loggedInUser!.userID) {
         isLike = true;
         break;
       }

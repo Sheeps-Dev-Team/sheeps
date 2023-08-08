@@ -2,7 +2,6 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:sheeps_app/chat/models/ImageChatBubble.dart';
 import 'package:sheeps_app/profile/DetailProfile.dart';
 import '../models/ChatRecvMessageModel.dart';
@@ -31,11 +30,11 @@ class ChatItem extends StatelessWidget {
 
     if(this.message.from == CENTER_MESSAGE){
       isMe = true;
-      chatUser = GlobalProfile.loggedInUser;
+      chatUser = GlobalProfile.loggedInUser!;
       mainAxisAlignment = MainAxisAlignment.center;
     }else{
-      isMe = this.message.from == GlobalProfile.loggedInUser.userID;
-      chatUser = isMe ? GlobalProfile.loggedInUser : GlobalProfile.getUserByUserID(this.message.from);
+      isMe = this.message.from == GlobalProfile.loggedInUser!.userID;
+      chatUser = isMe ? GlobalProfile.loggedInUser! : GlobalProfile.getUserByUserID(this.message.from);
       mainAxisAlignment = isMe ? MainAxisAlignment.end : MainAxisAlignment.start;
     }
 

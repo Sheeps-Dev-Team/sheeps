@@ -76,7 +76,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             child: SafeArea(
               child: Scaffold(
                 backgroundColor: Color(0xFFF8F8F8),
-                appBar: SheepsAppBar(context, '${GlobalProfile.loggedInUser.name}의 쉽스', actions: [
+                appBar: SheepsAppBar(context, '${GlobalProfile.loggedInUser!.name}의 쉽스', actions: [
                   GestureDetector(
                     onTap: () async {
                       PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -162,7 +162,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           var res = await ApiProvider().post(
                               '/Matching/Select/TeamMemberRecruitByUserID',
                               jsonEncode({
-                                'userID': GlobalProfile.loggedInUser.userID,
+                                'userID': GlobalProfile.loggedInUser!.userID,
                               }));
 
                           if (res != null) {
@@ -188,7 +188,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           var res = await ApiProvider().post(
                               '/Matching/Select/PersonalSeekTeamByUserID',
                               jsonEncode({
-                                'userID': GlobalProfile.loggedInUser.userID,
+                                'userID': GlobalProfile.loggedInUser!.userID,
                               }));
 
                           if (res != null) {
@@ -214,7 +214,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           var res = await ApiProvider().post(
                               '/Matching/Select/Volunteer/TeamList',
                               jsonEncode({
-                                'userID': GlobalProfile.loggedInUser.userID,
+                                'userID': GlobalProfile.loggedInUser!.userID,
                               }));
 
                           if (res != null) {
@@ -240,7 +240,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           var res = await ApiProvider().post(
                               '/Matching/Select/Suggest/PersonalList',
                               jsonEncode({
-                                'userID': GlobalProfile.loggedInUser.userID,
+                                'userID': GlobalProfile.loggedInUser!.userID,
                               }));
 
                           if (res != null) {
@@ -266,7 +266,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           var resRecruit = await ApiProvider().post(
                               '/Matching/Select/Save/TeamMemberRecruit',
                               jsonEncode({
-                                'userID': GlobalProfile.loggedInUser.userID,
+                                'userID': GlobalProfile.loggedInUser!.userID,
                               }));
 
                           if (resRecruit != null) {
@@ -282,7 +282,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           var resSeek = await ApiProvider().post(
                               '/Matching/Select/Save/PersonalSeekTeam',
                               jsonEncode({
-                                'userID': GlobalProfile.loggedInUser.userID,
+                                'userID': GlobalProfile.loggedInUser!.userID,
                               }));
 
                           if (resSeek != null) {
@@ -326,7 +326,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           tmp = await ApiProvider().post(
                               '/CommunityPost/SelectUser',
                               jsonEncode({
-                                "userID": GlobalProfile.loggedInUser.userID,
+                                "userID": GlobalProfile.loggedInUser!.userID,
                               }));
                           if (tmp != null) {
                             for (int i = 0; i < tmp.length; i++) {
@@ -352,7 +352,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           tmp = await ApiProvider().post(
                               '/CommunityPost/Reply/SelectUser',
                               jsonEncode({
-                                "userID": GlobalProfile.loggedInUser.userID,
+                                "userID": GlobalProfile.loggedInUser!.userID,
                               }));
                           if (tmp != null) {
                             for (int i = 0; i < tmp.length; i++) {
@@ -378,7 +378,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           tmp = await ApiProvider().post(
                               '/CommunityPost/SelectUserLIke',
                               jsonEncode({
-                                "userID": GlobalProfile.loggedInUser.userID,
+                                "userID": GlobalProfile.loggedInUser!.userID,
                               }));
                           if (tmp != null) {
                             for (int i = 0; i < tmp.length; i++) {
@@ -392,7 +392,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           Get.to(() => PostedPage(a_communityList: GlobalProfile.myCommunityList, a_title: '좋아요 한 글'))?.then((value) => GlobalProfile.myCommunityList.clear());
                         },
                       ),
-                      if(GlobalProfile.loggedInUser.userID == 1)...[
+                      if(GlobalProfile.loggedInUser!.userID == 1)...[
                         SettingColumn(
                           str: "공지글 쓰기",
                           myFunc: () => Get.to(() => CommunityWriteNoticePostPage()),
