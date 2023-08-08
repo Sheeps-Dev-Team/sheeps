@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sheeps_app/Community/models/CommunityDetailController.dart';
@@ -49,26 +49,26 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
   final FilterController recruitFilterController = Get.put(FilterController());
   NavigationNum navigationNum = Get.put(NavigationNum());
 
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   PageController _pageController = PageController(
     initialPage: globalClientBannerList.length * 100,
     viewportFraction: 0.9,
   );
-  Timer timer;
+  late Timer timer;
 
   bool showNotificationBadge = false;
-  AnimationController extendedController;
+  late AnimationController extendedController;
 
   List<bool> popularPersonalVisibleList = [];
 
   bool isCanTapLike = true;
   int tapLikeDelayMilliseconds = 500;
 
-  ProfileState profileState;
+  late ProfileState profileState;
 
   // 커뮤니티 리스트 카운트 정해주기
-  int checkListLength({int listLength, int maxLength}) {
+  int checkListLength({required int listLength, required int maxLength}) {
     int result = maxLength;
 
     if (listLength < result) result = listLength;
@@ -184,13 +184,13 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
 
                             Get.to(() => TotalNotificationPage());
                           },
-                          child: Badge(
+                          child: badge.Badge(
                             showBadge: showNotificationBadge,
-                            position: BadgePosition.topEnd(top: -8 * sizeUnit, end: 2 * sizeUnit),
-                            padding: EdgeInsets.all(3 * sizeUnit),
-                            elevation: 0,
-                            badgeColor: sheepsColorRed,
-                            toAnimate: false,
+                            position: badge.BadgePosition.topEnd(top: -8 * sizeUnit, end: 2 * sizeUnit),
+                            // padding: EdgeInsets.all(3 * sizeUnit),
+                            // elevation: 0,
+                            // badgeColor: sheepsColorRed,
+                            // toAnimate: false,
                             badgeContent: Text(''),
                             child: SvgPicture.asset(
                               svgBellButton,
@@ -202,7 +202,7 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
                         SizedBox(width: 8 * sizeUnit),
                         InkWell(
                           onTap: () {
-                            Get.to(() => MyPage()).then((value) {
+                            Get.to(() => MyPage())?.then((value) {
                               setState(() {});
                             });
                           },
@@ -409,7 +409,7 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
                                   var tmp = await communityController.getReply(context, community);
                                   DialogBuilder(context).hideOpenDialog();
 
-                                  if (tmp != null) Get.to(() => CommunityMainDetail(community)).then((value) => setState(() {}));
+                                  if (tmp != null) Get.to(() => CommunityMainDetail(community))?.then((value) => setState(() {}));
                                 },
                                 typeCheck: communityController.typeCheck(community),
                               );
@@ -459,7 +459,7 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
                                   var tmp = await communityController.getReply(context, community);
                                   DialogBuilder(context).hideOpenDialog();
 
-                                  if (tmp != null) Get.to(() => CommunityMainDetail(community)).then((value) => setState(() {}));
+                                  if (tmp != null) Get.to(() => CommunityMainDetail(community))?.then((value) => setState(() {}));
                                 },
                                 typeCheck: communityController.typeCheck(community),
                               );
