@@ -9,7 +9,7 @@ import 'package:sheeps_app/Event/model/event.dart';
 
 class EventPage extends StatefulWidget {
   final Event event;
-  const EventPage({Key key, @required this.event}) : super(key: key);
+  const EventPage({Key? key, required this.event}) : super(key: key);
 
   @override
   _EventPageState createState() => _EventPageState();
@@ -17,7 +17,7 @@ class EventPage extends StatefulWidget {
 
 class _EventPageState extends State<EventPage> {
 
-  Event _event;
+  late Event _event;
 
   @override
   void initState() {
