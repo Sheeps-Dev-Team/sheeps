@@ -118,7 +118,7 @@ class _PostedPageState extends State<PostedPage> with SingleTickerProviderStateM
     for (int i = 0;
     i <  communityList[index].communityLike.length;
     i++) {
-      if (communityList[index].communityLike[i].userID == GlobalProfile.loggedInUser.userID) {
+      if (communityList[index].communityLike[i].userID == GlobalProfile.loggedInUser!.userID) {
         check = true;
         break;
       }

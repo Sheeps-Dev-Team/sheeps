@@ -2457,7 +2457,7 @@ Widget communityPostCard(
                   children: [
                     Text(community.category == '비밀' ? '익명' : user.name,
                         style: SheepsTextStyle.bWriter()
-                            .copyWith(color: community.category == '비밀' && community.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack)),
+                            .copyWith(color: community.category == '비밀' && community.userID == GlobalProfile.loggedInUser!.userID ? sheepsColorGreen : sheepsColorBlack)),
                     SizedBox(width: 12 * sizeUnit),
                     Text(timeCheck(community.updatedAt), style: SheepsTextStyle.bWriteDate()),
                     SizedBox(width: 12 * sizeUnit),

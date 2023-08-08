@@ -226,9 +226,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                               DialogBuilder(context).showLoadingIndicator();
 
                               for (int i = 0; i < room.chatUserIDList.length; ++i) {
-                                UserData alreadyUser = await GlobalProfile.getFutureUserByUserID(room.chatUserIDList[i]);
+                                UserData? alreadyUser = await GlobalProfile.getFutureUserByUserID(room.chatUserIDList[i]);
 
-                                var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": room.chatUserIDList[i], "updatedAt": alreadyUser.updatedAt}));
+                                var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": room.chatUserIDList[i], "updatedAt": alreadyUser!.updatedAt}));
 
                                 if (user != null) {
                                   //개인 프로필 바뀐 데이터로 전역 데이터 세팅
@@ -322,9 +322,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> with SingleTickerProviderSt
                             DialogBuilder(context).showLoadingIndicator();
 
                             for (int i = 0; i < room.chatUserIDList.length; ++i) {
-                              UserData alreadyUser = await GlobalProfile.getFutureUserByUserID(room.chatUserIDList[i]);
+                              UserData? alreadyUser = await GlobalProfile.getFutureUserByUserID(room.chatUserIDList[i]);
 
-                              var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": room.chatUserIDList[i], "updatedAt": alreadyUser.updatedAt}));
+                              var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": room.chatUserIDList[i], "updatedAt": alreadyUser!.updatedAt}));
 
                               if (user != null) {
                                 //개인 프로필 바뀐 데이터로 전역 데이터 세팅

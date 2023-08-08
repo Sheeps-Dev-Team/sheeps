@@ -104,10 +104,10 @@ const List<int> teamBadgeAttraction = [56];
 void initBadgePart() {
   bool Flag = false;
 
-  if (GlobalProfile.loggedInUser.badgeList == null) return;
+  if (GlobalProfile.loggedInUser!.badgeList == null) return;
 
-  for (int i = 0; i < GlobalProfile.loggedInUser.badgeList.length; i++) {
-    BadgeModel item = GlobalProfile.loggedInUser.badgeList[i];
+  for (int i = 0; i < GlobalProfile.loggedInUser!.badgeList.length; i++) {
+    BadgeModel item = GlobalProfile.loggedInUser!.badgeList[i];
     for (int j = 0; j < PersonalBadgeTable.length; j++) {
       if (Flag) {
         Flag = false;

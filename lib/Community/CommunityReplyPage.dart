@@ -56,7 +56,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
     textEditingController.addListener(() => controller.checkTextField(removeSpace(textEditingController.text))); // 텍스트 필드 글 체크
 
     Future.microtask(() async {
-      var res = await ApiProvider().post('/CommunityPost/Select/ReplySubscribe', jsonEncode({"replyID": communityReply.id, "userID": GlobalProfile.loggedInUser.userID}));
+      var res = await ApiProvider().post('/CommunityPost/Select/ReplySubscribe', jsonEncode({"replyID": communityReply.id, "userID": GlobalProfile.loggedInUser!.userID}));
 
       if (res != null) {
         isAlarm = true;
@@ -248,7 +248,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                 Expanded(
                   child: Text(
                     controller.setReplyReplyWriterName(community, communityReply, reReplyUser),
-                    style: SheepsTextStyle.h4().copyWith(color: community.category == '비밀' && communityReplyReply.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack),
+                    style: SheepsTextStyle.h4().copyWith(color: community.category == '비밀' && communityReplyReply.userID == GlobalProfile.loggedInUser!.userID ? sheepsColorGreen : sheepsColorBlack),
                   ),
                 ),
                 GestureDetector(
@@ -314,7 +314,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      if (GlobalProfile.loggedInUser.userID == communityReplyReply.userID) ...[
+                      if (GlobalProfile.loggedInUser!.userID == communityReplyReply.userID) ...[
                         reReplyShapeButton(
                           communityReplyReply,
                           text: '삭제하기',
@@ -355,7 +355,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                           textColor: sheepsColorRed,
                           text: '신고하기',
                           press: () => Get.to(() => PageReport(
-                                userID: GlobalProfile.loggedInUser.userID,
+                                userID: GlobalProfile.loggedInUser!.userID,
                                 reportedID: communityReplyReply.id.toString(),
                                 classification: 'Community',
                                 postType: reportForReplyReply,
@@ -404,7 +404,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(community.category == '비밀' ? '익명' : replyUser.name,
-              style: SheepsTextStyle.h3().copyWith(color: community.category == '비밀' && communityReply.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack)),
+              style: SheepsTextStyle.h3().copyWith(color: community.category == '비밀' && communityReply.userID == GlobalProfile.loggedInUser!.userID ? sheepsColorGreen : sheepsColorBlack)),
           SizedBox(height: 12 * sizeUnit),
           if (communityReply.isShow == normalReply) ...[
             if (blindCheck(declareLength: communityReply.declareLength, likeLength: communityReply.communityReplyLike.length))
@@ -475,7 +475,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
       actions: [
         GestureDetector(
           onTap: () async {
-            var res = await ApiProvider().post('/CommunityPost/Update/ReplySubscribe', jsonEncode({"replyID": communityReply.id, "userID": GlobalProfile.loggedInUser.userID}));
+            var res = await ApiProvider().post('/CommunityPost/Update/ReplySubscribe', jsonEncode({"replyID": communityReply.id, "userID": GlobalProfile.loggedInUser!.userID}));
 
             if (res['item'] == 1) {
               isAlarm = false;
@@ -511,7 +511,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
   }
 
   Widget _settingDialog() {
-    bool isMe = GlobalProfile.loggedInUser.userID == replyUser.userID;
+    bool isMe = GlobalProfile.loggedInUser!.userID == replyUser.userID;
 
     return GestureDetector(
       onTap: () => Get.back(),
@@ -593,7 +593,7 @@ class _CommunityReplyPageState extends State<CommunityReplyPage> {
                       Get.back();
                       Get.to(
                         () => PageReport(
-                          userID: GlobalProfile.loggedInUser.userID,
+                          userID: GlobalProfile.loggedInUser!.userID,
                           reportedID: communityReply.id.toString(),
                           classification: 'Community',
                           postType: reportForReply,

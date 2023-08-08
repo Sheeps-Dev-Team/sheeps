@@ -130,7 +130,7 @@ Future<RoomInfo> SetRoomInfoData(NotificationModel model, {int roomType = 1}) as
   roomInfo.createdAt = updatedDate;
   
   await ApiProvider().post('/Room/Info/Select', jsonEncode({
-    "userID" : GlobalProfile.loggedInUser.userID,
+    "userID" : GlobalProfile.loggedInUser!.userID,
     "roomName" : roomInfo.roomName
   })).then((value) => {
     if(value != null){

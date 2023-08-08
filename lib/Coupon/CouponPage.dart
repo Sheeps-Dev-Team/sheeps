@@ -28,7 +28,7 @@ class _CouponPageState extends State<CouponPage> {
     var res = await ApiProvider().post(
         '/Personal/Select/Coupon',
         jsonEncode({
-          "userID": GlobalProfile.loggedInUser.userID,
+          "userID": GlobalProfile.loggedInUser!.userID,
         }));
 
     if (res != null) {
@@ -106,7 +106,7 @@ class _CouponPageState extends State<CouponPage> {
                         jsonEncode({
                           'id': coupon.id,
                           'state': COUPON_STATE_COMPLETE,
-                          "userID": GlobalProfile.loggedInUser.userID,
+                          "userID": GlobalProfile.loggedInUser!.userID,
                         }));
 
                     Get.back();

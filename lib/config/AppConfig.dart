@@ -322,7 +322,7 @@ Future<bool> getNotiByStatus() async {
 }
 
 String getFileName(int index, String filePath) {
-  return GlobalProfile.loggedInUser.userID.toString() + '_' + DateTime.now().millisecondsSinceEpoch.toString() + index.toString() + getMimeType(filePath);
+  return GlobalProfile.loggedInUser!.userID.toString() + '_' + DateTime.now().millisecondsSinceEpoch.toString() + index.toString() + getMimeType(filePath);
 }
 
 String getMimeType(String file) {
@@ -504,7 +504,7 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
 
     //Personal Profile 데이터 get
     GlobalProfile.personalProfile.clear();
-    var personalProfileList = await ApiProvider().post('/Personal/Select/UserList', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+    var personalProfileList = await ApiProvider().post('/Personal/Select/UserList', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
     if (personalProfileList != null) {
       for (int i = 0; i < personalProfileList.length; i++) {
         UserData _userTmp = UserData.fromJson(personalProfileList[i]);
@@ -523,7 +523,7 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
 
     ChatGlobal.roomInfoList.clear();
     //join된 방들 List 받음
-    var list = await ApiProvider().post('/Room/User/Select', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+    var list = await ApiProvider().post('/Room/User/Select', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
     if (null != list) {
       //방 List 재조합
@@ -576,9 +576,9 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
           if (roomNameSub == 'user') isPersonal = true;
 
           if (isPersonal) {
-            UserData userData = await GlobalProfile.getFutureUserByUserID(userList[0]);
+            UserData? userData = await GlobalProfile.getFutureUserByUserID(userList[0]);
 
-            roomInfo.name = userData.name;
+            roomInfo.name = userData!.name;
             roomInfo.profileImage = userData.profileImgList[0].imgUrl;
           } else {
             Team team = await GlobalProfile.getFutureTeamByRoomName(roomName);
@@ -591,9 +591,9 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
 
           if (roomNameSub == 'personal') isPersonal = true; //INTERVIEW에서는 personal로 개인이 올린 글인지 확인할 것
 
-          UserData userData = await GlobalProfile.getFutureUserByUserID(userList[0]);
+          UserData? userData = await GlobalProfile.getFutureUserByUserID(userList[0]);
 
-          roomInfo.name = userData.name;
+          roomInfo.name = userData!.name;
           roomInfo.profileImage = userData.profileImgList[0].imgUrl;
         } else {
           //전문가
@@ -837,7 +837,7 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
         .post(
             '/Matching/Select/TeamMemberRecruitLike',
             jsonEncode({
-              "userID": GlobalProfile.loggedInUser.userID,
+              "userID": GlobalProfile.loggedInUser!.userID,
             }))
         .then((value) {
       if (value != null) {
@@ -874,7 +874,7 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
         .post(
             '/Matching/Select/PersonalSeekTeamLike',
             jsonEncode({
-              "userID": GlobalProfile.loggedInUser.userID,
+              "userID": GlobalProfile.loggedInUser!.userID,
             }))
         .then((value) {
       if (value != null) {
@@ -919,7 +919,7 @@ Future globalLogin(BuildContext context, SocketProvider provider, dynamic result
 
 Future globalLogout(bool isSelf, socket) async {
   if (isSelf == true) {
-    ApiProvider().post('/Personal/Logout', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "isSelf": 1}));
+    ApiProvider().post('/Personal/Logout', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "isSelf": 1}));
   }
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -928,12 +928,12 @@ Future globalLogout(bool isSelf, socket) async {
   prefs.setBool('autoLoginKey', false);
   prefs.setString('autoLoginId', '');
   prefs.setString('autoLoginPw', '');
-  prefs.setString('prevLoginID', GlobalProfile.loggedInUser.id);
+  prefs.setString('prevLoginID', GlobalProfile.loggedInUser!.id);
   if (socket != null) socket.disconnect();
 
   final navigationNum = Get.put(NavigationNum());
   navigationNum.setNum(DASHBOARD_MAIN_PAGE);
-  GlobalProfile.loggedInUser = GlobalProfile.nullUser;
+  GlobalProfile.loggedInUser = null;
   Get.offAll(() => LoginSelectPage());
 }
 
@@ -958,55 +958,38 @@ String abbreviateForLocation(String location) {
   switch (location) {
     case '서울특별시':
       return '서울';
-      break;
     case '인천광역시':
       return '인천';
-      break;
     case '경기도':
       return '경기';
-      break;
     case '강원도':
       return '강원';
-      break;
     case '충청남도':
       return '충남';
-      break;
     case '충청북도':
       return '충북';
-      break;
     case '세종시':
       return '세종';
-      break;
     case '대전광역시':
       return '대전';
-      break;
     case '경상북도':
       return '경북';
-      break;
     case '경상남도':
       return '경남';
-      break;
     case '대구광역시':
       return '대구';
-      break;
     case '부산광역시':
       return '부산';
-      break;
     case '전라북도':
       return '전북';
-      break;
     case '전라남도':
       return '전남';
-      break;
     case '광주광역시':
       return '광주';
-      break;
     case '울산광역시':
       return '울산';
-      break;
     case '제주특별자치도':
       return '제주';
-      break;
   }
   return location;
 }
@@ -1127,7 +1110,7 @@ void _handleDynamicLink(Uri deepLink) async {
     case '/profile_person':
       {
         int id = int.parse(deepLink.queryParameters['id']!);
-        if (id == GlobalProfile.loggedInUser.userID)
+        if (id == GlobalProfile.loggedInUser!.userID)
           Get.to(() => DetailProfile(index: 0, profileStatus: PROFILE_STATUS.MyProfile));
         else
           Get.to(() => DetailProfile(index: 0, user: GlobalProfile.getUserByUserID(id), profileStatus: PROFILE_STATUS.OtherProfile));

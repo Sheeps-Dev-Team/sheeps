@@ -285,9 +285,9 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                                 DialogBuilder(context).showLoadingIndicator();
 
                                                 for (int i = 0; i < chatRoomList[index].chatUserIDList.length; ++i) {
-                                                  UserData alreadyUser = await GlobalProfile.getFutureUserByUserID(chatRoomList[index].chatUserIDList[i]);
+                                                  UserData? alreadyUser = await GlobalProfile.getFutureUserByUserID(chatRoomList[index].chatUserIDList[i]);
 
-                                                  var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": chatRoomList[index].chatUserIDList[i], "updatedAt": alreadyUser.updatedAt}));
+                                                  var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": chatRoomList[index].chatUserIDList[i], "updatedAt": alreadyUser!.updatedAt}));
 
                                                   if (user != null) {
                                                     //개인 프로필 바뀐 데이터로 전역 데이터 세팅
@@ -361,9 +361,9 @@ class _ChatRoomSearchPageState extends State<ChatRoomSearchPage> with SingleTick
                                                 DialogBuilder(context).showLoadingIndicator();
 
                                                 for (int i = 0; i < chatRoomList[index].chatUserIDList.length; ++i) {
-                                                  UserData alreadyUser = await GlobalProfile.getFutureUserByUserID(chatRoomList[index].chatUserIDList[i]);
+                                                  UserData? alreadyUser = await GlobalProfile.getFutureUserByUserID(chatRoomList[index].chatUserIDList[i]);
 
-                                                  var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": chatRoomList[index].chatUserIDList[i], "updatedAt": alreadyUser.updatedAt}));
+                                                  var user = await ApiProvider().post('/Personal/Select/ModifyUser', jsonEncode({"userID": chatRoomList[index].chatUserIDList[i], "updatedAt": alreadyUser!.updatedAt}));
 
                                                   if (user != null) {
                                                     //개인 프로필 바뀐 데이터로 전역 데이터 세팅
