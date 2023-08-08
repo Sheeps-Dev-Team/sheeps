@@ -87,9 +87,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         //5분 주기로 access token 을 받아온다
         if(GlobalProfile.loggedInUser != null ) {
           Future.microtask(() async {
-            if (int.parse(GlobalProfile.accessTokenExpiredAt) < int.parse(DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10))) {
+            if (int.parse(GlobalProfile.accessTokenExpiredAt!) < int.parse(DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10))) {
               var res = await ApiProvider().post('/Personal/Select/Login/Token', jsonEncode({
-                "userID" : GlobalProfile.loggedInUser.userID,
+                "userID" : GlobalProfile.loggedInUser!.userID,
                 "refreshToken" : GlobalProfile.refreshToken
               }));
 
@@ -106,7 +106,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
             Future.microtask(() async {
               var notiListGet = await ApiProvider().post('/Notification/UnSendSelect', jsonEncode(
                   {
-                    "userID" : GlobalProfile.loggedInUser.userID,
+                    "userID" : GlobalProfile.loggedInUser!.userID,
                   }
               ));
 
@@ -150,7 +150,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
               var chatLogList = await ApiProvider().post('/ChatLog/UnSendSelect', jsonEncode(
                   {
-                    "userID" : GlobalProfile.loggedInUser.userID
+                    "userID" : GlobalProfile.loggedInUser!.userID
                   }
               ));
 
