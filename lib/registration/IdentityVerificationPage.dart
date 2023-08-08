@@ -17,7 +17,7 @@ enum IdentityStatus{SignUP, FindID, FindPW} // 가입, 아이디 찾기, 비번 
 
 class IdentityVerificationPage extends StatefulWidget {
   final IdentityStatus identityStatus;
-  const IdentityVerificationPage({Key key, @required this.identityStatus}) : super(key: key);
+  const IdentityVerificationPage({Key? key, required this.identityStatus}) : super(key: key);
 
   @override
   _IdentityVerificationPageState createState() => _IdentityVerificationPageState();

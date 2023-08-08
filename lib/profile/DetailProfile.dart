@@ -46,13 +46,13 @@ enum PROFILE_STATUS { MyProfile, OtherProfile, Applicant }
 
 class DetailProfile extends StatefulWidget {
   final int index;
-  final UserData user;
+  final UserData? user;
   final PROFILE_STATUS profileStatus;
 
   DetailProfile({
     Key? key,
     required this.index,
-    required this.user,
+    this.user,
     this.profileStatus = PROFILE_STATUS.OtherProfile,
   }) : super(key: key);
 

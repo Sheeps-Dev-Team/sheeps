@@ -39,7 +39,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
   final String svgAppleWhiteLogo = 'assets/images/LoginReg/appleWhiteLogo.svg';
   final String svgKakaoLogin = 'assets/images/LoginReg/kakaoLogin.svg';
 
-  bool _isReady; //서버중복신호방지
+  bool? _isReady; //서버중복신호방지
 
   @override
   void initState() {
@@ -51,14 +51,14 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  User currentUser;
+  User? currentUser;
   String name = "";
   String email = "";
 
-  Future<String> googleLogin(SocketProvider provider) async {
+  Future<String?> googleLogin(SocketProvider provider) async {
     if (googleSignIn == null) return null;
 
-    GoogleSignInAccount account;
+    GoogleSignInAccount? account;
 
     try {
       account = await googleSignIn.signIn();
@@ -82,17 +82,17 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
     );
 
     final UserCredential authResult = await _auth.signInWithCredential(credential);
-    final User user = authResult.user;
+    final User user = authResult.user!;
 
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
 
     currentUser = _auth.currentUser;
-    assert(user.uid == currentUser.uid);
+    assert(user.uid == currentUser!.uid);
 
     setState(() {
-      email = user.email;
-      name = user.displayName == null ? '쉽스의 어린 양' : user.displayName;
+      email = user.email!;
+      name = user.displayName! == null ? '쉽스의 어린 양' : user.displayName!;
     });
 
     globalSocialName = name;
@@ -168,7 +168,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
     return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
 
-  Future<String> appleLogin(SocketProvider provider) async {
+  Future<String?> appleLogin(SocketProvider provider) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final credential = await SignInWithApple.getAppleIDCredential(
       scopes: [
@@ -184,8 +184,8 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
 
     UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-    email = userCredential.user.email;
-    name = userCredential.user.displayName != null || userCredential.user.displayName == '' ? userCredential.user.displayName : "MUSTCHANGEAPPLEID";
+    email = userCredential.user!.email!;
+    name = userCredential.user!.displayName! != null || userCredential.user!.displayName! == '' ? userCredential.user!.displayName! : "MUSTCHANGEAPPLEID";
     globalSocialName = name;
 
     prefs.setString('autoLoginAppleId', email);
@@ -254,11 +254,11 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
     });
   }
 
-  static DateTime currentBackPressTime;
+  static DateTime? currentBackPressTime;
 
   _isEnd() {
     DateTime now = DateTime.now();
-    if (currentBackPressTime == null || now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+    if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
       currentBackPressTime = now;
       showSheepsToast(context: context, text: '뒤로 가기를 한 번 더 입력하시면 종료됩니다.');
       return false;
@@ -351,7 +351,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
                           Platform.isIOS
                               ? GestureDetector(
                             onTap: () {
-                              if (_isReady) {
+                              if (_isReady!) {
                                 _isReady = false;
                                 appleLogin(provider);
                                 Future.delayed(Duration(milliseconds: 500), () {
@@ -380,7 +380,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
                           Platform.isIOS ? SizedBox(width: 12 * sizeUnit) : SizedBox.shrink(),
                           GestureDetector(
                             onTap: () {
-                              if (_isReady) {
+                              if (_isReady!) {
                                 _isReady = false; //서버 중복 신호 방지
                                 googleLogin(provider);
                                 Future.delayed(Duration(milliseconds: 500), () {
@@ -408,7 +408,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
                           SizedBox(width: 12 * sizeUnit),
                           GestureDetector(
                             onTap: () {
-                              if (_isReady) {
+                              if (_isReady!) {
                                 _isReady = false; //서버 중복 신호 방지
                                 kakaoLoginButtonClicked(context, provider);
                                 Future.delayed(Duration(milliseconds: 500), () {

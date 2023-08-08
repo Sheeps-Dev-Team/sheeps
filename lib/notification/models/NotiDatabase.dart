@@ -116,7 +116,7 @@ class NotiDBHelper {
   Future<List<NotificationModel>> getAllData() async {
     final db = await database;
 
-    int userID = GlobalProfile.loggedInUser.userID;
+    int userID = GlobalProfile.loggedInUser!.userID;
 
     var res = await db.rawQuery('SELECT * from $TableName');
     List<NotificationModel> list  = res.isNotEmpty ? res.map((c) => NotificationModel(

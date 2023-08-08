@@ -108,7 +108,7 @@ Future SetHandLoginNotificationListByEvent() async {
   var notiListGet = await ApiProvider().post(
       '/Notification/HandLoginSelect',
       jsonEncode({
-        "userID": GlobalProfile.loggedInUser.userID,
+        "userID": GlobalProfile.loggedInUser!.userID,
       }));
 
   if (null != notiListGet) {
@@ -126,7 +126,7 @@ Future SetNotificationListByEvent() async {
   var notiListGet = await ApiProvider().post(
       '/Notification/UnSendSelect',
       jsonEncode({
-        "userID": GlobalProfile.loggedInUser.userID,
+        "userID": GlobalProfile.loggedInUser!.userID,
       }));
 
   if (null != notiListGet) {
@@ -519,18 +519,18 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
         if (ChatGlobal.roomInfoList[i].roomName == roomName) {
           ChatGlobal.roomInfoList[i].chatUserIDList.removeWhere((element) => element == model.targetIndex);
 
-          if (GlobalProfile.loggedInUser.userID == model.targetIndex || ChatGlobal.roomInfoList[i].chatUserIDList.length == 0) {
+          if (GlobalProfile.loggedInUser!.userID == model.targetIndex || ChatGlobal.roomInfoList[i].chatUserIDList.length == 0) {
             ChatGlobal.roomInfoList.removeAt(i);
             break;
           } else {
             Future.microtask(() async {
-              UserData user = await GlobalProfile.getFutureUserByUserID(model.targetIndex);
+              UserData? user = await GlobalProfile.getFutureUserByUserID(model.targetIndex);
 
               ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(
                 to: CENTER_MESSAGE.toString(),
                 from: CENTER_MESSAGE,
                 roomName: ChatGlobal.roomInfoList[i].roomName,
-                message: user.name + " 이 팀을 나갔습니다.",
+                message: user!.name + " 이 팀을 나갔습니다.",
                 isImage: 0,
                 date: "",
                 isRead: 1, chatId: 0,
@@ -561,13 +561,13 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
               ChatGlobal.roomInfoList.remove(element);
             } else {
               Future.microtask(() async {
-                UserData user = await GlobalProfile.getFutureUserByUserID(model.from);
+                UserData? user = await GlobalProfile.getFutureUserByUserID(model.from);
 
                 ChatRecvMessageModel chatRecvMessageModel = ChatRecvMessageModel(
                   to: CENTER_MESSAGE.toString(),
                   from: CENTER_MESSAGE,
                   roomName: element.roomName,
-                  message: user.name + " 이 팀을 나갔습니다.",
+                  message: user!.name + " 이 팀을 나갔습니다.",
                   isImage: 0,
                   date: "",
                   isRead: 1, chatId: 0,
@@ -645,9 +645,9 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
         if (res != null) {
           UserEducation education = UserEducation.fromJson(res);
 
-          int index = GlobalProfile.loggedInUser.userEducationList.indexWhere((element) => element.id == education.id);
+          int index = GlobalProfile.loggedInUser!.userEducationList.indexWhere((element) => element.id == education.id);
 
-          GlobalProfile.loggedInUser.userEducationList[index].auth = education.auth;
+          GlobalProfile.loggedInUser!.userEducationList[index].auth = education.auth;
           model.tableIndex = education.id;
         }
       });
@@ -659,9 +659,9 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
         if (res != null) {
           UserCareer career = UserCareer.fromJson(res);
 
-          int index = GlobalProfile.loggedInUser.userCareerList.indexWhere((element) => element.id == career.id);
+          int index = GlobalProfile.loggedInUser!.userCareerList.indexWhere((element) => element.id == career.id);
 
-          GlobalProfile.loggedInUser.userCareerList[index].auth = career.auth;
+          GlobalProfile.loggedInUser!.userCareerList[index].auth = career.auth;
           model.tableIndex = career.id;
         }
       });
@@ -674,9 +674,9 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
         if (res != null) {
           UserLicense license = UserLicense.fromJson(res);
 
-          int index = GlobalProfile.loggedInUser.userLicenseList.indexWhere((element) => element.id == license.id);
+          int index = GlobalProfile.loggedInUser!.userLicenseList.indexWhere((element) => element.id == license.id);
 
-          GlobalProfile.loggedInUser.userLicenseList[index].auth = license.auth;
+          GlobalProfile.loggedInUser!.userLicenseList[index].auth = license.auth;
           model.tableIndex = license.id;
         }
       });
@@ -688,9 +688,9 @@ Future<NotificationModel> SetNotificationData(NotificationModel pModel, List<int
         if (res != null) {
           UserWin win = UserWin.fromJson(res);
 
-          int index = GlobalProfile.loggedInUser.userWinList.indexWhere((element) => element.id == win.id);
+          int index = GlobalProfile.loggedInUser!.userWinList.indexWhere((element) => element.id == win.id);
 
-          GlobalProfile.loggedInUser.userWinList[index].auth = win.auth;
+          GlobalProfile.loggedInUser!.userWinList[index].auth = win.auth;
           model.tableIndex = win.id;
           model.teamRoomName = index.toString();
         }
@@ -865,7 +865,7 @@ Future notiClickEvent(BuildContext context, NotificationModel notificationModel,
       }
       break;
     case NOTI_EVENT_PERSONAL_UNIV_AUTH_UPDATE:
-      UserEducation education = GlobalProfile.loggedInUser.userEducationList.singleWhere((element) => element.id == notificationModel.tableIndex);
+      UserEducation education = GlobalProfile.loggedInUser!.userEducationList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
       if (null == education) {
         debugPrint("PERSONAL UNIV AUTH DATA ERROR");
@@ -884,7 +884,7 @@ Future notiClickEvent(BuildContext context, NotificationModel notificationModel,
       }
       break;
     case NOTI_EVENT_PERSONAL_CAREER_AUTH_UPDATE:
-      UserCareer career = GlobalProfile.loggedInUser.userCareerList.singleWhere((element) => element.id == notificationModel.tableIndex);
+      UserCareer career = GlobalProfile.loggedInUser!.userCareerList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
       if (null == career) {
         debugPrint("PERSONAL CAREER AUTH DATA ERROR");
@@ -903,7 +903,7 @@ Future notiClickEvent(BuildContext context, NotificationModel notificationModel,
       }
       break;
     case NOTI_EVENT_PERSONAL_LICENSE_AUTH_UPDATE:
-      UserLicense license = GlobalProfile.loggedInUser.userLicenseList.singleWhere((element) => element.id == notificationModel.tableIndex);
+      UserLicense license = GlobalProfile.loggedInUser!.userLicenseList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
       if (null == license) {
         debugPrint("PERSONAL LICENSE AUTH DATA ERROR");
@@ -922,7 +922,7 @@ Future notiClickEvent(BuildContext context, NotificationModel notificationModel,
       }
       break;
     case NOTI_EVENT_PERSONAL_WIN_AUTH_UPDATE:
-      UserWin win = GlobalProfile.loggedInUser.userWinList.singleWhere((element) => element.id == notificationModel.tableIndex);
+      UserWin win = GlobalProfile.loggedInUser!.userWinList.singleWhere((element) => element.id == notificationModel.tableIndex);
 
       if (null == win) {
         debugPrint("PERSONAL WIN AUTH DATA ERROR");
@@ -1114,13 +1114,13 @@ Future notiClickEvent(BuildContext context, NotificationModel notificationModel,
     case NOTI_EVENT_DELETE_PERSONALSEEKTEAM_POST:
       break;
     case NOTI_EVENT_INTERNAL_PERSON_PROFILE_1:
-      Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser));
+      Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!));
       break;
     case NOTI_EVENT_INTERNAL_PERSON_PROFILE_2:
-      Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser));
+      Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!));
       break;
     case NOTI_EVENT_INTERNAL_PERSON_PROFILE_3:
-      Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser));
+      Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!));
       break;
     case NOTI_EVENT_INTERNAL_PERSON_COMMUNITY:
       Get.back();
@@ -1197,14 +1197,14 @@ void setNotiListRead() {
 void setInternalNotification() async {
   //개인프로필 정보 채우기 관련
   bool isHaveAuth = false;
-  if (GlobalProfile.loggedInUser.userCareerList.length > 0 ||
-      GlobalProfile.loggedInUser.userEducationList.length > 0 ||
-      GlobalProfile.loggedInUser.userLicenseList.length > 0 ||
-      GlobalProfile.loggedInUser.userWinList.length > 0) isHaveAuth = true;
+  if (GlobalProfile.loggedInUser!.userCareerList.length > 0 ||
+      GlobalProfile.loggedInUser!.userEducationList.length > 0 ||
+      GlobalProfile.loggedInUser!.userLicenseList.length > 0 ||
+      GlobalProfile.loggedInUser!.userWinList.length > 0) isHaveAuth = true;
 
-  if (GlobalProfile.loggedInUser.part.isEmpty) {
+  if (GlobalProfile.loggedInUser!.part.isEmpty) {
     addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_1, teamIndex: 0);
-  } else if (GlobalProfile.loggedInUser.profileImgList[0].imgUrl == 'BasicImage') {
+  } else if (GlobalProfile.loggedInUser!.profileImgList[0].imgUrl == 'BasicImage') {
     addLocalNotification(NOTI_EVENT_INTERNAL_PERSON_PROFILE_2, teamIndex: 0);
   } else if (!isHaveAuth) {
     runOnProbability(0.3, () {
@@ -1221,7 +1221,7 @@ void setInternalNotification() async {
   var res = await ApiProvider().post(
       '/Matching/Select/PersonalSeekTeamByUserID',
       jsonEncode({
-        'userID': GlobalProfile.loggedInUser.userID,
+        'userID': GlobalProfile.loggedInUser!.userID,
       }));
   if (res == null) {
     bool isRun = false;
@@ -1239,14 +1239,14 @@ void setInternalNotification() async {
   //팀프로필 관련
   bool isHaveNoTeam = false;
   List<Team> leaderTeamList = []; // 리더인 팀 리스트
-  var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+  var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
   if (leaderList != null) {
     for (int i = 0; i < leaderList.length; ++i) {
       leaderTeamList.add(Team.fromJson(leaderList[i]));
     }
   }
 
-  var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+  var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
   if (leaderList == null && teamList == null) isHaveNoTeam = true;
 
   if (isHaveNoTeam) addLocalNotification(NOTI_EVENT_INTERNAL_TEAM_PROFILE_1, teamIndex: 0);
@@ -1269,7 +1269,7 @@ void setInternalNotification() async {
     var resTeam = await ApiProvider().post(
         '/Matching/Select/TeamMemberRecruitByUserID',
         jsonEncode({
-          'userID': GlobalProfile.loggedInUser.userID,
+          'userID': GlobalProfile.loggedInUser!.userID,
         }));
 
     if (resTeam == null) {

@@ -22,7 +22,7 @@ class RegistrationPage extends StatefulWidget {
   final bool isMarketingAgree;
   final int loginType;
 
-  RegistrationPage({Key key, this.isMarketingAgree, @required this.loginType}) : super(key: key);
+  RegistrationPage({Key? key, this.isMarketingAgree = true, required this.loginType}) : super(key: key);
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -38,9 +38,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController passwordTextEditingController = TextEditingController();
   final TextEditingController passwordConfirmTextEditingController = TextEditingController();
 
-  ScrollController nameScrollController;
-  ScrollController emailScrollController;
-  ScrollController passwordScrollController;
+  ScrollController? nameScrollController;
+  ScrollController? emailScrollController;
+  ScrollController? passwordScrollController;
 
   String name = '';
   String email = '';
@@ -52,7 +52,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   bool isReady = true;
 
-  String emailErrMsg;
+  String? emailErrMsg;
 
   _scrollControllerToBottom(ScrollController controller){
     if (controller.hasClients) {
@@ -101,9 +101,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
     passwordTextEditingController.dispose();
     passwordConfirmTextEditingController.dispose();
 
-    nameScrollController.dispose();
-    emailScrollController.dispose();
-    passwordScrollController.dispose();
+    nameScrollController!.dispose();
+    emailScrollController!.dispose();
+    passwordScrollController!.dispose();
     super.dispose();
   }
 
@@ -287,7 +287,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       validNameErrorText(nameTextEditingController.text) == null ? isCheckName = true : isCheckName = false;
 
                       if(false == isCheckName){
-                        _scrollControllerToBottom(nameScrollController);
+                        _scrollControllerToBottom(nameScrollController!);
                       }
                     });
                   },
@@ -312,7 +312,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         FocusScopeNode currentFocus = FocusScope.of(context); //텍스트 포커스 해제
         if (!currentFocus.hasPrimaryFocus) {
           if (Platform.isIOS) {
-            FocusManager.instance.primaryFocus.unfocus();
+            FocusManager.instance.primaryFocus!.unfocus();
           } else {
             currentFocus.unfocus();
           }
@@ -355,7 +355,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     validEmailErrorText(emailTextEditingController.text) == null ? isCheckEmail = true : isCheckEmail = false;
                     setState(() {
                       if(false == isCheckEmail){
-                        _scrollControllerToBottom(emailScrollController);
+                        _scrollControllerToBottom(emailScrollController!);
                       }
                     });
                   },
@@ -380,7 +380,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         FocusScopeNode currentFocus = FocusScope.of(context); //텍스트 포커스 해제
         if (!currentFocus.hasPrimaryFocus) {
           if (Platform.isIOS) {
-            FocusManager.instance.primaryFocus.unfocus();
+            FocusManager.instance.primaryFocus!.unfocus();
           } else {
             currentFocus.unfocus();
           }
@@ -420,7 +420,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         : isCheckPassword = false;
                     setState(() {
                       if(false == isCheckPassword){
-                        _scrollControllerToBottom(passwordScrollController);
+                        _scrollControllerToBottom(passwordScrollController!);
                       }
                     });
                   },
@@ -445,7 +445,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         : isCheckPassword = false;
                     setState(() {
                       if(false == isCheckPassword){
-                        _scrollControllerToBottom(passwordScrollController);
+                        _scrollControllerToBottom(passwordScrollController!);
                       }
                     });
                   },

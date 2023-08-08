@@ -15,7 +15,7 @@ import 'package:sheeps_app/registration/IdentityVerificationPage.dart';
 
 class RegistrationSuccessPage extends StatefulWidget {
   final int state; //1 성공 2 실패
-  RegistrationSuccessPage({Key key, @required this.state}) : super(key: key);
+  RegistrationSuccessPage({Key? key, required this.state}) : super(key: key);
 
   @override
   _RegistrationSuccessPageState createState() => _RegistrationSuccessPageState();

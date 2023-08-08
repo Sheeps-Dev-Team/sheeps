@@ -22,7 +22,7 @@ class iamportCertificationPage extends StatefulWidget {
   final String phoneNumber;
   final IdentityStatus identityStatus; //1 가입, 2 아이디 찾기, 3 비번 찾기
 
-  iamportCertificationPage({Key key, @required this.realName, @required this.phoneNumber, @required this.identityStatus}) : super(key: key);
+  iamportCertificationPage({Key? key, required this.realName, required this.phoneNumber, required this.identityStatus}) : super(key: key);
 
   @override
   _iamportCertificationPageState createState() => _iamportCertificationPageState();
@@ -31,7 +31,7 @@ class iamportCertificationPage extends StatefulWidget {
 class _iamportCertificationPageState extends State<iamportCertificationPage> {
   String userCode = 'imp99004464';
 
-  CertificationData data;
+  CertificationData? data;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _iamportCertificationPageState extends State<iamportCertificationPage> {
             ),
           ),
           userCode: userCode,
-          data: data,
+          data: data!,
           callback: (Map<String, String> result) async {
             if (result['success'] == 'true') {
               switch (widget.identityStatus) {
