@@ -10,8 +10,8 @@ import 'package:sheeps_app/config/GlobalWidget.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
 
 class BusinessInfoPage extends StatelessWidget {
-  TextStyle tsHead;
-  TextStyle tsBody;
+  TextStyle? tsHead;
+  TextStyle? tsBody;
 
   @override
   Widget build(BuildContext context) {

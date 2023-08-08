@@ -69,7 +69,7 @@ class _DetailAlarmPageState extends State<DetailAlarmPage> {
                                   FirebaseNotifications.isChatting = value;
                                   await ApiProvider().post('/Fcm/DetailAlarmSetting', jsonEncode(
                                       {
-                                        "userID" : GlobalProfile.loggedInUser.userID,
+                                        "userID" : GlobalProfile.loggedInUser!.userID,
                                         "marketing" : FirebaseNotifications.isMarketing,
                                         "chatting" : FirebaseNotifications.isChatting,
                                         "team" : FirebaseNotifications.isTeam,
@@ -120,7 +120,7 @@ class _DetailAlarmPageState extends State<DetailAlarmPage> {
                                   FirebaseNotifications.isTeam = value;
                                   await ApiProvider().post('/Fcm/DetailAlarmSetting', jsonEncode(
                                       {
-                                        "userID" : GlobalProfile.loggedInUser.userID,
+                                        "userID" : GlobalProfile.loggedInUser!.userID,
                                         "marketing" : FirebaseNotifications.isMarketing,
                                         "chatting" : FirebaseNotifications.isChatting,
                                         "team" : FirebaseNotifications.isTeam,
@@ -171,7 +171,7 @@ class _DetailAlarmPageState extends State<DetailAlarmPage> {
                                   FirebaseNotifications.isCommunity = value;
                                   await ApiProvider().post('/Fcm/DetailAlarmSetting', jsonEncode(
                                       {
-                                        "userID" : GlobalProfile.loggedInUser.userID,
+                                        "userID" : GlobalProfile.loggedInUser!.userID,
                                         "marketing" : FirebaseNotifications.isMarketing,
                                         "chatting" : FirebaseNotifications.isChatting,
                                         "team" : FirebaseNotifications.isTeam,
@@ -205,8 +205,8 @@ class _DetailAlarmPageState extends State<DetailAlarmPage> {
                                     style: SheepsTextStyle.b1(),
                                   ),
                                   Text(
-                                    GlobalProfile.loggedInUser.marketingAgree
-                                      ? '마케팅 수신동의 일자 : ' + GlobalProfile.loggedInUser.marketingAgreeTime
+                                    GlobalProfile.loggedInUser!.marketingAgree
+                                      ? '마케팅 수신동의 일자 : ' + GlobalProfile.loggedInUser!.marketingAgreeTime
                                       : '중요한 이벤트와 혜택을 놓치지 않도록, 동의는 필수!',
                                     style: SheepsTextStyle.info2(),
                                   ),
@@ -217,18 +217,18 @@ class _DetailAlarmPageState extends State<DetailAlarmPage> {
                             Transform.scale(
                               scale: 0.8,
                               child: CupertinoSwitch(
-                                value: GlobalProfile.loggedInUser.marketingAgree,
+                                value: GlobalProfile.loggedInUser!.marketingAgree,
                                 onChanged: (bool value) async {
-                                  GlobalProfile.loggedInUser.marketingAgree = value;
-                                  GlobalProfile.loggedInUser.marketingAgreeTime = DateTime.now().toString().substring(0,19);
+                                  GlobalProfile.loggedInUser!.marketingAgree = value;
+                                  GlobalProfile.loggedInUser!.marketingAgreeTime = DateTime.now().toString().substring(0,19);
                                   FirebaseNotifications.isMarketing = value;
                                   await ApiProvider().post('/Personal/Update/Marketing', jsonEncode({
-                                    "id" : GlobalProfile.loggedInUser.id,
-                                    "marketingAgree" : GlobalProfile.loggedInUser.marketingAgree,
+                                    "id" : GlobalProfile.loggedInUser!.id,
+                                    "marketingAgree" : GlobalProfile.loggedInUser!.marketingAgree,
                                   }));
                                   await ApiProvider().post('/Fcm/DetailAlarmSetting', jsonEncode(
                                       {
-                                        "userID" : GlobalProfile.loggedInUser.userID,
+                                        "userID" : GlobalProfile.loggedInUser!.userID,
                                         "marketing" : FirebaseNotifications.isMarketing,
                                         "chatting" : FirebaseNotifications.isChatting,
                                         "team" : FirebaseNotifications.isTeam,

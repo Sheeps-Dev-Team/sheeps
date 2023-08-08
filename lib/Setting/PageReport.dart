@@ -21,11 +21,11 @@ class PageReport extends StatefulWidget {
   final String classification;
   final String reportedID;
   final int postType;
-  final Community community;
-  final CommunityReply communityReply;
-  final CommunityReplyReply communityReplyReply;
+  final Community? community;
+  final CommunityReply? communityReply;
+  final CommunityReplyReply? communityReplyReply;
 
-  PageReport({Key key, @required this.userID, @required this.classification, @required this.reportedID, this.postType, this.community, this.communityReply, this.communityReplyReply})
+  PageReport({Key? key, required this.userID, required this.classification, required this.reportedID, this.postType = 0, this.community, this.communityReply, this.communityReplyReply})
       : super(key: key);
 
   @override
@@ -36,15 +36,15 @@ class _PageReportState extends State<PageReport> {
   final TextEditingController textEditingController = TextEditingController();
   final PageReportController controller = Get.put(PageReportController());
 
-  int userID;
-  String classification;
-  String reportedID;
-  int postType;
-  Community community;
-  CommunityReply communityReply;
-  CommunityReplyReply communityReplyReply;
+  int? userID;
+  String? classification;
+  String? reportedID;
+  int? postType;
+  Community? community;
+  CommunityReply? communityReply;
+  CommunityReplyReply? communityReplyReply;
 
-  bool isContents;
+  bool? isContents;
 
   @override
   void initState() {
@@ -142,14 +142,14 @@ class _PageReportState extends State<PageReport> {
                 okButtonColor: sheepsColorBlue,
                 okFunc: () => controller.submitReport(
                   context,
-                  classification: classification,
-                  reportedID: reportedID,
+                  classification: classification!,
+                  reportedID: reportedID!,
                   contents: textEditingController.text,
-                  postType: postType,
-                  userID: userID,
-                  community: community ?? Community(),
-                  communityReply: communityReply ?? CommunityReply(),
-                  communityReplyReply: communityReplyReply ?? CommunityReplyReply(),
+                  postType: postType!,
+                  userID: userID!,
+                  community: community!,
+                  communityReply: communityReply!,
+                  communityReplyReply: communityReplyReply!,
                 ),
               );
             }

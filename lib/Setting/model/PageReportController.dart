@@ -29,14 +29,14 @@ class PageReportController extends GetxController {
   // postType = 커뮤니티, 댓글, 답글 => int
   Future<void> submitReport(
     BuildContext context, {
-    @required String classification,
-    @required int userID,
-    @required String reportedID,
-    @required String contents,
-    int postType,
-    Community community,
-    CommunityReply communityReply,
-    CommunityReplyReply communityReplyReply,
+    required String classification,
+    required int userID,
+    required String reportedID,
+    required String contents,
+    int postType = 0,
+    Community? community,
+    CommunityReply? communityReply,
+    CommunityReplyReply? communityReplyReply,
   }) async {
     if (classification == 'ChatRoom') {
       var res = await ApiProvider().post(
@@ -68,10 +68,10 @@ class PageReportController extends GetxController {
         // 중복 신고가 아닐 때
         if (res[1]) {
           if (postType == reportForCommunity)
-            community.declareLength++; // 커뮤니티 신고 갯수 추가
+            community!.declareLength++; // 커뮤니티 신고 갯수 추가
           else if (postType == reportForReply)
-            communityReply.declareLength++; // 댓글 신고 갯수 추가
-          else if (postType == reportForReplyReply) communityReplyReply.declareLength++; // 답글 신고 갯수 추가
+            communityReply!.declareLength++; // 댓글 신고 갯수 추가
+          else if (postType == reportForReplyReply) communityReplyReply!.declareLength++; // 답글 신고 갯수 추가
           showSheepsToast(context: context, text: "신고되었습니다.");
         } else {
           showSheepsToast(context: context, text: "이미 신고한 글입니다.");

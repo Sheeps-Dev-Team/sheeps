@@ -8,7 +8,7 @@ class ModifiedMemberInformation with ChangeNotifier {
   bool IfConfirmPassword = false;
   bool IfComplete = false;
 
-  ModifiedMemberInformation({this.ConfirmedNewPassword,this.ExistingPassword,this.ID,this.NewPassword});
+  ModifiedMemberInformation({this.ConfirmedNewPassword = '',this.ExistingPassword = '',this.ID = '',this.NewPassword = ''});
 
   String getID() => ID;
   String getExistingPassword() => ExistingPassword;
