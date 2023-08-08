@@ -29,9 +29,9 @@ import 'models/Community.dart';
 
 class CommunityWriteNoticePostPage extends StatefulWidget {
   final bool isEdit; //수정일때만 true
-  final Community community; //수정일때만 받음
+  final Community? community; //수정일때만 받음
 
-  const CommunityWriteNoticePostPage({Key? key, this.isEdit = false, required this.community}) : super(key: key);
+  const CommunityWriteNoticePostPage({Key? key, this.isEdit = false, this.community}) : super(key: key);
 
   @override
   _CommunityWriteNoticePostPageState createState() => _CommunityWriteNoticePostPageState();
@@ -46,7 +46,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
   late AnimationController extendedController;
 
   bool isFinishFileLoading = false; //파일생성 완료 전 이미지변경방지
-  late Community community;
+  late Community? community;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
     // _filesController.filesList.add(f);
 
     if (widget.isEdit) {
-      controller.loading(widget.community);
+      controller.loading(widget.community!);
       titleController.text = controller.title.value;
       contentsController.text = controller.contents.value;
       controller.checkFilledRequired();
@@ -346,7 +346,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
                                       if (widget.isEdit) {
                                         //게시글 수정
                                         FormData formData = FormData.fromMap({
-                                          "id": widget.community.id,
+                                          "id": widget.community!.id,
                                           "category": category,
                                           "title": controlSpace(controller.title.value),
                                           "contents": controlSpace(controller.contents.value),
@@ -373,7 +373,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
                                           modifiedCommunity = Community.fromJson(json.decode(res.toString()));
 
                                           for (int i = 0; i < GlobalProfile.noticeCommunityList.length; i++) {
-                                            if (GlobalProfile.noticeCommunityList[i].id == widget.community.id) {
+                                            if (GlobalProfile.noticeCommunityList[i].id == widget.community!.id) {
                                               GlobalProfile.noticeCommunityList[i] = Community.fromJson(json.decode(res.toString()), isNotice: true);
                                               modifiedCommunity = GlobalProfile.noticeCommunityList[i];
                                               break;
@@ -381,7 +381,7 @@ class _CommunityWriteNoticePostPageState extends State<CommunityWriteNoticePostP
                                           }
 
                                           for (int i = 0; i < GlobalProfile.myCommunityList.length; i++) {
-                                            if (GlobalProfile.myCommunityList[i].id == widget.community.id) {
+                                            if (GlobalProfile.myCommunityList[i].id == widget.community!.id) {
                                               GlobalProfile.myCommunityList[i] = Community.fromJson(json.decode(res.toString()));
                                               modifiedCommunity = GlobalProfile.myCommunityList[i];
                                               break;

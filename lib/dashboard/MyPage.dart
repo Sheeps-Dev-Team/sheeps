@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sheeps_app/Community/CommunityWriteNoticePostPage.dart';
 
 import 'package:sheeps_app/Community/PostedPage.dart';
@@ -44,7 +44,7 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
-  AnimationController extendedController;
+  late AnimationController extendedController;
 
   @override
   void initState() {
@@ -337,7 +337,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 
                           DialogBuilder(context).hideOpenDialog();
 
-                          Get.to(() => PostedPage(GlobalProfile.myCommunityList, '내가 쓴 글')).then((value) => GlobalProfile.myCommunityList.clear());
+                          Get.to(() => PostedPage(a_communityList: GlobalProfile.myCommunityList, a_title: '내가 쓴 글'))?.then((value) => GlobalProfile.myCommunityList.clear());
                         },
                       ),
                       SettingColumn(
@@ -363,7 +363,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 
                           DialogBuilder(context).hideOpenDialog();
 
-                          Get.to(() => PostedPage(GlobalProfile.myCommunityList, '댓글 단 글')).then((value) => GlobalProfile.myCommunityList.clear());
+                          Get.to(() => PostedPage(a_communityList: GlobalProfile.myCommunityList, a_title: '댓글 단 글'))?.then((value) => GlobalProfile.myCommunityList.clear());
                         },
                       ),
                       SettingColumn(
@@ -389,7 +389,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 
                           DialogBuilder(context).hideOpenDialog();
 
-                          Get.to(() => PostedPage(GlobalProfile.myCommunityList, '좋아요 한 글')).then((value) => GlobalProfile.myCommunityList.clear());
+                          Get.to(() => PostedPage(a_communityList: GlobalProfile.myCommunityList, a_title: '좋아요 한 글'))?.then((value) => GlobalProfile.myCommunityList.clear());
                         },
                       ),
                       if(GlobalProfile.loggedInUser.userID == 1)...[
