@@ -22,13 +22,13 @@ class SocketProvider extends GetxController with  StoppableService{
     super.start();
     if(this._fromUser != null && stopCheck){
       socket!.emit('resumed',[{
-        "userID" : GlobalProfile.loggedInUser.userID.toString(),
+        "userID" : GlobalProfile.loggedInUser!.userID.toString(),
         "roomStatus" : roomStatus,
       }] );
       stopCheck = false;
 
       ApiProvider().post('/Fcm/BadgeCount/Reset', jsonEncode({
-        "userID" : GlobalProfile.loggedInUser.userID
+        "userID" : GlobalProfile.loggedInUser!.userID
       }));
     }
   }
@@ -39,7 +39,7 @@ class SocketProvider extends GetxController with  StoppableService{
     if(this._fromUser != null){
       stopCheck = true;
       socket!.emit('paused',[{
-        "userID" : GlobalProfile.loggedInUser.userID.toString(),
+        "userID" : GlobalProfile.loggedInUser!.userID.toString(),
         "roomStatus" : roomStatus,
       }] );
     }

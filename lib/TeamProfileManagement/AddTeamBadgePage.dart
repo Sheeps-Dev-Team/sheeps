@@ -21,14 +21,14 @@ import 'package:sheeps_app/userdata/MyBadge.dart';
 class AddTeamBadgePage extends StatefulWidget {
   final Team team;
 
-  AddTeamBadgePage({Key key, @required this.team}) : super(key: key);
+  AddTeamBadgePage({Key? key, required this.team}) : super(key: key);
 
   @override
   _AddTeamBadgePageState createState() => _AddTeamBadgePageState();
 }
 
 class _AddTeamBadgePageState extends State<AddTeamBadgePage> {
-  Team team;
+  Team? team;
   TeamProfileManagementController controller = Get.put(TeamProfileManagementController());
 
   int barIndex = 0;
@@ -46,8 +46,8 @@ class _AddTeamBadgePageState extends State<AddTeamBadgePage> {
 
     team = widget.team;
 
-    if (team.badgeList != null && team.badgeList.length > 0) {
-      listHaveBadge = team.badgeList.map((BadgeModel badge) => badge.badgeID).toList();
+    if (team!.badgeList != null && team!.badgeList.length > 0) {
+      listHaveBadge = team!.badgeList.map((BadgeModel badge) => badge.badgeID).toList();
     }
     tmpShowBadgeList.addAll(controller.badgeList);
   }
@@ -113,7 +113,7 @@ class _AddTeamBadgePageState extends State<AddTeamBadgePage> {
   }
 
   Widget haveBadgePage() {
-    Widget selectedBadge({int badgeID}) {
+    Widget selectedBadge({required int badgeID}) {
       return GestureDetector(
         onTap: () {
           for (int i = 0; i < tmpShowBadgeList.length; i++) {
@@ -211,7 +211,7 @@ class _AddTeamBadgePageState extends State<AddTeamBadgePage> {
   }
 
   Widget haveBadgeGrid({
-    @required List<int> badgeList,
+    required List<int> badgeList,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit, vertical: 10 * sizeUnit),
@@ -317,8 +317,8 @@ class _AddTeamBadgePageState extends State<AddTeamBadgePage> {
   }
 
   Widget badgeGridTile({
-    String title,
-    @required List<int> badgeList,
+    String title = '',
+    required List<int> badgeList,
   }) {
     int countHaveBadge = 0;
     if (listHaveBadge.isNotEmpty) {
@@ -335,7 +335,7 @@ class _AddTeamBadgePageState extends State<AddTeamBadgePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (title != null) ...[
+          if (title != '') ...[
             Text(
               title + '(' + countHaveBadge.toString() + '\/' + badgeList.length.toString() + ')',
               style: SheepsTextStyle.badgeTitle(),

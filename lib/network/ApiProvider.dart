@@ -36,8 +36,8 @@ class ApiProvider {
       final response = await ioClient.get(uri,
       headers: {
         'Content-Type' : 'application/json',
-        'user' : GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser.userID.toString(),
-        'accessToken' : GlobalProfile.accessToken
+        'user' : GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser!.userID.toString(),
+        'accessToken' : GlobalProfile.accessToken!
       },);
 
       if(response.body == "" || response.body == null) return null;
@@ -66,8 +66,8 @@ class ApiProvider {
       final response = await ioClient.post(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'user' : GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser.userID.toString(),
-            'accessToken' : GlobalProfile.accessToken
+            'user' : GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser!.userID.toString(),
+            'accessToken' : GlobalProfile.accessToken!
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));

@@ -12,7 +12,7 @@ import 'package:sheeps_app/config/ListForProfileModify.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
 
 class SelectTeamField extends StatefulWidget {
-  SelectTeamField({Key key}) : super(key: key);
+  SelectTeamField({Key? key}) : super(key: key);
 
   @override
   _SelectTeamFieldState createState() => _SelectTeamFieldState();

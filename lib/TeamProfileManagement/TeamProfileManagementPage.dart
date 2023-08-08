@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 
 
 import 'package:dio/dio.dart' as D;
-import 'package:drag_and_drop_gridview/devdrag.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -43,7 +42,7 @@ class TeamProfileManagementPage extends StatefulWidget {
   final bool isAdd; // 팀 생성 페이지면 true
   final Team team; // 팀 생성이면 기본 생성자 Team()
 
-  const TeamProfileManagementPage({Key key, @required this.team, this.isAdd = false}) : super(key: key);
+  const TeamProfileManagementPage({Key? key, required this.team, this.isAdd = false}) : super(key: key);
 
   @override
   _TeamProfileManagementPageState createState() => _TeamProfileManagementPageState();
@@ -66,10 +65,10 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
   bool isEditMode = false;
   bool isReady = true;
 
-  D.FormData formData;
-  D.Response dioRes;
+  D.FormData? formData;
+  D.Response? dioRes;
 
-  AnimationController extendedController;
+  AnimationController? extendedController;
 
   @override
   void initState() {
@@ -81,7 +80,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
     _filesController = Get.put(MultipartImgFilesController());
 
     _filesController.filesList.clear();
-    File f;
+    File? f;
     _filesController.filesList.add(f);
 
     if (!widget.isAdd) {
@@ -130,8 +129,8 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
     nameController.dispose();
     infoController.dispose();
     linkController.dispose();
-    _scrollController.dispose();
-    extendedController.dispose();
+    _scrollController!.dispose();
+    extendedController!.dispose();
     super.dispose();
   }
 
@@ -319,7 +318,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
               GestureDetector(
                 onTap: () {
                   unFocus(context);
-                  Get.to(() => SelectTeamCategory()).then((value) {
+                  Get.to(() => SelectTeamCategory())?.then((value) {
                     if (value != null) {
                       controller.category.value = value[0];
                       controller.checkFilledRequiredInfo();
@@ -364,7 +363,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
               GestureDetector(
                 onTap: () {
                   unFocus(context);
-                  Get.to(() => SelectTeamField()).then((value) {
+                  Get.to(() => SelectTeamField())?.then((value) {
                     if (value != null) {
                       controller.part.value = value[0];
                       controller.checkFilledRequiredInfo();
@@ -409,7 +408,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
               GestureDetector(
                 onTap: () {
                   unFocus(context);
-                  Get.to(() => SelectArea()).then((value) {
+                  Get.to(() => SelectArea())?.then((value) {
                     if (value != null) {
                       controller.location.value = value[0];
                       controller.subLocation.value = value[1];
@@ -616,7 +615,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
                                 child: FittedBox(
                                   child: controller.profileImgList[index].id == -1
                                       ? Image(image: FileImage(_filesController.filesList[index]))
-                                      : getExtendedImage(controller.profileImgList[index].imgUrl, 60, extendedController),
+                                      : getExtendedImage(controller.profileImgList[index].imgUrl, 60, extendedController!),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -993,8 +992,8 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
   }
 
   Widget linkItem({
-    @required String title,
-    @required RxString linkUrl,
+    required String title,
+    required RxString linkUrl,
     Color color = sheepsColorGreen,
   }) {
     return GestureDetector(
@@ -1079,7 +1078,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
     );
   }
 
-  Widget GreyBorderContainer({String icon, Color iconColor, Function tapIcon, Widget child}) {
+  Widget GreyBorderContainer({String? icon, Color? iconColor, Function? tapIcon, Widget? child}) {
     return Container(
       width: 328 * sizeUnit,
       height: 32 * sizeUnit,
@@ -1093,7 +1092,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
           if (icon != null) ...[
             SizedBox(width: 5 * sizeUnit),
             GestureDetector(
-              onTap: tapIcon == null ? () {} : tapIcon,
+              onTap: tapIcon == null ? () => {} : () => tapIcon,
               child: SvgPicture.asset(
                 icon,
                 width: 22 * sizeUnit,
@@ -1105,7 +1104,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
           ] else ...[
             SizedBox(width: 12 * sizeUnit),
           ],
-          child,
+          child!,
         ],
       ),
     );
@@ -1113,7 +1112,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
 
   Future modifyFunc() async {
     D.Dio dio = new D.Dio();
-    dio.options.headers = {'Content-Type': 'application/json', 'user': GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser.userID.toString()};
+    dio.options.headers = {'Content-Type': 'application/json', 'user': GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser!.userID.toString()};
 
     Future.microtask(() async {
       formData = new D.FormData.fromMap({
@@ -1130,51 +1129,51 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
 
       //뱃지
       if (controller.badgeList.length > 0) {
-        formData.fields.add(MapEntry("badge1", controller.badgeList[0].toString()));
+        formData!.fields.add(MapEntry("badge1", controller.badgeList[0].toString()));
         if (controller.badgeList.length > 1) {
-          formData.fields.add(MapEntry("badge2", controller.badgeList[1].toString()));
+          formData!.fields.add(MapEntry("badge2", controller.badgeList[1].toString()));
           if (controller.badgeList.length > 2) {
-            formData.fields.add(MapEntry("badge3", controller.badgeList[2].toString()));
+            formData!.fields.add(MapEntry("badge3", controller.badgeList[2].toString()));
           }
         }
       }
 
       //프로필 사진
       if (controller.isChangePhotos) {
-        formData.fields.add(MapEntry("isChangePhotos", "1")); //변동 있음
+        formData!.fields.add(MapEntry("isChangePhotos", "1")); //변동 있음
 
         for (int i = 0; i < controller.deletedImgIdList.length; i++) {
-          formData.fields.add(MapEntry("removeidlist", controller.deletedImgIdList[i].toString()));
+          formData!.fields.add(MapEntry("removeidlist", controller.deletedImgIdList[i].toString()));
         }
 
         for (int i = 0; i < controller.profileImgList.length; i++) {
-          formData.fields.add(MapEntry("fileidlist", controller.profileImgList[i].id.toString()));
+          formData!.fields.add(MapEntry("fileidlist", controller.profileImgList[i].id.toString()));
           String filePath = _filesController.filesList[i].path;
-          formData.files.add(MapEntry("TeamPhoto", D.MultipartFile.fromFileSync(filePath, filename: getFileName(i, filePath))));
+          formData!.files.add(MapEntry("TeamPhoto", D.MultipartFile.fromFileSync(filePath, filename: getFileName(i, filePath))));
         }
       } else {
-        formData.fields.add(MapEntry("isChangePhotos", "0")); //변동 없음
+        formData!.fields.add(MapEntry("isChangePhotos", "0")); //변동 없음
       }
 
       //인증
       for (int i = 0; i < controller.certificationList.length; ++i) {
-        formData.fields.add(MapEntry("tauthcontents", controller.certificationList[i].contents));
+        formData!.fields.add(MapEntry("tauthcontents", controller.certificationList[i].contents));
         String filePath = controller.certificationList[i].imgUrl;
-        formData.files.add(MapEntry("TAuthAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
+        formData!.files.add(MapEntry("TAuthAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
       }
 
       //수행내역
       for (int i = 0; i < controller.performancesList.length; ++i) {
-        formData.fields.add(MapEntry("tperformancecontents", controller.performancesList[i].contents));
+        formData!.fields.add(MapEntry("tperformancecontents", controller.performancesList[i].contents));
         String filePath = controller.performancesList[i].imgUrl;
-        formData.files.add(MapEntry("TPerformanceAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
+        formData!.files.add(MapEntry("TPerformanceAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
       }
 
       //수상
       for (int i = 0; i < controller.winList.length; ++i) {
-        formData.fields.add(MapEntry("twincontents", controller.winList[i].contents));
+        formData!.fields.add(MapEntry("twincontents", controller.winList[i].contents));
         String filePath = controller.winList[i].imgUrl;
-        formData.files.add(MapEntry("TWinAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
+        formData!.files.add(MapEntry("TWinAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
       }
 
       DialogBuilder(context).showLoadingIndicator();
@@ -1197,7 +1196,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
         throw FetchDataException(e.message);
       }
 
-      Team changedTeam = Team.fromJson(dioRes.data);
+      Team changedTeam = Team.fromJson(dioRes!.data);
 
       DialogBuilder(context).hideOpenDialog();
 
@@ -1218,14 +1217,14 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
     Dio dio = new Dio();
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'user': GlobalProfile.loggedInUser.userID,
+      'user': GlobalProfile.loggedInUser!.userID,
     };
 
-    Team addTeam;
+    Team? addTeam;
 
     Future.microtask(() async {
       formData = new D.FormData.fromMap({
-        "leaderid": GlobalProfile.loggedInUser.userID,
+        "leaderid": GlobalProfile.loggedInUser!.userID,
         "name": controller.name.value,
         "category": controller.category.value,
         "part": controller.part.value,
@@ -1239,40 +1238,40 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
 
       //프로필 사진
       if (controller.isChangePhotos) {
-        formData.fields.add(MapEntry("isChangePhotos", "1")); //변동 있음
+        formData!.fields.add(MapEntry("isChangePhotos", "1")); //변동 있음
 
         for (int i = 0; i < controller.deletedImgIdList.length; i++) {
-          formData.fields.add(MapEntry("removeidlist", controller.deletedImgIdList[i].toString()));
+          formData!.fields.add(MapEntry("removeidlist", controller.deletedImgIdList[i].toString()));
         }
 
         for (int i = 0; i < controller.profileImgList.length; i++) {
-          formData.fields.add(MapEntry("fileidlist", controller.profileImgList[i].id.toString()));
+          formData!.fields.add(MapEntry("fileidlist", controller.profileImgList[i].id.toString()));
           String filePath = _filesController.filesList[i].path;
-          formData.files.add(MapEntry("TeamPhoto", D.MultipartFile.fromFileSync(filePath, filename: getFileName(i, filePath))));
+          formData!.files.add(MapEntry("TeamPhoto", D.MultipartFile.fromFileSync(filePath, filename: getFileName(i, filePath))));
         }
       } else {
-        formData.fields.add(MapEntry("isChangePhotos", "0")); //변동 없음
+        formData!.fields.add(MapEntry("isChangePhotos", "0")); //변동 없음
       }
 
       //인증
       for (int i = 0; i < controller.certificationList.length; ++i) {
-        formData.fields.add(MapEntry("tauthcontents", controller.certificationList[i].contents));
+        formData!.fields.add(MapEntry("tauthcontents", controller.certificationList[i].contents));
         String filePath = controller.certificationList[i].imgUrl;
-        formData.files.add(MapEntry("TAuthAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
+        formData!.files.add(MapEntry("TAuthAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
       }
 
       //수행내역
       for (int i = 0; i < controller.performancesList.length; ++i) {
-        formData.fields.add(MapEntry("tperformancecontents", controller.performancesList[i].contents));
+        formData!.fields.add(MapEntry("tperformancecontents", controller.performancesList[i].contents));
         String filePath = controller.performancesList[i].imgUrl;
-        formData.files.add(MapEntry("TPerformanceAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
+        formData!.files.add(MapEntry("TPerformanceAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
       }
 
       //수상
       for (int i = 0; i < controller.winList.length; ++i) {
-        formData.fields.add(MapEntry("twincontents", controller.winList[i].contents));
+        formData!.fields.add(MapEntry("twincontents", controller.winList[i].contents));
         String filePath = controller.winList[i].imgUrl;
-        formData.files.add(MapEntry("TWinAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
+        formData!.files.add(MapEntry("TWinAuthImg", D.MultipartFile.fromFileSync(filePath, filename: getFileName(1, filePath))));
       }
 
       DialogBuilder(context).showLoadingIndicator("팀 생성 중...");
@@ -1291,18 +1290,18 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
         await ApiProvider().post(
             '/Team/InsertOrUpdate/Links',
             jsonEncode({
-              'teamID': addTeam.id,
+              'teamID': addTeam!.id,
               'site': controller.siteUrl.value,
               'recruit': controller.recruitUrl.value,
               'instagram': controller.instagramUrl.value,
               'facebook': controller.facebookUrl.value,
             }));
-        addTeam.teamLink.siteUrl = controller.siteUrl.value;
-        addTeam.teamLink.recruitUrl = controller.recruitUrl.value;
-        addTeam.teamLink.instagramUrl = controller.instagramUrl.value;
-        addTeam.teamLink.facebookUrl = controller.facebookUrl.value;
+        addTeam!.teamLink.siteUrl = controller.siteUrl.value;
+        addTeam!.teamLink.recruitUrl = controller.recruitUrl.value;
+        addTeam!.teamLink.instagramUrl = controller.instagramUrl.value;
+        addTeam!.teamLink.facebookUrl = controller.facebookUrl.value;
 
-        GlobalProfile.teamProfile.insert(0, addTeam);
+        GlobalProfile.teamProfile.insert(0, addTeam!);
       } else {
         addTeam = null;
       }

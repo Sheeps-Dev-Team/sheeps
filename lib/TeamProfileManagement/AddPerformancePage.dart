@@ -34,7 +34,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
   var dateStart;
   var dateEnd;
 
-  File authFile;
+  File? authFile;
 
   @override
   void dispose() {
@@ -127,7 +127,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
                                                     primarySwatch: Colors.grey,
                                                   ),
                                                 ),
-                                                child: child,
+                                                child: child!,
                                               );
                                             },
                                           ).then((value) {
@@ -172,7 +172,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
                                                     primarySwatch: Colors.grey,
                                                   ),
                                                 ),
-                                                child: child,
+                                                child: child!,
                                               );
                                             },
                                           ).then((value) {
@@ -206,7 +206,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
                                   GestureDetector(
                                     onTap: () {
                                       unFocus(context);
-                                      Get.to(() => AuthFileUploadPage(appBarTitle: '수행 내역 증빙 자료', authFile: authFile)).then((value) {
+                                      Get.to(() => AuthFileUploadPage(appBarTitle: '수행 내역 증빙 자료', authFile: authFile!))?.then((value) {
                                         if (value != null) {
                                           setState(() {
                                             authFile = value[0];
@@ -229,7 +229,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
                                             child: Container(
                                               width: 284 * sizeUnit,
                                               child: Text(
-                                                authFile != null ? authFile.path.substring(authFile.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
+                                                authFile != null ? authFile!.path.substring(authFile!.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
                                                 style: SheepsTextStyle.hint4Profile().copyWith(color: authFile != null ? sheepsColorGreen : sheepsColorGrey),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -281,7 +281,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
                                 controller.performancesList.add(TeamPerformances(
                                   id: -1,
                                   contents: contents,
-                                  imgUrl: authFile.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
+                                  imgUrl: authFile!.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
                                   auth: 2,
                                 ));
                                 Get.back();

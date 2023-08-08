@@ -31,7 +31,7 @@ class _AddTeamWinState extends State<AddTeamWinPage> {
 
   String date = '';
 
-  File authFile;
+  File? authFile;
 
   @override
   void dispose() {
@@ -133,7 +133,7 @@ class _AddTeamWinState extends State<AddTeamWinPage> {
                                                 primarySwatch: Colors.grey,
                                               ),
                                             ),
-                                            child: child,
+                                            child: child!,
                                           );
                                         },
                                       ).then((value) {
@@ -164,7 +164,7 @@ class _AddTeamWinState extends State<AddTeamWinPage> {
                                   GestureDetector(
                                     onTap: () {
                                       unFocus(context);
-                                      Get.to(() => AuthFileUploadPage(appBarTitle: '수상 증빙 자료', authFile: authFile)).then((value) {
+                                      Get.to(() => AuthFileUploadPage(appBarTitle: '수상 증빙 자료', authFile: authFile!))?.then((value) {
                                         if (value != null) {
                                           setState(() {
                                             authFile = value[0];
@@ -187,7 +187,7 @@ class _AddTeamWinState extends State<AddTeamWinPage> {
                                             child: Container(
                                               width: 284 * sizeUnit,
                                               child: Text(
-                                                authFile != null ? authFile.path.substring(authFile.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
+                                                authFile != null ? authFile!.path.substring(authFile!.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
                                                 style: SheepsTextStyle.hint4Profile().copyWith(color: authFile != null ? sheepsColorGreen : sheepsColorGrey),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -237,7 +237,7 @@ class _AddTeamWinState extends State<AddTeamWinPage> {
                                 controller.winList.add(TeamWins(
                                   id: -1,
                                   contents: contents,
-                                  imgUrl: authFile.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
+                                  imgUrl: authFile!.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
                                   auth: 2,
                                 ));
                                 Get.back();

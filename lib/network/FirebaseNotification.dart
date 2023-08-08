@@ -74,7 +74,7 @@ class FirebaseNotifications {
       if(_fcmToken == ''){
         _fcmToken = (await _.getToken())!;
         var res = await ApiProvider().post('/Fcm/Token/Save', jsonEncode({
-          "userID" : GlobalProfile.loggedInUser.userID,
+          "userID" : GlobalProfile.loggedInUser!.userID,
           "token" : _fcmToken,
         }));
 
@@ -206,7 +206,7 @@ class FirebaseNotifications {
       Future.microtask(() async {
         var notiListGet = await ApiProvider().post('/Notification/UnSendSelect', jsonEncode(
             {
-              "userID": GlobalProfile.loggedInUser.userID,
+              "userID": GlobalProfile.loggedInUser!.userID,
             }
         ));
 
@@ -250,7 +250,7 @@ class FirebaseNotifications {
           //채팅 가져오기 필요함
           var chatLogList = await ApiProvider().post('/ChatLog/UnSendSelect', jsonEncode(
               {
-                "userID" : GlobalProfile.loggedInUser.userID
+                "userID" : GlobalProfile.loggedInUser!.userID
               }
           ));
 
@@ -339,7 +339,7 @@ class FirebaseNotifications {
     screen = message['screen'] as String;
 
     socket!.socket!.emit('resumed',[{
-      "userID" : GlobalProfile.loggedInUser.userID.toString(),
+      "userID" : GlobalProfile.loggedInUser!.userID.toString(),
       "roomStatus" : ROOM_STATUS_ETC,
     }] );
 

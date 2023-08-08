@@ -11,7 +11,7 @@ class TeamAuth {
   String createdAt;
   String updatedAt;
 
-  TeamAuth({this.createdAt, this.updatedAt, this.teamID, this.auth, this.contents, this.id, this.imgUrl});
+  TeamAuth({this.createdAt = '', this.updatedAt = '', this.teamID = 0, this.auth = 0, this.contents = '', this.id = 0, this.imgUrl = ''});
 
   factory TeamAuth.fromJson(Map<String, dynamic> json) {
     return TeamAuth(
@@ -35,7 +35,7 @@ class TeamWins {
   String createdAt;
   String updatedAt;
 
-  TeamWins({this.updatedAt, this.createdAt, this.auth, this.contents, this.id, this.imgUrl, this.teamID});
+  TeamWins({this.updatedAt = '', this.createdAt = '', this.auth = 0, this.contents = '', this.id = 0, this.imgUrl = '', this.teamID = 0});
 
   factory TeamWins.fromJson(Map<String, dynamic> json) {
     return TeamWins(
@@ -59,7 +59,7 @@ class TeamPerformances {
   String createdAt;
   String updatedAt;
 
-  TeamPerformances({this.createdAt, this.updatedAt, this.auth, this.contents, this.id, this.imgUrl, this.teamID});
+  TeamPerformances({this.createdAt = '', this.updatedAt = '', this.auth = 0, this.contents = '', this.id = 0, this.imgUrl = '', this.teamID = 0});
 
   factory TeamPerformances.fromJson(Map<String, dynamic> json) {
     return TeamPerformances(
@@ -137,9 +137,9 @@ class SampleTeam {
   String name;
   String part;
   String location;
-  TeamProfileImg profileImg;
+  TeamProfileImg? profileImg;
 
-  SampleTeam({this.id, this.name, this.part, this.location, this.profileImg});
+  SampleTeam({this.id = 0, this.name = '', this.part = '', this.location = '', this.profileImg});
 
   factory SampleTeam.fromJson(Map<String, dynamic> json) {
     List<TeamProfileImg> profileImgList = [];
@@ -185,33 +185,33 @@ class Team {
   List<TeamPerformances> teamPerformList = [];
   List<TeamWins> teamWinList = [];
 
-  TeamLink teamLink = TeamLink();
+  TeamLink? teamLink;
 
   bool isTeamMemberChange;
 
   Team({
-    this.id,
-    this.leaderID,
-    this.name,
-    this.information,
-    this.category,
-    this.part,
-    this.location,
-    this.subLocation,
-    this.possibleJoin,
-    this.profileImgList,
-    this.badge1,
-    this.badge2,
-    this.badge3,
-    this.badgeList,
-    this.userList,
-    this.createdAt,
-    this.updatedAt,
-    this.teamWinList,
-    this.teamPerformList,
-    this.teamAuthList,
+    this.id = 0,
+    this.leaderID = 0,
+    this.name = '',
+    this.information = '',
+    this.category = '',
+    this.part = '',
+    this.location = '',
+    this.subLocation = '',
+    this.possibleJoin = 0,
+    this.profileImgList = const [],
+    this.badge1 = 0,
+    this.badge2 = 0,
+    this.badge3 = 0,
+    this.badgeList = const [],
+    this.userList = const [],
+    this.createdAt = '',
+    this.updatedAt = '',
+    this.teamWinList = const [],
+    this.teamPerformList = const [],
+    this.teamAuthList = const [],
     this.teamLink,
-    this.isTeamMemberChange
+    this.isTeamMemberChange = false
   });
 
   factory Team.fromJson(Map<String, dynamic> json) {
@@ -249,9 +249,9 @@ class Team {
       badge2: json["Badge2"] as int,
       badge3: json["Badge3"] as int,
       userList: teamList,
-      teamAuthList: json['teamauths'] == null ? null : (json['teamauths'] as List).map((e) => TeamAuth.fromJson(e)).toList(),
-      teamPerformList: json['teamperformances'] == null ? null : (json['teamperformances'] as List).map((e) => TeamPerformances.fromJson(e)).toList(),
-      teamWinList: json['teamwins'] == null ? null : (json['teamwins'] as List).map((e) => TeamWins.fromJson(e)).toList(),
+      teamAuthList: json['teamauths'] == null ? [] : (json['teamauths'] as List).map((e) => TeamAuth.fromJson(e)).toList(),
+      teamPerformList: json['teamperformances'] == null ? [] : (json['teamperformances'] as List).map((e) => TeamPerformances.fromJson(e)).toList(),
+      teamWinList: json['teamwins'] == null ? [] : (json['teamwins'] as List).map((e) => TeamWins.fromJson(e)).toList(),
       teamLink: json['teamlinks'] == null || json['teamlinks'].length == 0 ? TeamLink() : TeamLink.fromJson(json['teamlinks'][0]),
       createdAt: replaceUTCDate(json["createdAt"] as String),
       updatedAt: replaceUTCDate(json["updatedAt"] as String),
