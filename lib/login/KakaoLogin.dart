@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:kakao_flutter_sdk/all.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sheeps_app/config/AppConfig.dart';
@@ -57,8 +57,8 @@ void kakaoLoginButtonClicked(BuildContext context, SocketProvider provider) asyn
 
   if (user == null) return null;
 
-  String email = user.kakaoAccount.email;
-  String name = user.kakaoAccount.profile.nickname == null ? '' : user.kakaoAccount.profile.nickname;
+  String email = user.kakaoAccount!.email!;
+  String name = user.kakaoAccount!.profile!.nickname == null ? '' : user.kakaoAccount!.profile!.nickname!;
 
   globalSocialName = name;
 

@@ -18,7 +18,7 @@ import 'package:sheeps_app/registration/model/RegistrationModel.dart';
 class PasswordCheckPage extends StatefulWidget {
   final String password;
 
-  PasswordCheckPage({Key key, @required this.password}) : super(key: key);
+  PasswordCheckPage({Key? key, required this.password}) : super(key: key);
 
   @override
   _PasswordCheckPageState createState() => _PasswordCheckPageState();

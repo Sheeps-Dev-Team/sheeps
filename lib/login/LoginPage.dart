@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isCheckEmail = false;
   String loginID = "";
   String loginPassword = "";
-  String errMsg4Password;
+  String? errMsg4Password;
 
   bool validPassword(String password) {
     //if (!kReleaseMode) return true;
