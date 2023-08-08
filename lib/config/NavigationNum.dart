@@ -13,7 +13,7 @@ class NavigationNum extends GetxController{
   void setNum(int num){
     pastNum.value = _num.value;
     _num.value = num;
-    forSetState = forSetState + 0.1;
+    forSetState(forSetState.value + 0.1);
     update();
   }
   void setPastNum(int num){

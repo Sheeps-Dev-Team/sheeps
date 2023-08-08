@@ -10,9 +10,9 @@ class ConcaveDecoration extends Decoration {
   final List<Color> colors;
 
   ConcaveDecoration({
-    @required this.shape,
-    @required this.depression,
-    @required this.colors,
+    required this.shape,
+    required this.depression,
+    required this.colors,
   })  : assert(shape != null),
         assert(depression >= 0),
         assert(colors == null || colors.length == 2);
@@ -37,7 +37,7 @@ class _ConcaveDecorationPainter extends BoxPainter {
 
   @override
   void paint(ui.Canvas canvas, ui.Offset offset, ImageConfiguration configuration) {
-    final rect = offset & configuration.size;
+    final rect = offset & configuration.size!;
     final shapePath = shape.getOuterPath(rect);
 
     final delta = 16 / rect.longestSide;

@@ -8,6 +8,8 @@ import 'package:sheeps_app/chat/models/ChatGlobal.dart';
 import 'package:sheeps_app/network/ApiProvider.dart';
 import 'package:sheeps_app/userdata/User.dart';
 
+import '../config/constants.dart';
+
 class GlobalProfile {
   static bool personalFiltered = false;
   static List<UserData> personalProfile = [];
@@ -45,6 +47,7 @@ class GlobalProfile {
   static List<CommunityReply> communityReply = [];
 
   static UserData loggedInUser;
+  static UserData nullUser = UserData(userID: nullInt);
   static String accessToken;
   static String refreshToken;
   static String accessTokenExpiredAt;

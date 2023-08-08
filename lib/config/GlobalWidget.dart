@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +26,12 @@ class SettingColumn extends StatelessWidget {
   final String str;
   final Function myFunc;
 
-  SettingColumn({Key key, this.str, this.myFunc});
+  SettingColumn({Key? key, required this.str, required this.myFunc});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: myFunc,
+      onTap: () => myFunc,
       child: Container(
         color: Colors.white,
         height: 48 * sizeUnit,
@@ -111,13 +109,11 @@ getExtendedImage(String url, int size, AnimationController controller, {bool isR
         case LoadState.loading:
           controller.reset();
           return Container();
-          break;
         case LoadState.completed:
           controller.forward();
           return ExtendedRawImage(
             image: state.extendedImageInfo?.image,
           );
-          break;
         case LoadState.failed:
           controller.reset();
           return GestureDetector(
@@ -126,17 +122,16 @@ getExtendedImage(String url, int size, AnimationController controller, {bool isR
               state.reLoadImage();
             },
           );
-          break;
         default:
           controller.reset();
           return Container();
-          break;
       }
     },
   );
 }
 
-PreferredSizeWidget SheepsAppBar(BuildContext context, String title, {String subText = '', bool isBackButton = true, Function? backFunc, List<Widget>? actions, bool bottomLine = false}) {
+PreferredSizeWidget SheepsAppBar(BuildContext context, String title,
+    {String subText = '', bool isBackButton = true, Function? backFunc, List<Widget>? actions, bool bottomLine = false}) {
   return PreferredSize(
     preferredSize: Size.fromHeight(44 * sizeUnit),
     child: AppBar(
@@ -206,14 +201,14 @@ Widget SheepsSimpleListItemBox(BuildContext context, Widget _child) {
 showSheepsDialog(
     {required BuildContext context,
     required String title,
-    String imgUrl,
-    String description,
+    String? imgUrl,
+    String? description,
     String okText = '확인',
-    Function okFunc,
+    Function? okFunc,
     Color okColor = sheepsColorGreen,
     bool isCancelButton = true,
     String cancelText = '취소하기',
-    Function cancelFunc,
+    Function? cancelFunc,
     Color cancelColor = sheepsColorGrey,
     bool isBarrierDismissible = true}) {
   return showDialog(
@@ -349,7 +344,7 @@ Future SheepsBottomSheetForImg(BuildContext context, {required Function cameraFu
                 ],
               ),
               GestureDetector(
-                onTap: cameraFunc,
+                onTap: () => cameraFunc,
                 child: Container(
                   height: 48 * sizeUnit,
                   width: 360 * sizeUnit,
@@ -364,7 +359,7 @@ Future SheepsBottomSheetForImg(BuildContext context, {required Function cameraFu
               ),
               Container(color: Color(0xFFF8F8F8), height: 1 * sizeUnit),
               GestureDetector(
-                onTap: galleryFunc,
+                onTap: () => galleryFunc,
                 child: Container(
                   height: 48 * sizeUnit,
                   width: 360 * sizeUnit,
@@ -483,7 +478,7 @@ Widget SheepsPersonalProfileCard(BuildContext context, UserData person, int inde
   });
 
   return GestureDetector(
-    onTap: onTap,
+    onTap: () => onTap,
     child: Container(
       width: 160 * sizeUnit,
       padding: EdgeInsets.only(top: 8 * sizeUnit, left: 4 * sizeUnit, right: 4 * sizeUnit),
@@ -500,7 +495,8 @@ Widget SheepsPersonalProfileCard(BuildContext context, UserData person, int inde
                 children: [
                   Positioned(
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: new BorderRadius.circular(28 * sizeUnit), border: Border.all(color: sheepsColorGrey, width: 0.5)),
+                      decoration:
+                          BoxDecoration(color: Colors.white, borderRadius: new BorderRadius.circular(28 * sizeUnit), border: Border.all(color: sheepsColorGrey, width: 0.5)),
                       child: Center(
                         child: SvgPicture.asset(
                           svgSheepsBasicProfileImage,
@@ -654,7 +650,7 @@ Widget SheepsTeamProfileCard(BuildContext context, Team team, int index, {bool p
   });
 
   return GestureDetector(
-    onTap: onTap,
+    onTap: () => onTap,
     child: Container(
       width: 160 * sizeUnit,
       padding: EdgeInsets.only(top: 8 * sizeUnit, left: 4 * sizeUnit, right: 4 * sizeUnit),
@@ -671,7 +667,8 @@ Widget SheepsTeamProfileCard(BuildContext context, Team team, int index, {bool p
                 children: [
                   Positioned(
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: new BorderRadius.circular(28 * sizeUnit), border: Border.all(color: sheepsColorGrey, width: 0.5)),
+                      decoration:
+                          BoxDecoration(color: Colors.white, borderRadius: new BorderRadius.circular(28 * sizeUnit), border: Border.all(color: sheepsColorGrey, width: 0.5)),
                       child: Center(
                           child: SvgPicture.asset(
                         svgSheepsBasicProfileImage,
@@ -930,7 +927,7 @@ Widget SheepsBottomButton({
     ),
     child: TextButton(
       style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12 * sizeUnit)))),
-      onPressed: function,
+      onPressed: () => function,
       child: Text(
         text,
         style: SheepsTextStyle.button1(),
@@ -1011,9 +1008,9 @@ Widget sheepsTextField(
 
 Widget SheepsAnimatedTabBar2(
   BuildContext context, {
-  double height,
-  double width,
-  double thickness,
+  double? height,
+  double? width,
+  double? thickness,
   int duration = 500,
   Curve curve = Curves.easeInOut,
   required int barIndex,
@@ -1038,7 +1035,7 @@ Widget SheepsAnimatedTabBar2(
                     },
                     child: Container(
                       width: itemWidth,
-                      height: height - thickness,
+                      height: height! - thickness!,
                       color: Colors.white,
                       child: Center(child: item),
                     ),
@@ -1077,10 +1074,17 @@ class SheepsAnimatedTabBar extends StatefulWidget {
   final double insidePadding; //탭 사이 여백
   final List<String> listTabItemTitle; //탭 이름 리스트
   final List<double> listTabItemWidth; //각 탭 너비 리스트
-  final List<bool> listTabItemBoolean;
+  final List<bool>? listTabItemBoolean;
 
-  SheepsAnimatedTabBar({Key key, required this.barIndex, required this.pageController, required this.insidePadding, required this.listTabItemTitle, required this.listTabItemWidth, this.listTabItemBoolean,})
-      : super(key: key);
+  SheepsAnimatedTabBar({
+    Key? key,
+    required this.barIndex,
+    required this.pageController,
+    required this.insidePadding,
+    required this.listTabItemTitle,
+    required this.listTabItemWidth,
+    this.listTabItemBoolean,
+  }) : super(key: key);
 
   @override
   _SheepsAnimatedTabBarState createState() => _SheepsAnimatedTabBarState();
@@ -1089,12 +1093,12 @@ class SheepsAnimatedTabBar extends StatefulWidget {
 class _SheepsAnimatedTabBarState extends State<SheepsAnimatedTabBar> {
   final Duration duration = Duration(milliseconds: 500);
   final Curve curve = Curves.fastOutSlowIn;
-  double insidePadding;
+  late double insidePadding;
 
-  double leftPadding;
-  double rightPadding;
+  late double leftPadding;
+  late double rightPadding;
 
-  TextStyle _textStyle;
+  late TextStyle _textStyle;
 
   @override
   void initState() {
@@ -1134,42 +1138,40 @@ class _SheepsAnimatedTabBarState extends State<SheepsAnimatedTabBar> {
                               widget.barIndex = index;
                               widget.pageController.animateToPage(index, duration: duration, curve: curve);
                             },
-                            child:
-                            widget.listTabItemBoolean != null ?
-                            Badge(
-                              showBadge: widget.listTabItemBoolean[index],
-                              position: BadgePosition.topEnd(top: -7 * sizeUnit,end: -7 * sizeUnit),
-                              padding: EdgeInsets.all(3 * sizeUnit),
-                              badgeColor: sheepsColorRed,
-                              toAnimate: false,
-                              elevation: 0,
-                              badgeContent: Text(''),
-                              child: Container(
-                                width: widget.listTabItemWidth[index],
-                                height: 24 * sizeUnit,
-                                color: Colors.white,
-                                child: Center(
-                                  child: Text(
-                                    title,
-                                    style: _textStyle.copyWith(color: widget.barIndex == index ? sheepsColorBlack : sheepsColorDarkGrey),
-                                    softWrap: false,
+                            child: widget.listTabItemBoolean != null
+                                ? badge.Badge(
+                                    showBadge: widget.listTabItemBoolean![index],
+                                    position: badge.BadgePosition.topEnd(top: -7 * sizeUnit, end: -7 * sizeUnit),
+                                    // padding: EdgeInsets.all(3 * sizeUnit),
+                                    // badgeColor: sheepsColorRed,
+                                    // toAnimate: false,
+                                    // elevation: 0,
+                                    badgeContent: Text(''),
+                                    child: Container(
+                                      width: widget.listTabItemWidth[index],
+                                      height: 24 * sizeUnit,
+                                      color: Colors.white,
+                                      child: Center(
+                                        child: Text(
+                                          title,
+                                          style: _textStyle.copyWith(color: widget.barIndex == index ? sheepsColorBlack : sheepsColorDarkGrey),
+                                          softWrap: false,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    width: widget.listTabItemWidth[index],
+                                    height: 24 * sizeUnit,
+                                    color: Colors.white,
+                                    child: Center(
+                                      child: Text(
+                                        title,
+                                        style: _textStyle.copyWith(color: widget.barIndex == index ? sheepsColorBlack : sheepsColorDarkGrey),
+                                        softWrap: false,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                            :
-                            Container(
-                              width: widget.listTabItemWidth[index],
-                              height: 24 * sizeUnit,
-                              color: Colors.white,
-                              child: Center(
-                                child: Text(
-                                  title,
-                                  style: _textStyle.copyWith(color: widget.barIndex == index ? sheepsColorBlack : sheepsColorDarkGrey),
-                                  softWrap: false,
-                                ),
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -1208,19 +1210,20 @@ class _SheepsAnimatedTabBarState extends State<SheepsAnimatedTabBar> {
 //텍스트랑 스타일 입력하면 그 텍스트가 들어갈 텍스트위젯의 사이즈를 알려줌. 뒤에 .width .height 붙여서 사용
 //IOS에서 텍스트페인터가 실제보다 사이즈를 작게 가져오는 이슈 있음
 Size getTextWidgetSize(String text, TextStyle style) {
-  TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr, textScaleFactor: 1)..layout(minWidth: 0, maxWidth: double.infinity);
+  TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr, textScaleFactor: 1)
+    ..layout(minWidth: 0, maxWidth: double.infinity);
   return textPainter.size;
 }
 
 showSheepsCustomDialog({
-  Widget title,
-  Widget contents,
+  Widget? title,
+  required Widget contents,
   Color okButtonColor = sheepsColorGreen,
   String okText = '확인',
-  Function okFunc,
+  Function? okFunc,
   bool isCancelButton = false,
   String cancelText = '취소하기',
-  Function cancelFunc,
+  Function? cancelFunc,
   bool isBarrierDismissible = true,
 }) {
   return Get.dialog(
@@ -1238,7 +1241,7 @@ showSheepsCustomDialog({
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(height: 40 * sizeUnit),
-              if(title != null)...[
+              if (title != null) ...[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20 * sizeUnit),
                   child: title,
@@ -1265,7 +1268,7 @@ showSheepsCustomDialog({
                         ? () {
                             Get.back();
                           }
-                        : okFunc,
+                        : () => okFunc,
                     child: Text(
                       okText,
                       style: SheepsTextStyle.button1(),
@@ -1290,7 +1293,7 @@ showSheepsCustomDialog({
                           ? () {
                               Get.back();
                             }
-                          : cancelFunc,
+                          : () => cancelFunc,
                       child: Text(
                         cancelText,
                         style: SheepsTextStyle.button1(),
@@ -1335,7 +1338,7 @@ showAddFailDialog({required String title, Color okButtonColor = sheepsColorGreen
 }
 
 showPersonalBadgeDialog({
-  int badgeID,
+  required int badgeID,
   Color okButtonColor = sheepsColorBlue,
 }) {
   return Get.dialog(
@@ -1412,7 +1415,7 @@ showPersonalBadgeDialog({
 }
 
 showTeamBadgeDialog({
-  int badgeID,
+  required int badgeID,
   Color okButtonColor = sheepsColorGreen,
 }) {
   return Get.dialog(
@@ -1699,7 +1702,13 @@ Widget multiLineTextField({
         borderRadius: BorderRadius.circular(16 * sizeUnit),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: controller.text.length > 0 ? borderColor : sheepsColorGrey, width: 1 * sizeUnit),
+        borderSide: BorderSide(
+            color: controller == null
+                ? sheepsColorGrey
+                : controller.text.length > 0
+                    ? borderColor
+                    : sheepsColorGrey,
+            width: 1 * sizeUnit),
         borderRadius: BorderRadius.circular(16 * sizeUnit),
       ),
       //constraints: BoxConstraints(minHeight: 32 * sizeUnit),
@@ -1709,7 +1718,7 @@ Widget multiLineTextField({
     minLines: 1,
     maxLines: isOneLine ? 1 : 100,
     maxLength: maxTextLength,
-    onChanged: onChange,
+    onChanged: onChange == null ? null : (value) => onChange(value),
   );
 }
 
@@ -1751,18 +1760,16 @@ Widget noSearchResultsPage(String? descriptionText) {
       SvgPicture.asset(svgGreySheepEyeX, width: 120 * sizeUnit, height: 88 * sizeUnit, color: sheepsColorLightGrey),
       SizedBox(height: 20 * sizeUnit),
       Center(
-        child:
-        Text(
-          descriptionText == null ? '검색한 결과가 없습니다.\n다른 방법으로 다시 시도해 보세요!' : descriptionText,
-          style: SheepsTextStyle.b4(),
-          textAlign: TextAlign.center,
-        )
-      ),
+          child: Text(
+        descriptionText == null ? '검색한 결과가 없습니다.\n다른 방법으로 다시 시도해 보세요!' : descriptionText,
+        style: SheepsTextStyle.b4(),
+        textAlign: TextAlign.center,
+      )),
     ],
   );
 }
 
-Widget pickDateContainer({String text, Color color = sheepsColorGreen, bool isNeedDay = false}) {
+Widget pickDateContainer({required String text, Color color = sheepsColorGreen, bool isNeedDay = false}) {
   return Container(
     height: 32 * sizeUnit,
     decoration: BoxDecoration(
@@ -1822,7 +1829,7 @@ Widget dragAndDropList({
     );
   }
 
-  Widget GreyBorderContainer({String icon, Color iconColor, Function tapIcon, Widget child}) {
+  Widget GreyBorderContainer({String? icon, required Color iconColor, Function? tapIcon, required Widget child}) {
     return Container(
       width: 328 * sizeUnit,
       height: 32 * sizeUnit,
@@ -1836,7 +1843,7 @@ Widget dragAndDropList({
           if (icon != null) ...[
             SizedBox(width: 5 * sizeUnit),
             GestureDetector(
-              onTap: tapIcon == null ? () {} : tapIcon,
+              onTap: tapIcon == null ? () {} : () => tapIcon(),
               child: SvgPicture.asset(
                 icon,
                 width: 22 * sizeUnit,
@@ -1864,12 +1871,12 @@ Widget dragAndDropList({
       double blankSize = 0;
       if (index == list.length) {
         blankSize = 15 * sizeUnit;
-        return DragTarget(
-          builder: (context, List<int> inputIndex, l) {
+        return DragTarget<int>(
+          builder: (context, inputIndex, l) {
             return AnimatedContainer(duration: Duration(milliseconds: 100), height: blankSize);
           },
           onWillAccept: (data) {
-            int tmp = data;
+            int tmp = data!;
             int dataId = 0;
             do {
               tmp = tmp - idUnit;
@@ -1910,8 +1917,8 @@ Widget dragAndDropList({
         data: 10000 * id + index, //id를 1만 곱해서 인덱스랑 더함
         child: Padding(
           padding: EdgeInsets.only(top: index == 0 ? 0 : 8 * sizeUnit),
-          child: DragTarget(
-            builder: (context, List<int> inputIndex, l) {
+          child: DragTarget<int>(
+            builder: (context, inputIndex, l) {
               return Column(
                 children: [
                   AnimatedContainer(duration: Duration(milliseconds: 100), height: blankSize),
@@ -1927,7 +1934,7 @@ Widget dragAndDropList({
               );
             },
             onWillAccept: (data) {
-              int tmp = data;
+              int tmp = data!;
               int dataId = 0;
               do {
                 tmp = tmp - idUnit;
@@ -2140,9 +2147,13 @@ Text replyExceptionText({bool isBlind = false, bool isReply = true, bool bigFont
     TextSpan(
       style: bigFont ? SheepsTextStyle.badgeTitle().copyWith(color: sheepsColorDarkGrey) : SheepsTextStyle.b3().copyWith(height: 14 / 12, color: sheepsColorDarkGrey),
       children: [
-        if (!isBlind) TextSpan(text: '삭제', style: bigFont ? SheepsTextStyle.badgeTitle().copyWith(color: sheepsColorRed) : SheepsTextStyle.b3().copyWith(height: 14 / 12, color: sheepsColorRed)),
+        if (!isBlind)
+          TextSpan(
+              text: '삭제', style: bigFont ? SheepsTextStyle.badgeTitle().copyWith(color: sheepsColorRed) : SheepsTextStyle.b3().copyWith(height: 14 / 12, color: sheepsColorRed)),
         if (isBlind)
-          TextSpan(text: '신고 누적으로 블라인드', style: bigFont ? SheepsTextStyle.badgeTitle().copyWith(color: sheepsColorRed) : SheepsTextStyle.b3().copyWith(height: 14 / 12, color: sheepsColorRed)),
+          TextSpan(
+              text: '신고 누적으로 블라인드',
+              style: bigFont ? SheepsTextStyle.badgeTitle().copyWith(color: sheepsColorRed) : SheepsTextStyle.b3().copyWith(height: 14 / 12, color: sheepsColorRed)),
         TextSpan(text: '된 $replyState 입니다.'),
       ],
     ),
@@ -2154,7 +2165,8 @@ Text communityExceptionText({bool bigFont = false}) {
     TextSpan(
       style: bigFont ? SheepsTextStyle.h3() : SheepsTextStyle.info2().copyWith(height: 1.4),
       children: [
-        TextSpan(text: '신고 누적으로 블라인드', style: bigFont ? SheepsTextStyle.h3().copyWith(color: sheepsColorRed) : SheepsTextStyle.info2().copyWith(height: 1.4, color: sheepsColorRed)),
+        TextSpan(
+            text: '신고 누적으로 블라인드', style: bigFont ? SheepsTextStyle.h3().copyWith(color: sheepsColorRed) : SheepsTextStyle.info2().copyWith(height: 1.4, color: sheepsColorRed)),
         TextSpan(text: '된 글 입니다.'),
       ],
     ),
@@ -2173,7 +2185,7 @@ Widget sheepsRecruitPostCard({required bool isRecruit, required Function dataSet
   dataSetFunc(); // 포스트 카드 데이터 set
 
   return GestureDetector(
-    onTap: press,
+    onTap: () => press(),
     child: Container(
       padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit),
       width: 360 * sizeUnit,
@@ -2341,7 +2353,8 @@ Widget sheepsCustomRefreshIndicator({required Widget child, required Future<void
           return Stack(
             alignment: Alignment.topCenter,
             children: [
-              !indicatorController.isDragging && !indicatorController.isHiding && !indicatorController.isIdle
+// !indicatorController.isDragging && !indicatorController.isHiding && !indicatorController.isIdle
+              !indicatorController.isDragging && !indicatorController.isIdle
                   ? Positioned(
                       top: 18 * sizeUnit * indicatorController.value,
                       child: SizedBox(
@@ -2371,7 +2384,7 @@ Widget sheepsCustomRefreshIndicator({required Widget child, required Future<void
 
 Widget customShapeButton({required Function press, required String text, Color color = Colors.black}) {
   return GestureDetector(
-    onTap: press,
+    onTap: () => press(),
     child: Container(
       height: 32 * sizeUnit,
       padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit, vertical: 8 * sizeUnit),
@@ -2390,13 +2403,14 @@ Widget customShapeButton({required Function press, required String text, Color c
   );
 }
 
-Widget communityPostCard({required Community community, bool lastAddedPost = false, required bool likeCheckFunc, Map<String, dynamic> typeCheck, required Function press}) {
+Widget communityPostCard(
+    {required Community community, bool lastAddedPost = false, required bool likeCheckFunc, required Map<String, dynamic> typeCheck, required Function press}) {
   UserData user = GlobalProfile.getUserByUserID(community.userID); // 유저정보 가져오기
   bool isLike = likeCheckFunc; // 좋아요 여부 체크
   Map<String, dynamic> communityType = typeCheck; // 타입 체크
 
   return GestureDetector(
-    onTap: press,
+    onTap: () => press(),
     child: Container(
       padding: EdgeInsets.all(16 * sizeUnit),
       decoration: BoxDecoration(
@@ -2442,7 +2456,8 @@ Widget communityPostCard({required Community community, bool lastAddedPost = fal
                 Row(
                   children: [
                     Text(community.category == '비밀' ? '익명' : user.name,
-                        style: SheepsTextStyle.bWriter().copyWith(color: community.category == '비밀' && community.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack)),
+                        style: SheepsTextStyle.bWriter()
+                            .copyWith(color: community.category == '비밀' && community.userID == GlobalProfile.loggedInUser.userID ? sheepsColorGreen : sheepsColorBlack)),
                     SizedBox(width: 12 * sizeUnit),
                     Text(timeCheck(community.updatedAt), style: SheepsTextStyle.bWriteDate()),
                     SizedBox(width: 12 * sizeUnit),
@@ -2502,13 +2517,15 @@ Container buildCommunityProfileImg(Community community) {
           height: 72 * sizeUnit,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12 * sizeUnit),
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: getOptimizeImageURL(community.imageUrl1, 60),
-              ),
-            ),
+            child: community.imageUrl1 == null
+                ? const SizedBox.shrink()
+                : FittedBox(
+                    fit: BoxFit.cover,
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: getOptimizeImageURL(community.imageUrl1!, 60),
+                    ),
+                  ),
           ),
         ),
       ],
@@ -2519,11 +2536,11 @@ Container buildCommunityProfileImg(Community community) {
 // 새로운 팀을 만들고 싶으신가요? 위젯
 Widget createTeamCard({required Function press, bool shortCard = false}) {
   return GestureDetector(
-    onTap: press,
+    onTap: () => press(),
     child: Stack(
       children: [
         Positioned(
-          // bottom: 68 * sizeUnit,
+// bottom: 68 * sizeUnit,
           bottom: shortCard ? 68 * sizeUnit : 148 * sizeUnit,
           right: 20 * sizeUnit,
           child: SvgPicture.asset(
@@ -2556,7 +2573,7 @@ Widget createTeamCard({required Function press, bool shortCard = false}) {
   );
 }
 
-Future<dynamic> fullTeamDialog(int leaderTeamLength){
+Future<dynamic> fullTeamDialog(int leaderTeamLength) {
   return showSheepsCustomDialog(
     title: Text(
       '이미 팀이\n$leaderTeamLength개가 있어요!',
@@ -2575,7 +2592,7 @@ Future<dynamic> fullTeamDialog(int leaderTeamLength){
 }
 
 // 바텀 버튼 그림자
-BoxShadow bottomButtonBoxShadow(){
+BoxShadow bottomButtonBoxShadow() {
   return BoxShadow(
     offset: Offset(2, -3),
     blurRadius: 2,

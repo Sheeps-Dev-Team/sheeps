@@ -10,7 +10,7 @@ class MultipartImgFilesController extends GetxController {
   var filesList = [].obs;
 
   MultipartImgFilesController(){
-    File f;
+    File? f;
     filesList.add(f);
   }
 
@@ -25,7 +25,7 @@ class MultipartImgFilesController extends GetxController {
   }
 
 
-  void removeFile({File targetFile}) {
+  void removeFile({required File targetFile}) {
     int index = filesList.indexOf(targetFile);
     if (index < 0) return;
     flagList[filesList.length-1] = false;
@@ -50,7 +50,7 @@ class MultipartImgFilesController extends GetxController {
   Future getImageGallery() async {
     final picker = ImagePicker();
 
-    var imageFile = await picker.getImage(source: ImageSource.gallery);
+    var imageFile = await picker.pickImage(source: ImageSource.gallery);
     if (imageFile == null) return;
 
     int fileSize = (await imageFile.readAsBytes()).lengthInBytes;
@@ -66,7 +66,7 @@ class MultipartImgFilesController extends GetxController {
   Future getImageCamera() async {
     final picker = ImagePicker();
 
-    var imageFile = await picker.getImage(source: ImageSource.camera);
+    var imageFile = await picker.pickImage(source: ImageSource.camera);
     if (imageFile == null) return;
 
     int fileSize = (await imageFile.readAsBytes()).lengthInBytes;
