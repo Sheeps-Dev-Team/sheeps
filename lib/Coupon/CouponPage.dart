@@ -14,7 +14,7 @@ import '../network/ApiProvider.dart';
 import '../userdata/GlobalProfile.dart';
 
 class CouponPage extends StatefulWidget {
-  const CouponPage({Key key}) : super(key: key);
+  const CouponPage({Key? key}) : super(key: key);
 
   @override
   _CouponPageState createState() => _CouponPageState();
