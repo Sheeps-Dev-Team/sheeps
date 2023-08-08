@@ -12,7 +12,7 @@ class iamportCertificationNamePage extends StatefulWidget {
   String resultPage;
   CertificationData data;
 
-  iamportCertificationNamePage({Key key, @required this.resultPage, @required this.data}) : super(key : key);
+  iamportCertificationNamePage({Key? key, required this.resultPage, required this.data}) : super(key : key);
 
   @override
   _iamportCertificationNamePageState createState() => _iamportCertificationNamePageState();

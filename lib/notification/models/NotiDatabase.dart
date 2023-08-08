@@ -18,13 +18,13 @@ class NotiDBHelper {
 
   factory NotiDBHelper() => _db;
 
-  static Database _database;
+  static Database? _database;
 
   Future<Database> get database async {
-    if (_database != null) return _database;
+    if (_database != null) return _database!;
 
     _database = await initDB();
-    return _database;
+    return _database!;
   }
 
   initDB() async {
@@ -39,7 +39,7 @@ class NotiDBHelper {
             await db.execute("CREATE TABLE $TableName(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, UserID INTEGER, ChatID INTEGER, type INTEGER, tableIndex INTEGER, targetIndex INTEGER, teamIndex INTEGER, time TEXT, isRead INTEGER, isSend INTEGER)");
           }
           catch(e){
-            debugPrint(e);
+            debugPrint(e.toString());
           }
 
         },
@@ -100,15 +100,15 @@ class NotiDBHelper {
         'SELECT * FROM $TableName where id = ?', [id]);
     return res.isNotEmpty ?
     NotificationModel(
-      id: res.first['id'],
-      from: res.first['UserID'],
-      to: res.first['ChatID'],
-      type: res.first['type'],
-      tableIndex: res.first['tableIndex'],
-      targetIndex: res.first['targetIndex'],
-      teamIndex: res.first['teamIndex'],
-      time: res.first['time'],
-      isRead: res.first['isRead'],
+      id: res.first['id'] as int,
+      from: res.first['UserID'] as int,
+      to: res.first['ChatID'] as int,
+      type: res.first['type'] as int,
+      tableIndex: res.first['tableIndex'] as int,
+      targetIndex: res.first['targetIndex'] as int,
+      teamIndex: res.first['teamIndex'] as int,
+      time: res.first['time'] as String,
+      isRead: res.first['isRead'] as int,
     )
         : null;
   }
@@ -120,16 +120,16 @@ class NotiDBHelper {
 
     var res = await db.rawQuery('SELECT * from $TableName');
     List<NotificationModel> list  = res.isNotEmpty ? res.map((c) => NotificationModel(
-      id: c['id'],
-      from: c['UserID'],
-      to: c['ChatID'],
-      type: c['type'],
-      tableIndex: c['tableIndex'],
-      targetIndex: c['targetIndex'],
-      teamIndex: c['teamIndex'],
-      time: c['time'],
-      isRead: c['isRead'],
-      isSend: c['isSend']
+      id: c['id'] as int,
+      from: c['UserID'] as int,
+      to: c['ChatID'] as int,
+      type: c['type'] as int,
+      tableIndex: c['tableIndex'] as int,
+      targetIndex: c['targetIndex'] as int,
+      teamIndex: c['teamIndex'] as int,
+      time: c['time'] as String,
+      isRead: c['isRead'] as int,
+      isSend: c['isSend'] as int
     )).toList()
         : [];
 
