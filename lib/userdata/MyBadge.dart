@@ -21,10 +21,10 @@ class BadgeModel{
 
   factory BadgeModel.fromJson(Map<String, dynamic> json) {
     return BadgeModel(
-      id : json['id'] as int,
+      id : json['id'] == null ? 0 : json['id'] as int,
       userID: json['UserID'] as int,
-      badgeID: json['BadgeID'] as int,
-      type : json['Type'] as int,
+      badgeID: json['BadgeID'] == null ? 0 : json['BadgeID'] as int,
+      type : json['Type'] == null ? 0 : json['Type'] as int,
       createdAt: replaceUTCDate(json['createdAt']),
       updatedAt: replaceUTCDate(json['updatedAt'])
     );

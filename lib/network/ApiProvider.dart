@@ -67,7 +67,7 @@ class ApiProvider {
           headers: {
             'Content-Type' : 'application/json',
             'user' : GlobalProfile.loggedInUser == null ? 'sheepsToken' : GlobalProfile.loggedInUser!.userID.toString(),
-            'accessToken' : GlobalProfile.accessToken!
+            'accessToken' : GlobalProfile.accessToken == null ? '' : GlobalProfile.accessToken!
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
