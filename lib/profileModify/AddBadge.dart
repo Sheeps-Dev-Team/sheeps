@@ -24,7 +24,7 @@ class AddBadge extends StatefulWidget {
 }
 
 class _AddBadgeState extends State<AddBadge> {
-  UserData user = GlobalProfile.loggedInUser;
+  UserData user = GlobalProfile.loggedInUser!;
   PersonalProfileModifyController controller = Get.put(PersonalProfileModifyController());
 
   int barIndex = 0;
@@ -108,7 +108,7 @@ class _AddBadgeState extends State<AddBadge> {
   }
 
   Widget haveBadgePage() {
-    Widget selectedBadge({int badgeID}) {
+    Widget selectedBadge({required int badgeID}) {
       return GestureDetector(
         onTap: () {
           for (int i = 0; i < tmpShowBadgeList.length; i++) {
@@ -207,7 +207,7 @@ class _AddBadgeState extends State<AddBadge> {
   }
 
   Widget haveBadgeGrid({
-    @required List<int> badgeList,
+    required List<int> badgeList,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit, vertical: 10 * sizeUnit),
@@ -311,8 +311,8 @@ class _AddBadgeState extends State<AddBadge> {
   }
 
   Widget badgeGridTile({
-    String title,
-    @required List<int> badgeList,
+    String? title,
+    required List<int> badgeList,
   }) {
     int countHaveBadge = 0;
     if (listHaveBadge.isNotEmpty) {

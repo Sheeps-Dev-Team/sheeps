@@ -37,7 +37,7 @@ class _AddCareerState extends State<AddCareerPage> {
   var dateStart;
   var dateEnd;
 
-  File authFile;
+  File? authFile;
 
   @override
   void dispose() {
@@ -166,7 +166,7 @@ class _AddCareerState extends State<AddCareerPage> {
                                                       primarySwatch: Colors.grey,
                                                     ),
                                                   ),
-                                                  child: child,
+                                                  child: child ?? const SizedBox.shrink(),
                                                 );
                                               },
                                             ).then((value) {
@@ -214,7 +214,7 @@ class _AddCareerState extends State<AddCareerPage> {
                                                         primarySwatch: Colors.grey,
                                                       ),
                                                     ),
-                                                    child: child,
+                                                    child: child ?? const SizedBox.shrink(),
                                                   );
                                                 },
                                               ).then((value) {
@@ -250,7 +250,7 @@ class _AddCareerState extends State<AddCareerPage> {
                                   GestureDetector(
                                     onTap: () {
                                       unFocus(context);
-                                      Get.to(() => AuthFileUploadPage(appBarTitle: '경력 증빙 자료', authFile: authFile)).then((value) {
+                                      Get.to(() => AuthFileUploadPage(appBarTitle: '경력 증빙 자료', authFile: authFile))?.then((value) {
                                         if (value != null) {
                                           setState(() {
                                             authFile = value[0];
@@ -273,7 +273,7 @@ class _AddCareerState extends State<AddCareerPage> {
                                             child: Container(
                                               width: 284 * sizeUnit,
                                               child: Text(
-                                                authFile != null ? authFile.path.substring(authFile.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
+                                                authFile != null ? authFile!.path.substring(authFile!.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
                                                 style: SheepsTextStyle.hint4Profile().copyWith(color: authFile != null ? sheepsColorBlue : sheepsColorGrey),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -345,7 +345,7 @@ class _AddCareerState extends State<AddCareerPage> {
                                 controller.careerList.add(UserCareer(
                                   id: -1,
                                   contents: contents,
-                                  imgUrl: authFile.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
+                                  imgUrl: authFile!.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
                                   auth: 2,
                                 ));
                                 Get.back();

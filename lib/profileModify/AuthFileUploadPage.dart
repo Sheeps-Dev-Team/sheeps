@@ -17,16 +17,16 @@ import 'package:sheeps_app/config/SheepsTextStyle.dart';
 
 class AuthFileUploadPage extends StatefulWidget {
   final String appBarTitle;
-  final File authFile;
+  final File? authFile;
 
-  const AuthFileUploadPage({Key key, @required this.appBarTitle, @required this.authFile}) : super(key: key);
+  const AuthFileUploadPage({Key? key, required this.appBarTitle, required this.authFile}) : super(key: key);
 
   @override
   _AuthFileUploadPageState createState() => _AuthFileUploadPageState();
 }
 
 class _AuthFileUploadPageState extends State<AuthFileUploadPage> {
-  File tmpFile;
+  File? tmpFile;
 
   @override
   void initState() {
@@ -60,14 +60,14 @@ class _AuthFileUploadPageState extends State<AuthFileUploadPage> {
                               await SheepsBottomSheetForImg(
                                 context,
                                 cameraFunc: () async {
-                                  PickedFile f = await ImagePicker().getImage(source: ImageSource.camera);
+                                  XFile? f = await ImagePicker().pickImage(source: ImageSource.camera);
                                   if (f == null) return;
                                   tmpFile = File(f.path);
                                   setState(() {});
                                   Get.back();
                                 },
                                 galleryFunc: () async {
-                                  PickedFile f = await ImagePicker().getImage(source: ImageSource.gallery);
+                                  XFile? f = await ImagePicker().pickImage(source: ImageSource.gallery);
                                   if (f == null) return;
 
                                   int fileSize = (await f.readAsBytes()).lengthInBytes;
@@ -93,7 +93,7 @@ class _AuthFileUploadPageState extends State<AuthFileUploadPage> {
                                 decoration: BoxDecoration(
                                   color: sheepsColorLightGrey,
                                   borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
-                                  image: tmpFile != null ? DecorationImage(image: FileImage(tmpFile), fit: BoxFit.contain) : null,
+                                  image: tmpFile != null ? DecorationImage(image: FileImage(tmpFile!), fit: BoxFit.contain) : null,
                                 ),
                                 child: tmpFile == null
                                     ? Center(

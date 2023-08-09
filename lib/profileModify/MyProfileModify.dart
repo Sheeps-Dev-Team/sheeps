@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 
 import 'package:dio/dio.dart' as D;
-import 'package:drag_and_drop_gridview/devdrag.dart';
+// import 'package:drag_and_drop_gridview/devdrag.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -35,7 +35,7 @@ import 'SelectArea.dart';
 import 'SelectField.dart';
 
 class MyProfileModify extends StatefulWidget {
-  const MyProfileModify({Key key}) : super(key: key);
+  const MyProfileModify({Key? key}) : super(key: key);
 
   @override
   _MyProfileModifyState createState() => _MyProfileModifyState();
@@ -59,11 +59,11 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
   bool isEditMode = false;
   bool isReady = true;
 
-  D.FormData formData;
-  D.Response res;
+  late D.FormData formData;
+  late D.Response res;
   var result;
 
-  AnimationController extendedController;
+  late AnimationController extendedController;
 
   @override
   void initState() {
@@ -76,19 +76,19 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
     nameController.text = controller.name.value;
     infoController.text = controller.information.value;
 
-    File f;
+    // File f;
     _filesController.filesList.clear();
-    _filesController.filesList.add(f);
+    // _filesController.filesList.add(f);
 
     Future.microtask(() async {
-      if (GlobalProfile.loggedInUser.profileImgList != null && GlobalProfile.loggedInUser.profileImgList[0].imgUrl != 'BasicImage') {
-        for (int i = 0; i < GlobalProfile.loggedInUser.profileImgList.length; i++) {
-          var uri = Uri.parse(GlobalProfile.loggedInUser.profileImgList[i].imgUrl);
+      if (GlobalProfile.loggedInUser!.profileImgList != null && GlobalProfile.loggedInUser!.profileImgList[0].imgUrl != 'BasicImage') {
+        for (int i = 0; i < GlobalProfile.loggedInUser!.profileImgList.length; i++) {
+          var uri = Uri.parse(GlobalProfile.loggedInUser!.profileImgList[i].imgUrl);
 
           var response = await get(uri);
           var documentDirectory = await getApplicationDocumentsDirectory();
           var firstPath = documentDirectory.path + "/images";
-          var filePathAndName = documentDirectory.path + '/images/pict' + i.toString() + getMimeType(GlobalProfile.loggedInUser.profileImgList[i].imgUrl);
+          var filePathAndName = documentDirectory.path + '/images/pict' + i.toString() + getMimeType(GlobalProfile.loggedInUser!.profileImgList[i].imgUrl);
           await Directory(firstPath).create(recursive: true);
           File file2 = File(filePathAndName);
           file2.writeAsBytesSync(response.bodyBytes);
@@ -298,7 +298,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
                   GestureDetector(
                     onTap: () {
                       unFocus(context);
-                      Get.to(() => SelectField()).then((value) {
+                      Get.to(() => SelectField())?.then((value) {
                         if (value != null) {
                           controller.job.value = value[0];
                           controller.part.value = value[1];
@@ -336,7 +336,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
                     onTap: () {
                       unFocus(context);
                       if (controller.subJob.value.isEmpty) {
-                        Get.to(() => SelectField()).then((value) {
+                        Get.to(() => SelectField())?.then((value) {
                           if (value != null) {
                             controller.subJob.value = value[0];
                             controller.subPart.value = value[1];
@@ -401,7 +401,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
               GestureDetector(
                 onTap: () {
                   unFocus(context);
-                  Get.to(() => SelectArea()).then((value) {
+                  Get.to(() => SelectArea())?.then((value) {
                     if (value != null) {
                       controller.location.value = value[0];
                       controller.subLocation.value = value[1];
@@ -483,158 +483,159 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
                 ],
               ),
               SizedBox(height: 12 * sizeUnit),
-              Obx(
-                () => DragAndDropGridView(
-                  controller: _scrollController,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 3 / 3,
-                  ),
-                  itemCount: controller.profileImgList.length < MAX_USER_PROFILE_IMG ? controller.profileImgList.length + 1 : MAX_USER_PROFILE_IMG,
-                  itemBuilder: (context, index) => Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16 * sizeUnit)),
-                    elevation: 0,
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      if (index == controller.profileImgList.length) {
-                        return GestureDetector(
-                          onTap: () {
-                            SheepsBottomSheetForImg(
-                              context,
-                              cameraFunc: () {
-                                int checkAddFile = _filesController.filesList.length;
-                                _filesController.getImageCamera().then((value) {
-                                  if (checkAddFile != _filesController.filesList.length) {
-                                    controller.isChangePhotos = true;
-                                    controller.profileImgList
-                                        .add(UserProfileImg(imgUrl: _filesController.filesList[_filesController.filesList.length - 1].path)); //새 프로필이미지의 이미지url에 파일 패스를 넣어둠. id = -1로 구분
-                                  }
-                                }); // 카메라에서 사진 가져오기
-                              },
-                              galleryFunc: () {
-                                int checkAddFile = _filesController.filesList.length;
-                                _filesController.getImageGallery().then((value) {
-                                  if (checkAddFile != _filesController.filesList.length) {
-                                    controller.isChangePhotos = true;
-                                    controller.profileImgList
-                                        .add(UserProfileImg(imgUrl: _filesController.filesList[_filesController.filesList.length - 1].path)); //새 프로필이미지의 이미지url에 파일 패스를 넣어둠. id = -1로 구분
-                                  }
-                                }); // 갤러리에서 사진 가져오기
-                              },
-                            );
-                          },
-                          child: Stack(
-                            alignment: Alignment.bottomRight,
-                            children: [
-                              DottedBorder(
-                                borderType: BorderType.RRect,
-                                dashPattern: [6 * sizeUnit, 6 * sizeUnit],
-                                strokeWidth: 2 * sizeUnit,
-                                radius: Radius.circular(16 * sizeUnit),
-                                color: sheepsColorGrey,
-                                child: Container(
-                                  width: 104 * sizeUnit,
-                                  height: 104 * sizeUnit,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      svgSheepsBasicProfileImage,
-                                      width: 60 * sizeUnit,
-                                      height: 55 * sizeUnit,
-                                      color: sheepsColorGrey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                right: 1 * sizeUnit,
-                                bottom: 1 * sizeUnit,
-                                child: Container(
-                                  child: SvgPicture.asset(
-                                    svgPlusInCircle,
-                                    width: 34 * sizeUnit,
-                                    height: 34 * sizeUnit,
-                                    color: sheepsColorBlue,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          DottedBorder(
-                            borderType: BorderType.RRect,
-                            dashPattern: [6 * sizeUnit, 6 * sizeUnit],
-                            strokeWidth: 2 * sizeUnit,
-                            radius: Radius.circular(16 * sizeUnit),
-                            color: sheepsColorGrey,
-                            padding: EdgeInsets.zero,
-                            child: Container(
-                              width: 104 * sizeUnit,
-                              height: 104 * sizeUnit,
-                              decoration: BoxDecoration(
-                                color: sheepsColorLightGrey,
-                                borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16 * sizeUnit),
-                                child: FittedBox(
-                                  child: controller.profileImgList[index].id == -1
-                                      ? Image(image: FileImage(_filesController.filesList[index]))
-                                      : getExtendedImage(controller.profileImgList[index].imgUrl, 60, extendedController),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 1 * sizeUnit,
-                            bottom: 1 * sizeUnit,
-                            child: GestureDetector(
-                              onTap: () {
-                                if (controller.profileImgList[index].id != -1) {
-                                  controller.isChangePhotos = true;
-                                  controller.deletedImgIdList.add(controller.profileImgList[index].id);
-                                }
-                                controller.profileImgList.removeAt(index);
-                                _filesController.removeFile(targetFile: _filesController.filesList[index]);
-                                setState(() {});
-                              },
-                              child: Container(
-                                child: SvgPicture.asset(
-                                  svgXInCircle,
-                                  width: 34 * sizeUnit,
-                                  height: 34 * sizeUnit,
-                                  color: sheepsColorGrey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                  onWillAccept: (oldIndex, newIndex) => true,
-                  onReorder: (oldIndex, newIndex) {
-                    if (controller.profileImgList.length == MAX_USER_PROFILE_IMG || (oldIndex != controller.profileImgList.length && newIndex != controller.profileImgList.length)) {
-                      controller.isChangePhotos = true;
-                      final tmpProfileImg = controller.profileImgList[oldIndex];
-                      controller.profileImgList[oldIndex] = controller.profileImgList[newIndex];
-                      controller.profileImgList[newIndex] = tmpProfileImg;
-
-                      final tempFile = _filesController.filesList[oldIndex];
-                      _filesController.filesList[oldIndex] = _filesController.filesList[newIndex];
-                      _filesController.filesList[newIndex] = tempFile;
-                      setState(() {});
-                    }
-                  },
-                ),
-              ),
+              // todo drag and drop - noah
+              // Obx(
+              //   () => DragAndDropGridView(
+              //     controller: _scrollController,
+              //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 3,
+              //       childAspectRatio: 3 / 3,
+              //     ),
+              //     itemCount: controller.profileImgList.length < MAX_USER_PROFILE_IMG ? controller.profileImgList.length + 1 : MAX_USER_PROFILE_IMG,
+              //     itemBuilder: (context, index) => Card(
+              //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16 * sizeUnit)),
+              //       elevation: 0,
+              //       child: LayoutBuilder(builder: (context, constraints) {
+              //         if (index == controller.profileImgList.length) {
+              //           return GestureDetector(
+              //             onTap: () {
+              //               SheepsBottomSheetForImg(
+              //                 context,
+              //                 cameraFunc: () {
+              //                   int checkAddFile = _filesController.filesList.length;
+              //                   _filesController.getImageCamera().then((value) {
+              //                     if (checkAddFile != _filesController.filesList.length) {
+              //                       controller.isChangePhotos = true;
+              //                       controller.profileImgList
+              //                           .add(UserProfileImg(imgUrl: _filesController.filesList[_filesController.filesList.length - 1].path)); //새 프로필이미지의 이미지url에 파일 패스를 넣어둠. id = -1로 구분
+              //                     }
+              //                   }); // 카메라에서 사진 가져오기
+              //                 },
+              //                 galleryFunc: () {
+              //                   int checkAddFile = _filesController.filesList.length;
+              //                   _filesController.getImageGallery().then((value) {
+              //                     if (checkAddFile != _filesController.filesList.length) {
+              //                       controller.isChangePhotos = true;
+              //                       controller.profileImgList
+              //                           .add(UserProfileImg(imgUrl: _filesController.filesList[_filesController.filesList.length - 1].path)); //새 프로필이미지의 이미지url에 파일 패스를 넣어둠. id = -1로 구분
+              //                     }
+              //                   }); // 갤러리에서 사진 가져오기
+              //                 },
+              //               );
+              //             },
+              //             child: Stack(
+              //               alignment: Alignment.bottomRight,
+              //               children: [
+              //                 DottedBorder(
+              //                   borderType: BorderType.RRect,
+              //                   dashPattern: [6 * sizeUnit, 6 * sizeUnit],
+              //                   strokeWidth: 2 * sizeUnit,
+              //                   radius: Radius.circular(16 * sizeUnit),
+              //                   color: sheepsColorGrey,
+              //                   child: Container(
+              //                     width: 104 * sizeUnit,
+              //                     height: 104 * sizeUnit,
+              //                     decoration: BoxDecoration(
+              //                       color: Colors.white,
+              //                       borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
+              //                     ),
+              //                     child: Center(
+              //                       child: SvgPicture.asset(
+              //                         svgSheepsBasicProfileImage,
+              //                         width: 60 * sizeUnit,
+              //                         height: 55 * sizeUnit,
+              //                         color: sheepsColorGrey,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 Positioned(
+              //                   right: 1 * sizeUnit,
+              //                   bottom: 1 * sizeUnit,
+              //                   child: Container(
+              //                     child: SvgPicture.asset(
+              //                       svgPlusInCircle,
+              //                       width: 34 * sizeUnit,
+              //                       height: 34 * sizeUnit,
+              //                       color: sheepsColorBlue,
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           );
+              //         }
+              //         return Stack(
+              //           alignment: Alignment.bottomRight,
+              //           children: [
+              //             DottedBorder(
+              //               borderType: BorderType.RRect,
+              //               dashPattern: [6 * sizeUnit, 6 * sizeUnit],
+              //               strokeWidth: 2 * sizeUnit,
+              //               radius: Radius.circular(16 * sizeUnit),
+              //               color: sheepsColorGrey,
+              //               padding: EdgeInsets.zero,
+              //               child: Container(
+              //                 width: 104 * sizeUnit,
+              //                 height: 104 * sizeUnit,
+              //                 decoration: BoxDecoration(
+              //                   color: sheepsColorLightGrey,
+              //                   borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
+              //                 ),
+              //                 child: ClipRRect(
+              //                   borderRadius: BorderRadius.circular(16 * sizeUnit),
+              //                   child: FittedBox(
+              //                     child: controller.profileImgList[index].id == -1
+              //                         ? Image(image: FileImage(_filesController.filesList[index]))
+              //                         : getExtendedImage(controller.profileImgList[index].imgUrl, 60, extendedController),
+              //                     fit: BoxFit.cover,
+              //                   ),
+              //                 ),
+              //               ),
+              //             ),
+              //             Positioned(
+              //               right: 1 * sizeUnit,
+              //               bottom: 1 * sizeUnit,
+              //               child: GestureDetector(
+              //                 onTap: () {
+              //                   if (controller.profileImgList[index].id != -1) {
+              //                     controller.isChangePhotos = true;
+              //                     controller.deletedImgIdList.add(controller.profileImgList[index].id);
+              //                   }
+              //                   controller.profileImgList.removeAt(index);
+              //                   _filesController.removeFile(targetFile: _filesController.filesList[index]);
+              //                   setState(() {});
+              //                 },
+              //                 child: Container(
+              //                   child: SvgPicture.asset(
+              //                     svgXInCircle,
+              //                     width: 34 * sizeUnit,
+              //                     height: 34 * sizeUnit,
+              //                     color: sheepsColorGrey,
+              //                   ),
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         );
+              //       }),
+              //     ),
+              //     onWillAccept: (oldIndex, newIndex) => true,
+              //     onReorder: (oldIndex, newIndex) {
+              //       if (controller.profileImgList.length == MAX_USER_PROFILE_IMG || (oldIndex != controller.profileImgList.length && newIndex != controller.profileImgList.length)) {
+              //         controller.isChangePhotos = true;
+              //         final tmpProfileImg = controller.profileImgList[oldIndex];
+              //         controller.profileImgList[oldIndex] = controller.profileImgList[newIndex];
+              //         controller.profileImgList[newIndex] = tmpProfileImg;
+              //
+              //         final tempFile = _filesController.filesList[oldIndex];
+              //         _filesController.filesList[oldIndex] = _filesController.filesList[newIndex];
+              //         _filesController.filesList[newIndex] = tempFile;
+              //         setState(() {});
+              //       }
+              //     },
+              //   ),
+              // ),
               SizedBox(height: 40 * sizeUnit),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -994,8 +995,8 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
   }
 
   Widget linkItem({
-    @required String title,
-    @required RxString linkUrl,
+    required String title,
+    required RxString linkUrl,
     Color color = sheepsColorBlue,
   }) {
     return GestureDetector(
@@ -1080,7 +1081,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
     );
   }
 
-  Widget GreyBorderContainer({String icon, Color iconColor, Function tapIcon, Widget child}) {
+  Widget GreyBorderContainer({String? icon, required Color iconColor, Function? tapIcon, required Widget child}) {
     return Container(
       width: 328 * sizeUnit,
       height: 32 * sizeUnit,
@@ -1094,7 +1095,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
           if (icon != null) ...[
             SizedBox(width: 5 * sizeUnit),
             GestureDetector(
-              onTap: tapIcon == null ? () {} : tapIcon,
+              onTap: tapIcon == null ? () {} : () => tapIcon(),
               child: SvgPicture.asset(
                 icon,
                 width: 22 * sizeUnit,
@@ -1116,14 +1117,14 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
     D.Dio dio = D.Dio();
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'user': GlobalProfile.loggedInUser.userID,
+      'user': GlobalProfile.loggedInUser!.userID,
     };
 
     Future.microtask(() async {
       DialogBuilder(context).showLoadingIndicator("프로필 수정 중...");
 
       formData = new D.FormData.fromMap({
-        "userid": GlobalProfile.loggedInUser.userID,
+        "userid": GlobalProfile.loggedInUser!.userID,
         "name": controller.name.value,
         "job": controller.job.value,
         "part": controller.part.value,
@@ -1197,7 +1198,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
         await ApiProvider().post(
             '/Personal/InsertOrUpdate/Links',
             jsonEncode({
-              'userID': GlobalProfile.loggedInUser.userID,
+              'userID': GlobalProfile.loggedInUser!.userID,
               'portfolio': controller.portfolioUrl.value,
               'resume': controller.resumeUrl.value,
               'site': controller.siteUrl.value,
@@ -1214,7 +1215,7 @@ class _MyProfileModifyState extends State<MyProfileModify> with SingleTickerProv
         throw FetchDataException(e.message);
       }
 
-      result = await ApiProvider().post('/Personal/Select/User', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+      result = await ApiProvider().post('/Personal/Select/User', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
       GlobalProfile.loggedInUser = UserData.fromJson(result);
 

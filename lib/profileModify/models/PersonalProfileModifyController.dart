@@ -104,35 +104,37 @@ class PersonalProfileModifyController extends GetxController {
   }
 
   void loading(){
-    name.value = GlobalProfile.loggedInUser.name;
-    job.value = GlobalProfile.loggedInUser.job;
-    part.value = GlobalProfile.loggedInUser.part;
-    subJob.value = GlobalProfile.loggedInUser.subJob;
-    subPart.value = GlobalProfile.loggedInUser.subPart;
-    location.value = GlobalProfile.loggedInUser.location;
-    subLocation.value = GlobalProfile.loggedInUser.subLocation;
-    information.value = GlobalProfile.loggedInUser.information;
-    if(GlobalProfile.loggedInUser.profileImgList[0].id == -2){//기본이미지만 담겨있으면.
+    name.value = GlobalProfile.loggedInUser!.name;
+    job.value = GlobalProfile.loggedInUser!.job;
+    part.value = GlobalProfile.loggedInUser!.part;
+    subJob.value = GlobalProfile.loggedInUser!.subJob;
+    subPart.value = GlobalProfile.loggedInUser!.subPart;
+    location.value = GlobalProfile.loggedInUser!.location;
+    subLocation.value = GlobalProfile.loggedInUser!.subLocation;
+    information.value = GlobalProfile.loggedInUser!.information;
+    if(GlobalProfile.loggedInUser!.profileImgList[0].id == -2){//기본이미지만 담겨있으면.
       profileImgList.clear();
     } else {
-      profileImgList.addAll(GlobalProfile.loggedInUser.profileImgList);
+      profileImgList.addAll(GlobalProfile.loggedInUser!.profileImgList);
     }
     isChangePhotos = false;
-    if(GlobalProfile.loggedInUser.badge1 != null && GlobalProfile.loggedInUser.badge1 > 0) badgeList.add(GlobalProfile.loggedInUser.badge1);
-    if(GlobalProfile.loggedInUser.badge2 != null && GlobalProfile.loggedInUser.badge2 > 0) badgeList.add(GlobalProfile.loggedInUser.badge2);
-    if(GlobalProfile.loggedInUser.badge3 != null && GlobalProfile.loggedInUser.badge3 > 0) badgeList.add(GlobalProfile.loggedInUser.badge3);
-    educationList.addAll(GlobalProfile.loggedInUser.userEducationList);
-    careerList.addAll(GlobalProfile.loggedInUser.userCareerList);
-    licenseList.addAll(GlobalProfile.loggedInUser.userLicenseList);
-    winList.addAll(GlobalProfile.loggedInUser.userWinList);
-    portfolioUrl.value = GlobalProfile.loggedInUser.userLink.portfolioUrl;
-    resumeUrl.value = GlobalProfile.loggedInUser.userLink.resumeUrl;
-    siteUrl.value = GlobalProfile.loggedInUser.userLink.siteUrl;
-    linkedInUrl.value = GlobalProfile.loggedInUser.userLink.linkedInUrl;
-    instagramUrl.value = GlobalProfile.loggedInUser.userLink.instagramUrl;
-    facebookUrl.value = GlobalProfile.loggedInUser.userLink.facebookUrl;
-    gitHubUrl.value = GlobalProfile.loggedInUser.userLink.gitHubUrl;
-    notionUrl.value = GlobalProfile.loggedInUser.userLink.notionUrl;
+    if(GlobalProfile.loggedInUser!.badge1 != null && GlobalProfile.loggedInUser!.badge1 > 0) badgeList.add(GlobalProfile.loggedInUser!.badge1);
+    if(GlobalProfile.loggedInUser!.badge2 != null && GlobalProfile.loggedInUser!.badge2 > 0) badgeList.add(GlobalProfile.loggedInUser!.badge2);
+    if(GlobalProfile.loggedInUser!.badge3 != null && GlobalProfile.loggedInUser!.badge3 > 0) badgeList.add(GlobalProfile.loggedInUser!.badge3);
+    educationList.addAll(GlobalProfile.loggedInUser!.userEducationList);
+    careerList.addAll(GlobalProfile.loggedInUser!.userCareerList);
+    licenseList.addAll(GlobalProfile.loggedInUser!.userLicenseList);
+    winList.addAll(GlobalProfile.loggedInUser!.userWinList);
+    if(GlobalProfile.loggedInUser!.userLink != null) {
+      portfolioUrl.value = GlobalProfile.loggedInUser!.userLink!.portfolioUrl;
+      resumeUrl.value = GlobalProfile.loggedInUser!.userLink!.resumeUrl;
+      siteUrl.value = GlobalProfile.loggedInUser!.userLink!.siteUrl;
+      linkedInUrl.value = GlobalProfile.loggedInUser!.userLink!.linkedInUrl;
+      instagramUrl.value = GlobalProfile.loggedInUser!.userLink!.instagramUrl;
+      facebookUrl.value = GlobalProfile.loggedInUser!.userLink!.facebookUrl;
+      gitHubUrl.value = GlobalProfile.loggedInUser!.userLink!.gitHubUrl;
+      notionUrl.value = GlobalProfile.loggedInUser!.userLink!.notionUrl;
+    }
 
     Future.microtask(()async{
       for(int i = 0; i < educationList.length; i++){

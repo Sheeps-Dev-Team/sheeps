@@ -40,10 +40,10 @@ class _AddEducationState extends State<AddEducationPage> {
   String startDate = '';
   String endDate = '';
 
-  DateTime dateStart;
-  DateTime dateEnd;
+  DateTime? dateStart;
+  DateTime? dateEnd;
 
-  File authFile;
+  File? authFile;
 
   @override
   void dispose() {
@@ -253,9 +253,9 @@ class _AddEducationState extends State<AddEducationPage> {
                                             unFocus(context);
                                             showDatePicker(
                                               context: context,
-                                              initialDate: dateEnd != null ? dateEnd : DateTime.now(),
+                                              initialDate: dateEnd != null ? dateEnd! : DateTime.now(),
                                               firstDate: DateTime(1960),
-                                              lastDate: dateEnd != null ? dateEnd : DateTime.now(),
+                                              lastDate: dateEnd != null ? dateEnd! : DateTime.now(),
                                               helpText: '날짜 선택',
                                               cancelText: '취소',
                                               confirmText: '확인',
@@ -272,7 +272,7 @@ class _AddEducationState extends State<AddEducationPage> {
                                                       primarySwatch: Colors.grey,
                                                     ),
                                                   ),
-                                                  child: child,
+                                                  child: child ?? const SizedBox.shrink(),
                                                 );
                                               },
                                             ).then((value) {
@@ -302,8 +302,8 @@ class _AddEducationState extends State<AddEducationPage> {
                                               //재학이면 종료 날짜 선택 불가
                                               showDatePicker(
                                                 context: context,
-                                                initialDate: dateStart != null ? dateStart : DateTime.now(),
-                                                firstDate: dateStart != null ? dateStart : DateTime(1960),
+                                                initialDate: dateStart != null ? dateStart! : DateTime.now(),
+                                                firstDate: dateStart != null ? dateStart! : DateTime(1960),
                                                 lastDate: DateTime(DateTime.now().year + 1, 12, 31),
                                                 helpText: '날짜 선택',
                                                 cancelText: '취소',
@@ -321,7 +321,7 @@ class _AddEducationState extends State<AddEducationPage> {
                                                         primarySwatch: Colors.grey,
                                                       ),
                                                     ),
-                                                    child: child,
+                                                    child: child ?? const SizedBox.shrink(),
                                                   );
                                                 },
                                               ).then((value) {
@@ -357,7 +357,7 @@ class _AddEducationState extends State<AddEducationPage> {
                                   GestureDetector(
                                     onTap: () {
                                       unFocus(context);
-                                      Get.to(() => AuthFileUploadPage(appBarTitle: '학력 증빙 자료', authFile: authFile)).then((value) {
+                                      Get.to(() => AuthFileUploadPage(appBarTitle: '학력 증빙 자료', authFile: authFile))?.then((value) {
                                         if (value != null) {
                                           setState(() {
                                             authFile = value[0];
@@ -380,7 +380,7 @@ class _AddEducationState extends State<AddEducationPage> {
                                             child: Container(
                                               width: 284 * sizeUnit,
                                               child: Text(
-                                                authFile != null ? authFile.path.substring(authFile.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
+                                                authFile != null ? authFile!.path.substring(authFile!.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
                                                 style: SheepsTextStyle.hint4Profile().copyWith(color: authFile != null ? sheepsColorBlue : sheepsColorGrey),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -453,7 +453,7 @@ class _AddEducationState extends State<AddEducationPage> {
                                 controller.educationList.add(UserEducation(
                                   id: -1,
                                   contents: contents,
-                                  imgUrl: authFile.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
+                                  imgUrl: authFile!.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
                                   auth: 2,
                                 ));
                                 Get.back();
