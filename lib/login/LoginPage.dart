@@ -132,93 +132,190 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                             SizedBox(height: 40 * sizeUnit),
-                            SheepsBottomButton(
-                              context: context,
-                              function: () {
-                                if (_isReady && isCheckEmail && validPassword(loginPassword)) {
-                                  _isReady = false; //서버중복신호방지
-                                  (() async {
-                                    String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
+                            Container(
+                              width: 320 * sizeUnit,
+                              height: 54 * sizeUnit,
+                              decoration: BoxDecoration(
+                                color: sheepsColorGreen,
+                                borderRadius: BorderRadius.circular(12 * sizeUnit),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  if (_isReady && isCheckEmail && validPassword(loginPassword)) {
+                                    _isReady = false; //서버중복신호방지
+                                    (() async {
+                                      String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
 
-                                    var result = await ApiProvider().post(
-                                        loginURL,
-                                        jsonEncode({
-                                          "id": _idController.text,
-                                          "password": _passwordController.text,
-                                        }));
+                                      var result = await ApiProvider().post(
+                                          loginURL,
+                                          jsonEncode({
+                                            "id": _idController.text,
+                                            "password": _passwordController.text,
+                                          }));
 
-                                    if (null != result) {
-                                      if (result['result'] == null) {
-                                        if (result['res'] == 2) {
-                                          Function okFunc = () {
-                                            globalLoginID = _idController.text;
+                                      if (null != result) {
+                                        if (result['result'] == null) {
+                                          if (result['res'] == 2) {
+                                            Function okFunc = () {
+                                              globalLoginID = _idController.text;
 
-                                            Get.back();
+                                              Get.back();
 
-                                            Get.to(IdentityVerificationPage(identityStatus: IdentityStatus.SignUP));
-                                          };
+                                              Get.to(IdentityVerificationPage(identityStatus: IdentityStatus.SignUP));
+                                            };
 
-                                          Function cancelFunc = () {
-                                            Get.back();
-                                          };
+                                            Function cancelFunc = () {
+                                              Get.back();
+                                            };
 
-                                          _isReady = true; //서버중복신호방지
-                                          showSheepsDialog(
-                                            context: context,
-                                            title: '핸드폰 인증 필요',
-                                            description: "해당 아이디는 핸드폰 인증이 필요합니다.\n인증 페이지로 가시겠어요?",
-                                            okText: '갈게요',
-                                            okFunc: okFunc,
-                                            cancelText: '좀 더 생각해볼게요',
-                                            cancelFunc: cancelFunc,
-                                          );
-                                          return;
-                                        } else {
-                                          Function okFunc = () {
-                                            ApiProvider().post('/Personal/Logout', jsonEncode({"userID": result['userID'], "isSelf": 0}), isChat: true);
+                                            _isReady = true; //서버중복신호방지
+                                            showSheepsDialog(
+                                              context: context,
+                                              title: '핸드폰 인증 필요',
+                                              description: "해당 아이디는 핸드폰 인증이 필요합니다.\n인증 페이지로 가시겠어요?",
+                                              okText: '갈게요',
+                                              okFunc: okFunc,
+                                              cancelText: '좀 더 생각해볼게요',
+                                              cancelFunc: cancelFunc,
+                                            );
+                                            return;
+                                          } else {
+                                            Function okFunc = () {
+                                              ApiProvider().post('/Personal/Logout', jsonEncode({"userID": result['userID'], "isSelf": 0}), isChat: true);
 
-                                            Get.back();
-                                          };
+                                              Get.back();
+                                            };
 
-                                          showSheepsDialog(
-                                            context: context,
-                                            title: "로그아웃",
-                                            description: "해당 아이디는 이미 로그인 중입니다.\n로그아웃을 요청하시겠어요?",
-                                            okText: "로그아웃 할게요",
-                                            okFunc: okFunc,
-                                            cancelText: "좀 더 생각해볼게요",
-                                          );
-                                          _isReady = true; //서버중복신호방지
-                                          return;
+                                            showSheepsDialog(
+                                              context: context,
+                                              title: "로그아웃",
+                                              description: "해당 아이디는 이미 로그인 중입니다.\n로그아웃을 요청하시겠어요?",
+                                              okText: "로그아웃 할게요",
+                                              okFunc: okFunc,
+                                              cancelText: "좀 더 생각해볼게요",
+                                            );
+                                            _isReady = true; //서버중복신호방지
+                                            return;
+                                          }
                                         }
+
+                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        prefs.setBool('autoLoginKey', true);
+                                        prefs.setString('autoLoginId', _idController.text);
+                                        prefs.setString('autoLoginPw', _passwordController.text);
+                                        prefs.setString('socialLogin', 0.toString());
+
+                                        globalLogin(context, provider, result);
+                                      } else {
+                                        showSheepsDialog(
+                                          context: context,
+                                          title: "로그인 실패",
+                                          description: "가입하지 않은 아이디이거나\n잘못된 비밀번호입니다",
+                                          isCancelButton: false,
+                                        );
+                                        _isReady = true; //서버중복신호방지
                                       }
-
-                                      final SharedPreferences prefs = await SharedPreferences.getInstance();
-                                      prefs.setBool('autoLoginKey', true);
-                                      prefs.setString('autoLoginId', _idController.text);
-                                      prefs.setString('autoLoginPw', _passwordController.text);
-                                      prefs.setString('socialLogin', 0.toString());
-
-                                      globalLogin(context, provider, result);
-                                    } else {
-                                      showSheepsDialog(
-                                        context: context,
-                                        title: "로그인 실패",
-                                        description: "가입하지 않은 아이디이거나\n잘못된 비밀번호입니다",
-                                        isCancelButton: false,
-                                      );
-                                      _isReady = true; //서버중복신호방지
-                                    }
-                                  })();
-                                } else {
-                                  setState(() {
-                                    debugPrint("login fail");
-                                  });
-                                  _isReady = true;
-                                }
-                              },
-                              text: '쉽스에 로그인',
+                                    })();
+                                  } else {
+                                    setState(() {
+                                      debugPrint("login fail");
+                                    });
+                                    _isReady = true;
+                                  }
+                                },
+                                child: Text(
+                                  "쉽스에 로그인",
+                                  style: SheepsTextStyle.button1(),
+                                ),
+                              ),
                             ),
+                            // SheepsBottomButton(
+                            //   context: context,
+                            //   function: () {
+                            //     if (_isReady && isCheckEmail && validPassword(loginPassword)) {
+                            //       _isReady = false; //서버중복신호방지
+                            //       (() async {
+                            //         String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
+                            //
+                            //         var result = await ApiProvider().post(
+                            //             loginURL,
+                            //             jsonEncode({
+                            //               "id": _idController.text,
+                            //               "password": _passwordController.text,
+                            //             }));
+                            //
+                            //         if (null != result) {
+                            //           if (result['result'] == null) {
+                            //             if (result['res'] == 2) {
+                            //               Function okFunc = () {
+                            //                 globalLoginID = _idController.text;
+                            //
+                            //                 Get.back();
+                            //
+                            //                 Get.to(IdentityVerificationPage(identityStatus: IdentityStatus.SignUP));
+                            //               };
+                            //
+                            //               Function cancelFunc = () {
+                            //                 Get.back();
+                            //               };
+                            //
+                            //               _isReady = true; //서버중복신호방지
+                            //               showSheepsDialog(
+                            //                 context: context,
+                            //                 title: '핸드폰 인증 필요',
+                            //                 description: "해당 아이디는 핸드폰 인증이 필요합니다.\n인증 페이지로 가시겠어요?",
+                            //                 okText: '갈게요',
+                            //                 okFunc: okFunc,
+                            //                 cancelText: '좀 더 생각해볼게요',
+                            //                 cancelFunc: cancelFunc,
+                            //               );
+                            //               return;
+                            //             } else {
+                            //               Function okFunc = () {
+                            //                 ApiProvider().post('/Personal/Logout', jsonEncode({"userID": result['userID'], "isSelf": 0}), isChat: true);
+                            //
+                            //                 Get.back();
+                            //               };
+                            //
+                            //               showSheepsDialog(
+                            //                 context: context,
+                            //                 title: "로그아웃",
+                            //                 description: "해당 아이디는 이미 로그인 중입니다.\n로그아웃을 요청하시겠어요?",
+                            //                 okText: "로그아웃 할게요",
+                            //                 okFunc: okFunc,
+                            //                 cancelText: "좀 더 생각해볼게요",
+                            //               );
+                            //               _isReady = true; //서버중복신호방지
+                            //               return;
+                            //             }
+                            //           }
+                            //
+                            //           final SharedPreferences prefs = await SharedPreferences.getInstance();
+                            //           prefs.setBool('autoLoginKey', true);
+                            //           prefs.setString('autoLoginId', _idController.text);
+                            //           prefs.setString('autoLoginPw', _passwordController.text);
+                            //           prefs.setString('socialLogin', 0.toString());
+                            //
+                            //           globalLogin(context, provider, result);
+                            //         } else {
+                            //           showSheepsDialog(
+                            //             context: context,
+                            //             title: "로그인 실패",
+                            //             description: "가입하지 않은 아이디이거나\n잘못된 비밀번호입니다",
+                            //             isCancelButton: false,
+                            //           );
+                            //           _isReady = true; //서버중복신호방지
+                            //         }
+                            //       })();
+                            //     } else {
+                            //       setState(() {
+                            //         debugPrint("login fail");
+                            //       });
+                            //       _isReady = true;
+                            //     }
+                            //   },
+                            //   text: '쉽스에 로그인',
+                            // ),
                             SizedBox(height: 20 * sizeUnit),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
