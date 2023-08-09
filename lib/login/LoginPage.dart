@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   String? errMsg4Password;
 
   bool validPassword(String password) {
-    //if (!kReleaseMode) return true;
+    if (!kReleaseMode) return true;
 
     loginPassword = password;
     if (password.length < 1 || password == null) {
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  if (_isReady && isCheckEmail && validPassword(loginPassword)) {
+                                  if (_isReady && _idController.text.isNotEmpty && validPassword(_passwordController.text)) {
                                     _isReady = false; //서버중복신호방지
                                     (() async {
                                       String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
