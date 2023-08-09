@@ -513,12 +513,12 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
               ),
               SizedBox(height: 12 * sizeUnit),
               Obx(
-                () => DragAndDropGridView(
-                  controller: _scrollController,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 3 / 3,
-                  ),
+                () => ReorderableListView.builder(
+                  // controller: _scrollController,
+                  // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //   crossAxisCount: 3,
+                  //   childAspectRatio: 3 / 3,
+                  // ),
                   itemCount: controller.profileImgList.length < MAX_TEAM_PROFILE_IMG ? controller.profileImgList.length + 1 : MAX_TEAM_PROFILE_IMG,
                   itemBuilder: (context, index) => Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16 * sizeUnit)),
@@ -648,7 +648,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
                       );
                     }),
                   ),
-                  onWillAccept: (oldIndex, newIndex) => true,
+                  //onWillAccept: (oldIndex, newIndex) => true,
                   onReorder: (oldIndex, newIndex) {
                     if (controller.profileImgList.length == MAX_TEAM_PROFILE_IMG || (oldIndex != controller.profileImgList.length && newIndex != controller.profileImgList.length)) {
                       controller.isChangePhotos = true;
@@ -1296,10 +1296,10 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
               'instagram': controller.instagramUrl.value,
               'facebook': controller.facebookUrl.value,
             }));
-        addTeam!.teamLink.siteUrl = controller.siteUrl.value;
-        addTeam!.teamLink.recruitUrl = controller.recruitUrl.value;
-        addTeam!.teamLink.instagramUrl = controller.instagramUrl.value;
-        addTeam!.teamLink.facebookUrl = controller.facebookUrl.value;
+        addTeam!.teamLink!.siteUrl = controller.siteUrl.value;
+        addTeam!.teamLink!.recruitUrl = controller.recruitUrl.value;
+        addTeam!.teamLink!.instagramUrl = controller.instagramUrl.value;
+        addTeam!.teamLink!.facebookUrl = controller.facebookUrl.value;
 
         GlobalProfile.teamProfile.insert(0, addTeam!);
       } else {
