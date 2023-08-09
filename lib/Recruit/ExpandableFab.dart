@@ -11,7 +11,7 @@ import 'PersonalSeekTeamsEditPage.dart';
 class ExpandableFab extends StatelessWidget {
   final bool isRecruit;
 
-  const ExpandableFab({Key key, @required this.isRecruit}) : super(key: key);
+  const ExpandableFab({Key? key, required this.isRecruit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +82,9 @@ class ExpandableFab extends StatelessWidget {
     );
   }
 
-  Widget actionButton({@required String text, @required String iconPath, @required Color color, @required Function onTap}) {
+  Widget actionButton({required String text, required String iconPath, required Color color, required Function onTap}) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

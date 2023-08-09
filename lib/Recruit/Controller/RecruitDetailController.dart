@@ -19,8 +19,8 @@ class RecruitDetailController extends GetxController {
   RxBool shrinkState = false.obs;
 
   // 디테일 페이지 데이터 변수
-  int id;
-  int targetID;
+  late int id;
+  late int targetID;
   String title = '',
       name = '',
       state = '',
@@ -166,12 +166,12 @@ class RecruitDetailController extends GetxController {
   }
 
   // 좋아요 처리 함수
-  Future<void> likeFunc(bool isRecruit, {@required List dataList}) async {
+  Future<void> likeFunc(bool isRecruit, {required List dataList}) async {
     if (isRecruit) {
       var res = await ApiProvider().post(
         '/Matching/Insert/TeamMemberRecruitLike',
         jsonEncode({
-          "userID": GlobalProfile.loggedInUser.userID,
+          "userID": GlobalProfile.loggedInUser!.userID,
           "targetID": id,
         }),
       );
@@ -187,7 +187,7 @@ class RecruitDetailController extends GetxController {
       var res = await ApiProvider().post(
         '/Matching/Insert/PersonalSeekTeamLike',
         jsonEncode({
-          "userID": GlobalProfile.loggedInUser.userID,
+          "userID": GlobalProfile.loggedInUser!.userID,
           "targetID": id,
         }),
       );

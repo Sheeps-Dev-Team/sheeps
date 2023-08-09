@@ -109,38 +109,40 @@ class PersonalSeekTeamsEditController extends GetxController {
   }
 
   void loading(){
-    job = GlobalProfile.loggedInUser.job;
-    part = GlobalProfile.loggedInUser.part;
-    subJob = GlobalProfile.loggedInUser.subJob;
-    subPart = GlobalProfile.loggedInUser.subPart;
-    for(int i = 0; i < GlobalProfile.loggedInUser.userEducationList.length; i++){
-      if(GlobalProfile.loggedInUser.userEducationList[i].auth != 0){
-        educationList.add(GlobalProfile.loggedInUser.userEducationList[i]);
+    job = GlobalProfile.loggedInUser!.job;
+    part = GlobalProfile.loggedInUser!.part;
+    subJob = GlobalProfile.loggedInUser!.subJob;
+    subPart = GlobalProfile.loggedInUser!.subPart;
+    for(int i = 0; i < GlobalProfile.loggedInUser!.userEducationList.length; i++){
+      if(GlobalProfile.loggedInUser!.userEducationList[i].auth != 0){
+        educationList.add(GlobalProfile.loggedInUser!.userEducationList[i]);
       }
     }
-    for(int i = 0; i < GlobalProfile.loggedInUser.userCareerList.length; i++){
-      if(GlobalProfile.loggedInUser.userCareerList[i].auth != 0){
-        careerList.add(GlobalProfile.loggedInUser.userCareerList[i]);
+    for(int i = 0; i < GlobalProfile.loggedInUser!.userCareerList.length; i++){
+      if(GlobalProfile.loggedInUser!.userCareerList[i].auth != 0){
+        careerList.add(GlobalProfile.loggedInUser!.userCareerList[i]);
       }
     }
-    for(int i = 0; i < GlobalProfile.loggedInUser.userLicenseList.length; i++){
-      if(GlobalProfile.loggedInUser.userLicenseList[i].auth != 0){
-        licenseList.add(GlobalProfile.loggedInUser.userLicenseList[i]);
+    for(int i = 0; i < GlobalProfile.loggedInUser!.userLicenseList.length; i++){
+      if(GlobalProfile.loggedInUser!.userLicenseList[i].auth != 0){
+        licenseList.add(GlobalProfile.loggedInUser!.userLicenseList[i]);
       }
     }
-    for(int i = 0; i < GlobalProfile.loggedInUser.userWinList.length; i++){
-      if(GlobalProfile.loggedInUser.userWinList[i].auth != 0){
-        winList.add(GlobalProfile.loggedInUser.userWinList[i]);
+    for(int i = 0; i < GlobalProfile.loggedInUser!.userWinList.length; i++){
+      if(GlobalProfile.loggedInUser!.userWinList[i].auth != 0){
+        winList.add(GlobalProfile.loggedInUser!.userWinList[i]);
       }
     }
-    portfolioUrl.value = GlobalProfile.loggedInUser.userLink.portfolioUrl;
-    resumeUrl.value = GlobalProfile.loggedInUser.userLink.resumeUrl;
-    siteUrl.value = GlobalProfile.loggedInUser.userLink.siteUrl;
-    linkedInUrl.value = GlobalProfile.loggedInUser.userLink.linkedInUrl;
-    instagramUrl.value = GlobalProfile.loggedInUser.userLink.instagramUrl;
-    facebookUrl.value = GlobalProfile.loggedInUser.userLink.facebookUrl;
-    gitHubUrl.value = GlobalProfile.loggedInUser.userLink.gitHubUrl;
-    notionUrl.value = GlobalProfile.loggedInUser.userLink.notionUrl;
+    if(GlobalProfile.loggedInUser!.userLink != null) {
+      portfolioUrl.value = GlobalProfile.loggedInUser!.userLink!.portfolioUrl;
+      resumeUrl.value = GlobalProfile.loggedInUser!.userLink!.resumeUrl;
+      siteUrl.value = GlobalProfile.loggedInUser!.userLink!.siteUrl;
+      linkedInUrl.value = GlobalProfile.loggedInUser!.userLink!.linkedInUrl;
+      instagramUrl.value = GlobalProfile.loggedInUser!.userLink!.instagramUrl;
+      facebookUrl.value = GlobalProfile.loggedInUser!.userLink!.facebookUrl;
+      gitHubUrl.value = GlobalProfile.loggedInUser!.userLink!.gitHubUrl;
+      notionUrl.value = GlobalProfile.loggedInUser!.userLink!.notionUrl;
+    }
   }
 
   void editLoading(PersonalSeekTeam personalSeekTeam){

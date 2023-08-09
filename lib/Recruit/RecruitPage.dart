@@ -92,10 +92,10 @@ class _RecruitPageState extends State<RecruitPage> {
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         if (filterController.recruitFiltered || filterController.personalSeekFiltered) {
-          return filterController.maxFilterScrollEvent(controller.isRecruit).then((value) => setState(() {}));
+          filterController.maxFilterScrollEvent(controller.isRecruit).then((value) => setState(() {}));
         }
         if (filterController.searchForRecruit || filterController.searchForPersonalSeek) {
-          return filterController.maxSearchScrollEvent(controller.isRecruit).then((value) => setState(() {}));
+          filterController.maxSearchScrollEvent(controller.isRecruit).then((value) => setState(() {}));
         }
         controller.maxScrollEvent().then((value) => setState(() {}));
       }
@@ -420,7 +420,7 @@ class _RecruitPageState extends State<RecruitPage> {
     );
   }
 
-  Widget filterTitleAndList({@required String title, @required List<String> referenceList, @required List<bool> tempList}) {
+  Widget filterTitleAndList({required String title, required List<String> referenceList, required List<bool> tempList}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -466,7 +466,7 @@ class _RecruitPageState extends State<RecruitPage> {
   // 필터 선택해제 위젯
   Widget filterDeselectButton(Function press) {
     return GestureDetector(
-      onTap: press,
+      onTap: () => press(),
       child: Row(
         children: [
           Container(
@@ -666,7 +666,7 @@ class _RecruitPageState extends State<RecruitPage> {
                   });
                 }
 
-                Get.to(() => RecruitDetailPage(isRecruit: controller.isRecruit, data: resultList[index])).then((value) => setState(() {}));
+                Get.to(() => RecruitDetailPage(isRecruit: controller.isRecruit, data: resultList[index]))?.then((value) => setState(() {}));
               }
             },
             controller: controller,
@@ -678,9 +678,9 @@ class _RecruitPageState extends State<RecruitPage> {
 
   // 카테고리 바
   Column categoryBar({
-    @required int barIndex,
-    @required List<String> categoryList,
-    @required List<double> widthList,
+    required int barIndex,
+    required List<String> categoryList,
+    required List<double> widthList,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -881,7 +881,7 @@ class _RecruitPageState extends State<RecruitPage> {
             width: 12 * sizeUnit,
           ),
           GestureDetector(
-            onTap: () => Get.to(() => MyPage()).then((value) => setState(() {})),
+            onTap: () => Get.to(() => MyPage())?.then((value) => setState(() {})),
             child: SvgPicture.asset(
               svgGreyMyPageButton,
               width: 28 * sizeUnit,

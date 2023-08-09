@@ -89,14 +89,14 @@ class FilterController extends GetxController {
 
   // 팀원모집 필터 검색 시 사용되는 변수
   int recruitOrderRule = 0;
-  String recruitPart, servicePart, recruitLocation;
+  late String recruitPart, servicePart, recruitLocation;
   int recruitCheckAll = 1;
   int serviceCheckAll = 1;
   int recruitLocationCheckAll = 1;
 
   // 팀 찾기 필터 검색 시 사용되는 변수
   int seekingOrderRule = 0;
-  String seekingFieldPart, education, workForm, seekingLocation;
+  late String seekingFieldPart, education, workForm, seekingLocation;
   int seekingFieldPartCheckAll = 1;
   int educationCheckAll = 1;
   int workFormCheckAll = 1;
@@ -229,14 +229,14 @@ class FilterController extends GetxController {
   }
 
   // 대시보드 구직중인 프로필
-  Future<void> getRecommendPersonalSeek() async {
-    TeamMemberRecruit myRecruit; // 내가 쓴 최신 리쿠르트 글
+  Future getRecommendPersonalSeek() async {
+    TeamMemberRecruit? myRecruit; // 내가 쓴 최신 리쿠르트 글
     dashBoardSeekList.clear(); // 대시보드 리스트 초기화
 
     var res = await ApiProvider().post(
         '/Matching/Select/TeamMemberRecruitByUserID',
         jsonEncode({
-          'userID': GlobalProfile.loggedInUser.userID,
+          'userID': GlobalProfile.loggedInUser!.userID,
         }));
 
     if (res != null) {
@@ -289,7 +289,7 @@ class FilterController extends GetxController {
     int num = globalPersonalSeekTeamList.length > MAX_RECRUIT_VIEW ? MAX_RECRUIT_VIEW : globalPersonalSeekTeamList.length;
 
     for (int i = 0; i < num; i++) {
-      if (globalPersonalSeekTeamList[i].userId != GlobalProfile.loggedInUser.userID && globalPersonalSeekTeamList[i].seekingState == 1) {
+      if (globalPersonalSeekTeamList[i].userId != GlobalProfile.loggedInUser!.userID && globalPersonalSeekTeamList[i].seekingState == 1) {
         dashBoardSeekList.add(globalPersonalSeekTeamList[i]); // 내 글이 아니고, 구직중일 때 넣어주기
       } else {
         if(num < globalPersonalSeekTeamList.length) num++;
@@ -319,7 +319,7 @@ class FilterController extends GetxController {
         PersonalSeekTeam personalSeekTeam = PersonalSeekTeam.fromJson(res[i]);
 
         // 내 글이 아니고, 구직중인 것만
-        if (personalSeekTeam.userId != GlobalProfile.loggedInUser.userID && personalSeekTeam.seekingState == 1) {
+        if (personalSeekTeam.userId != GlobalProfile.loggedInUser!.userID && personalSeekTeam.seekingState == 1) {
           await GlobalProfile.getFutureUserByUserID(personalSeekTeam.userId); // 유저 정보 불러오기
           dashBoardSeekList.add(personalSeekTeam);
         }
@@ -329,7 +329,7 @@ class FilterController extends GetxController {
 
   // 특정 필터 보여주기 위한 세팅
   void setSpecificFilterForSeek() {
-    if (dashBoardFilterWordForSeek['personalSeekPart'].isEmpty && dashBoardFilterWordForSeek['location'].isEmpty) return; // 필터 반영 되어있지 않으면 리턴
+    if (dashBoardFilterWordForSeek['personalSeekPart']!.isEmpty && dashBoardFilterWordForSeek['location']!.isEmpty) return; // 필터 반영 되어있지 않으면 리턴
 
     filteredPersonalSeekList.clear(); // 필터 리스트 초기화
     searchForRecruit = false; // 검색 여부 꺼주기
@@ -337,9 +337,9 @@ class FilterController extends GetxController {
     offAllFilterForSeek(); // 필터 다 끄기
 
     // 구직분야 필터 켜기
-    if (dashBoardFilterWordForSeek['personalSeekPart'].isNotEmpty) {
+    if (dashBoardFilterWordForSeek['personalSeekPart']!.isNotEmpty) {
       for (int i = 0; i < FieldCategory.length; i++) {
-        if (FieldCategory[i].contains(dashBoardFilterWordForSeek['personalSeekPart'])) {
+        if (FieldCategory[i].contains(dashBoardFilterWordForSeek['personalSeekPart']!)) {
           jobFieldForSeek[i] = true;
           tempJobFieldForSeek[i] = true;
           break;
@@ -348,9 +348,9 @@ class FilterController extends GetxController {
     }
 
     // 지역 필터 켜기
-    if (dashBoardFilterWordForSeek['location'].isNotEmpty) {
+    if (dashBoardFilterWordForSeek['location']!.isNotEmpty) {
       for (int i = 0; i < locationNameList.length; i++) {
-        if (locationNameList[i] == abbreviateForLocation(dashBoardFilterWordForSeek['location'])) {
+        if (locationNameList[i] == abbreviateForLocation(dashBoardFilterWordForSeek['location']!)) {
           locationListForSeek[i] = true;
           tempLocationListForSeek[i] = true;
           break;
@@ -364,8 +364,8 @@ class FilterController extends GetxController {
   }
 
   // 대시보드 추천 리쿠르트
-  Future<void> getRecommendRecruit() async {
-    UserData user = GlobalProfile.loggedInUser;
+  Future getRecommendRecruit() async {
+    UserData user = GlobalProfile.loggedInUser!;
 
     await setTeamList();
 
@@ -495,7 +495,7 @@ class FilterController extends GetxController {
 
   // 특정 필터 보여주기 위한 세팅
   void setSpecificFilterForRecruit() {
-    if (dashBoardFilterWordForRecruit['recruitPart'].isEmpty && dashBoardFilterWordForRecruit['location'].isEmpty) return; // 필터 반영 되어있지 않으면 리턴
+    if (dashBoardFilterWordForRecruit['recruitPart']!.isEmpty && dashBoardFilterWordForRecruit['location']!.isEmpty) return; // 필터 반영 되어있지 않으면 리턴
 
     filteredRecruitList.clear(); // 필터 리스트 초기화
     searchForRecruit = false; // 검색 여부 꺼주기
@@ -503,9 +503,9 @@ class FilterController extends GetxController {
     offAllFilterForRecruit(); // 필터 다 끄기
 
     // 팀원모집 분야 필터 켜기
-    if (dashBoardFilterWordForRecruit['recruitPart'].isNotEmpty) {
+    if (dashBoardFilterWordForRecruit['recruitPart']!.isNotEmpty) {
       for (int i = 0; i < FieldCategory.length; i++) {
-        if (FieldCategory[i].contains(dashBoardFilterWordForRecruit['recruitPart'])) {
+        if (FieldCategory[i].contains(dashBoardFilterWordForRecruit['recruitPart']!)) {
           jobFieldForRecruit[i] = true;
           tempJobFieldForRecruit[i] = true;
           break;
@@ -514,9 +514,9 @@ class FilterController extends GetxController {
     }
 
     // 지역 필터 켜기
-    if (dashBoardFilterWordForRecruit['location'].isNotEmpty) {
+    if (dashBoardFilterWordForRecruit['location']!.isNotEmpty) {
       for (int i = 0; i < locationNameList.length; i++) {
-        if (locationNameList[i] == abbreviateForLocation(dashBoardFilterWordForRecruit['location'])) {
+        if (locationNameList[i] == abbreviateForLocation(dashBoardFilterWordForRecruit['location']!)) {
           locationListForRecruit[i] = true;
           tempLocationListForRecruit[i] = true;
           break;
@@ -531,7 +531,7 @@ class FilterController extends GetxController {
 
   // 내 팀 리스트 불러오기
   Future<void> setTeamList() async {
-    var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+    var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
     if (leaderList != null) {
       for (int i = 0; i < leaderList.length; ++i) {
@@ -540,7 +540,7 @@ class FilterController extends GetxController {
       }
     }
 
-    var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+    var teamList = await ApiProvider().post('/Team/Profile/SelectUser', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
     if (teamList != null) {
       for (int i = 0; i < teamList.length; ++i) {
@@ -739,7 +739,7 @@ class FilterController extends GetxController {
   }
 
   // 필터 검색어 조합
-  String makeSearchWord({List<bool> boolList, List<String> filterCategoryList}) {
+  String makeSearchWord({required List<bool> boolList, required List<String> filterCategoryList}) {
     bool firstPart = true; // 들어온 값중 처음인지
     String result = '';
 

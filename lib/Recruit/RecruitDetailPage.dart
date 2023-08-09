@@ -36,9 +36,9 @@ class RecruitDetailPage extends StatefulWidget {
   final bool isRecruit;
   final data;
   final bool onlyShowSuggest;
-  final List dataList; // 리쿠르트 삭제하는거 반영하기 위해 받는 리스트
+  final List? dataList; // 리쿠르트 삭제하는거 반영하기 위해 받는 리스트
 
-  const RecruitDetailPage({Key key, @required this.isRecruit, @required this.data, this.onlyShowSuggest = false, this.dataList}) : super(key: key);
+  const RecruitDetailPage({Key? key, required this.isRecruit, required this.data, this.onlyShowSuggest = false, this.dataList}) : super(key: key);
 
   @override
   _RecruitDetailPageState createState() => _RecruitDetailPageState();
@@ -52,12 +52,12 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
   final double appBarHeight = Get.height * 0.45;
   bool isPossibleInvite = false;
   bool isMe = false;
-  bool onlyShowSuggest; // 제안하기 버튼만 보여주기 여부
+  late bool onlyShowSuggest; // 제안하기 버튼만 보여주기 여부
   String inviteButtonText = "지원하기";
   Color inviteButtonColor = sheepsColorBlue;
 
-  PersonalSeekTeam personalSeekTeam;
-  TeamMemberRecruit teamMemberRecruit;
+  late PersonalSeekTeam personalSeekTeam;
+  late TeamMemberRecruit teamMemberRecruit;
 
   bool isReady = true;
   List dataList = [];  // 리쿠르트 삭제되는 거 반영하기 위한 리스트
@@ -68,7 +68,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
     inviteButtonColor = widget.isRecruit ? sheepsColorBlue : sheepsColorGreen;
     onlyShowSuggest = widget.onlyShowSuggest;
 
-    if(widget.dataList != null) dataList = widget.dataList;
+    if(widget.dataList != null) dataList = widget.dataList!;
 
     if (widget.isRecruit) {
       teamMemberRecruit = widget.data;
@@ -79,7 +79,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
     scrollController.addListener(() => controller.scrollListenerEvent(scrollController));
 
     Future.microtask(() async {
-      if (GlobalProfile.loggedInUser.userID == controller.targetID) {
+      if (GlobalProfile.loggedInUser!.userID == controller.targetID) {
         isMe = true;
         setState(() {});
       } else {
@@ -87,7 +87,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
           var teamListResult = await ApiProvider().post(
               '/Team/Profile/SelectUser',
               jsonEncode({
-                "userID": GlobalProfile.loggedInUser.userID,
+                "userID": GlobalProfile.loggedInUser!.userID,
               }));
 
           TeamMemberRecruit teamMemberRecruit = globalTeamMemberRecruitList.singleWhere((element) => element.id == controller.id);
@@ -106,7 +106,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
             var res = await ApiProvider().post(
                 '/Matching/Select/Target/TeamMemberRecruit',
                 jsonEncode({
-                  "userID": GlobalProfile.loggedInUser.userID,
+                  "userID": GlobalProfile.loggedInUser!.userID,
                   "inviteID": controller.targetID,
                   "id": controller.id,
                 }));
@@ -207,7 +207,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                           text: '지원자 보기',
                           color: widget.isRecruit ? sheepsColorGreen : sheepsColorBlue,
                           press: () async {
-                            var res = await ApiProvider().post('/Matching/Select/Proposed/TeamMemberRecruit', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "id": controller.id}));
+                            var res = await ApiProvider().post('/Matching/Select/Proposed/TeamMemberRecruit', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "id": controller.id}));
 
                             inviteController.currRecritInviteList.clear();
                             if (res != null) {
@@ -256,7 +256,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                             );
                           }else{
                             await ApiProvider()
-                                .post('/Matching/Invite/TeamMemberRecruit', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "inviteID": controller.targetID, "id": controller.id}))
+                                .post('/Matching/Invite/TeamMemberRecruit', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "inviteID": controller.targetID, "id": controller.id}))
                                 .then((value) {
                               setState(() {
                                 inviteButtonText = "지원 중...";
@@ -324,7 +324,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                           text: '제안한 팀 보기',
                           color: widget.isRecruit ? sheepsColorGreen : sheepsColorBlue,
                           press: () async {
-                            var res = await ApiProvider().post('/Matching/Select/Applicant/PersonalSeekTeam', jsonEncode({"userID": GlobalProfile.loggedInUser.userID, "id": controller.id}));
+                            var res = await ApiProvider().post('/Matching/Select/Applicant/PersonalSeekTeam', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID, "id": controller.id}));
 
                             inviteController.currRecritInviteList.clear();
                             if (res != null) {
@@ -414,11 +414,11 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
     );
   }
 
-  Widget bottomButton({String text, Color color, Function press}) {
+  Widget bottomButton({required String text, required Color color, required Function press}) {
     double meButton = isMe ? 328 : 160;
 
     return GestureDetector(
-      onTap: press,
+      onTap: () => press(),
       child: Container(
         width: meButton * sizeUnit,
         height: 54 * sizeUnit,
@@ -791,7 +791,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                 customShapeButton(
                   press: () {
                     if (widget.isRecruit) {
-                      Get.to(() => TeamMemberRecruitEditPage(team: GlobalProfile.getTeamByID(teamMemberRecruit.teamId), teamMemberRecruit: teamMemberRecruit)).then((value) {
+                      Get.to(() => TeamMemberRecruitEditPage(team: GlobalProfile.getTeamByID(teamMemberRecruit.teamId), teamMemberRecruit: teamMemberRecruit))?.then((value) {
                         if (value != null) {
                           setState(() {
                             teamMemberRecruit = value[0];
@@ -800,7 +800,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                         }
                       });
                     } else {
-                      Get.to(() => PersonalSeekTeamsEditPage(personalSeekTeam: personalSeekTeam)).then((value) {
+                      Get.to(() => PersonalSeekTeamsEditPage(personalSeekTeam: personalSeekTeam))?.then((value) {
                         if (value != null) {
                           setState(() {
                             personalSeekTeam = value[0];
@@ -987,7 +987,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                                   '/Matching/Delete/TeamMemberRecruit',
                                   jsonEncode({
                                     'id': teamMemberRecruit.id,
-                                    "userID": GlobalProfile.loggedInUser.userID,
+                                    "userID": GlobalProfile.loggedInUser!.userID,
                                     "teamName": GlobalProfile.getTeamByID(teamMemberRecruit.teamId).name,
                                     "roomName": roomName,
                                   }))
@@ -1028,8 +1028,8 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
                                   '/Matching/Delete/PersonalSeekTeam',
                                   jsonEncode({
                                     'id': personalSeekTeam.id,
-                                    "userID": GlobalProfile.loggedInUser.userID,
-                                    "userName": GlobalProfile.loggedInUser.name,
+                                    "userID": GlobalProfile.loggedInUser!.userID,
+                                    "userName": GlobalProfile.loggedInUser!.name,
                                     "roomName": roomName,
                                   }))
                               .then((value) {
@@ -1221,14 +1221,15 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
             packageName: 'kr.noteasy.sheeps_app',
             minimumVersion: 1, //실행 가능 최소 버전
           ),
-          iosParameters: IosParameters(
+          iosParameters: IOSParameters(
             bundleId: 'kr.noteasy.sheepsApp',
             minimumVersion: '1.0',
             appStoreId: '1558625011',
           ));
 
-      final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
-      final Uri shortUrl = shortDynamicLink.shortUrl;
+      // final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+      // final Uri shortUrl = shortDynamicLink.shortUrl;
+      final Uri shortUrl = parameters.link;
 
       String name = GlobalProfile.getTeamByID(teamMemberRecruit.teamId).name;
       String title = cutAuthInfo(teamMemberRecruit.title);
@@ -1244,14 +1245,15 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
             packageName: 'kr.noteasy.sheeps_app',
             minimumVersion: 1, //실행 가능 최소 버전
           ),
-          iosParameters: IosParameters(
+          iosParameters: IOSParameters(
             bundleId: 'kr.noteasy.sheepsApp',
             minimumVersion: '1.0',
             appStoreId: '1558625011',
           ));
 
-      final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
-      final Uri shortUrl = shortDynamicLink.shortUrl;
+      // final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+      // final Uri shortUrl = shortDynamicLink.shortUrl;
+      final Uri shortUrl = parameters.link;
 
       String name = GlobalProfile.getUserByUserID(personalSeekTeam.userId).name;
       String title = cutAuthInfo(personalSeekTeam.title);

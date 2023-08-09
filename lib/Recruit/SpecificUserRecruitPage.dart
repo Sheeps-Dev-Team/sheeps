@@ -24,7 +24,7 @@ class SpecificUserRecruitPage extends StatefulWidget {
   final bool isRecruit;
   final String appBarTitle;
 
-  const SpecificUserRecruitPage({Key key, this.myRecruitList, this.mySeekList, @required this.isRecruit, @required this.appBarTitle}) : super(key: key);
+  const SpecificUserRecruitPage({Key? key, this.myRecruitList = const [], this.mySeekList = const [], required this.isRecruit, required this.appBarTitle}) : super(key: key);
 
   @override
   _SpecificUserRecruitPageState createState() => _SpecificUserRecruitPageState();
@@ -65,12 +65,12 @@ class _SpecificUserRecruitPageState extends State<SpecificUserRecruitPage> {
 
                 widget.isRecruit ?
                 FloatingActionButton(
-                  onPressed: () => Get.to(RecruitTeamSelectionPage(isCreated: true, isMyPageRecruit: true)).then((value) => setState(() {})),
+                  onPressed: () => Get.to(RecruitTeamSelectionPage(isCreated: true, isMyPageRecruit: true))?.then((value) => setState(() {})),
                   backgroundColor: sheepsColorGreen,
                   child: SvgPicture.asset('assets/images/NavigationBar/TeamRecruitIcon.svg', color: Colors.white, width: 24 * sizeUnit, height: 24 * sizeUnit),
                 ) :
                 FloatingActionButton(
-                  onPressed: () => Get.to(PersonalSeekTeamsEditPage(isMyPagePersonalSeek: true)).then((value) => setState(() {})),
+                  onPressed: () => Get.to(PersonalSeekTeamsEditPage(isMyPagePersonalSeek: true))?.then((value) => setState(() {})),
                   backgroundColor: sheepsColorBlue,
                   child: SvgPicture.asset(svgSearchIcon, width: 24 * sizeUnit, height: 24 * sizeUnit),
                 )
@@ -95,7 +95,7 @@ class _SpecificUserRecruitPageState extends State<SpecificUserRecruitPage> {
                   data: widget.isRecruit ? myPageRecruitList[index] : myPageSeekList[index],
                   onlyShowSuggest: true,
                   dataList: widget.isRecruit ? myPageRecruitList : myPageSeekList,
-                )).then((value) {
+                ))?.then((value) {
               setState(() {
                 if(widget.isRecruit) {
                   if(value != null) myPageRecruitList[index] = value;

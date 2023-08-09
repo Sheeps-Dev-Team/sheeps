@@ -25,7 +25,7 @@ class RecruitTeamSelectionPage extends StatefulWidget {
   final bool isCreated;
   final bool isMyPageRecruit; // 마이페이지에서 왔으면 true
 
-  const RecruitTeamSelectionPage({Key key, this.isCreated = true, this.isMyPageRecruit = false}) : super(key: key);
+  const RecruitTeamSelectionPage({Key? key, this.isCreated = true, this.isMyPageRecruit = false}) : super(key: key);
 
   @override
   _RecruitTeamSelectionPageState createState() => _RecruitTeamSelectionPageState();
@@ -34,7 +34,7 @@ class RecruitTeamSelectionPage extends StatefulWidget {
 class _RecruitTeamSelectionPageState extends State<RecruitTeamSelectionPage> {
   final RecruitDetailController controller = Get.put(RecruitDetailController());
   List<Team> myTeamList = [];
-  int selectedTeamId;
+  int? selectedTeamId;
   bool loading = true;
 
   void backFunc(){
@@ -46,7 +46,7 @@ class _RecruitTeamSelectionPageState extends State<RecruitTeamSelectionPage> {
     super.initState();
 
     Future.microtask(() async {
-      var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser.userID}));
+      var leaderList = await ApiProvider().post('/Team/Profile/Leader', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
 
       if (leaderList != null) {
         for (int i = 0; i < leaderList.length; ++i) {
@@ -95,10 +95,10 @@ class _RecruitTeamSelectionPageState extends State<RecruitTeamSelectionPage> {
                         if (widget.isCreated) {
                           if(widget.isMyPageRecruit) {
                             // 마이페이지에서 setState 돌아야하기 때문에
-                            Get.to(() => TeamMemberRecruitEditPage(team: GlobalProfile.getTeamByID(selectedTeamId), isMyPageRecruit: widget.isMyPageRecruit));
+                            Get.to(() => TeamMemberRecruitEditPage(team: GlobalProfile.getTeamByID(selectedTeamId!), isMyPageRecruit: widget.isMyPageRecruit));
                           } else {
                             // ExpandedFab 에서 setState 돌아야하기 때문에
-                            Get.off(() => TeamMemberRecruitEditPage(team: GlobalProfile.getTeamByID(selectedTeamId), isMyPageRecruit: widget.isMyPageRecruit));
+                            Get.off(() => TeamMemberRecruitEditPage(team: GlobalProfile.getTeamByID(selectedTeamId!), isMyPageRecruit: widget.isMyPageRecruit));
                           }
                         } else {
                           var checkMemberResult = await ApiProvider().post(
@@ -122,7 +122,7 @@ class _RecruitTeamSelectionPageState extends State<RecruitTeamSelectionPage> {
                               await ApiProvider().post(
                                   '/Matching/Invite/PersonalSeekTeam',
                                   jsonEncode({
-                                    "userID": GlobalProfile.loggedInUser.userID,
+                                    "userID": GlobalProfile.loggedInUser!.userID,
                                     "teamID": selectedTeamId,
                                     "inviteID": controller.targetID,
                                     "id": controller.id,
@@ -333,7 +333,7 @@ class _RecruitTeamSelectionPageState extends State<RecruitTeamSelectionPage> {
           if (myTeamList.length >= MAX_CREATE_TEAM_LENGTH) {
             fullTeamDialog(myTeamList.length);
           } else {
-            Get.to(() => TeamProfileManagementPage(isAdd: true, team: Team())).then((value) {
+            Get.to(() => TeamProfileManagementPage(isAdd: true, team: Team()))?.then((value) {
               if (value != null) {
                 setState(() {
                   myTeamList.add(value[0]);

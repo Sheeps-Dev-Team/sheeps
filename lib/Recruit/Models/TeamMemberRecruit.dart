@@ -34,12 +34,38 @@ class TeamMemberRecruit {
   String createdAt;
   String updateAt;
 
-  TeamMemberRecruit({this.id, this.teamId, this.title, this.recruitPeriodStart, this.recruitPeriodEnd, this.ordinary,
-    this.recruitInfo, this.category, this.servicePart, this.location, this.subLocation, this.recruitField, this.recruitSubField, this.roleContents, this.education, this.career, this.detailVolunteerQualification,
-    this.preferenceInfo, this.detailPreferenceInfoContents, this.workFormFirst, this.workFormSecond, this.workDayOfWeek, this.workTime, this.welfare, this.detailWorkCondition,
-    this.isShow, this.createdAt, this.updateAt});
+  TeamMemberRecruit({
+    required this.id,
+    required this.teamId,
+    required this.title,
+    required this.recruitPeriodStart,
+    required this.recruitPeriodEnd,
+    required this.ordinary,
+    required this.recruitInfo,
+    required this.category,
+    required this.servicePart,
+    required this.location,
+    required this.subLocation,
+    required this.recruitField,
+    required this.recruitSubField,
+    required this.roleContents,
+    required this.education,
+    required this.career,
+    required this.detailVolunteerQualification,
+    required this.preferenceInfo,
+    required this.detailPreferenceInfoContents,
+    required this.workFormFirst,
+    required this.workFormSecond,
+    required this.workDayOfWeek,
+    required this.workTime,
+    required this.welfare,
+    required this.detailWorkCondition,
+    required this.isShow,
+    required this.createdAt,
+    required this.updateAt,
+  });
 
-  factory TeamMemberRecruit.fromJson(Map<String, dynamic> json){
+  factory TeamMemberRecruit.fromJson(Map<String, dynamic> json) {
     return TeamMemberRecruit(
       id: json['id'] as int,
       teamId: json['TeamID'] as int,
@@ -73,61 +99,57 @@ class TeamMemberRecruit {
   }
 
   Map<String, dynamic> toJson() => {
-  // 'id': id,
-  'teamID': teamId,
-  'title': title,
-  'recruitPeriodStart': recruitPeriodStart,
-  'recruitPeriodEnd': recruitPeriodEnd,
-  'ordinary': ordinary,
-  'recruitInfo': recruitInfo,
-  'category': category,
-  'servicePart' : servicePart,
-  'location' : location,
-  'subLocation' : subLocation,
-  'recruitField': recruitField,
-  'recruitSubField' : recruitSubField,
-  'roleContents': roleContents,
-  'education': education,
-  'career': career,
-  'detailVolunteerQualification': detailVolunteerQualification,
-  'preferenceInfo': preferenceInfo,
-  'detailPreferenceInfoContents': detailPreferenceInfoContents,
-    'workFormFirst': workFormFirst,
-    'workFormSecond' : workFormSecond,
-  'workDayOfWeek': workDayOfWeek,
-  'workTime': workTime,
-  'welfare': welfare,
-  'detailWorkCondition': detailWorkCondition,
-  // 'isShow': isShow,
-  'createdAt': createdAt,
-  'updateAt': updateAt,
-  };
+        // 'id': id,
+        'teamID': teamId,
+        'title': title,
+        'recruitPeriodStart': recruitPeriodStart,
+        'recruitPeriodEnd': recruitPeriodEnd,
+        'ordinary': ordinary,
+        'recruitInfo': recruitInfo,
+        'category': category,
+        'servicePart': servicePart,
+        'location': location,
+        'subLocation': subLocation,
+        'recruitField': recruitField,
+        'recruitSubField': recruitSubField,
+        'roleContents': roleContents,
+        'education': education,
+        'career': career,
+        'detailVolunteerQualification': detailVolunteerQualification,
+        'preferenceInfo': preferenceInfo,
+        'detailPreferenceInfoContents': detailPreferenceInfoContents,
+        'workFormFirst': workFormFirst,
+        'workFormSecond': workFormSecond,
+        'workDayOfWeek': workDayOfWeek,
+        'workTime': workTime,
+        'welfare': welfare,
+        'detailWorkCondition': detailWorkCondition,
+        // 'isShow': isShow,
+        'createdAt': createdAt,
+        'updateAt': updateAt,
+      };
 }
 
 List<TeamMemberRecruit> globalTeamMemberRecruitList = [];
 
 Future<TeamMemberRecruit> getFutureTeamMemberRecruit(int id) async {
-
-  TeamMemberRecruit teamMemberRecruit;
+  TeamMemberRecruit? teamMemberRecruit;
   globalTeamMemberRecruitList.forEach((element) {
-    if(element.id == id) {
+    if (element.id == id) {
       teamMemberRecruit = element;
     }
   });
 
-  if(teamMemberRecruit == null){
-    var res = await ApiProvider().post('/Matching/Select/TeamMemberRecruitByID', jsonEncode({
-      "id" : id
-    }));
+  if (teamMemberRecruit == null) {
+    var res = await ApiProvider().post('/Matching/Select/TeamMemberRecruitByID', jsonEncode({"id": id}));
 
-    if(res == null || res['IsShow'] == false) return Future.value(null);
+    if (res == null || res['IsShow'] == false) return Future.value(null);
 
     teamMemberRecruit = TeamMemberRecruit.fromJson(res);
-    globalTeamMemberRecruitList.add(teamMemberRecruit);
+    globalTeamMemberRecruitList.add(teamMemberRecruit!);
 
     return Future.value(teamMemberRecruit);
-
-  }else{
+  } else {
     return Future.value(teamMemberRecruit);
   }
 }
