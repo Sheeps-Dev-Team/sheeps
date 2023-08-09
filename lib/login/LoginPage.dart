@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   String? errMsg4Password;
 
   bool validPassword(String password) {
-    if (!kReleaseMode) return true;
+    //if (!kReleaseMode) return true;
 
     loginPassword = password;
     if (password.length < 1 || password == null) {
@@ -114,7 +114,6 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: '이메일을 적어주세요.',
                               errorText: validEmailErrorText(_idController.text) == 'empty' ? null : validEmailErrorText(_idController.text),
                               onChanged: (val) {
-                                print(val);
                                 validEmailErrorText(val) == null ? isCheckEmail = true : isCheckEmail = false;
                                 setState(() {});
                               },
@@ -142,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  if (_isReady && _idController.text.isNotEmpty && validPassword(_passwordController.text)) {
+                                  if (_isReady && isCheckEmail && validPassword(loginPassword)) {
                                     _isReady = false; //서버중복신호방지
                                     (() async {
                                       String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';

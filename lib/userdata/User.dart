@@ -9,8 +9,8 @@ class UserCareer {
   int userID;
   String imgUrl;
   String contents;
-  String? start;
-  String? done;
+  String start;
+  String done;
   bool isNow;
   int auth;
   String createdAt;
@@ -24,9 +24,9 @@ class UserCareer {
       userID: json['PfCUserID'] as int,
       contents: json['PfCareerContents'] as String,
       imgUrl: json['PfCareerImgUrl'] as String,
-      start: json['PfCareerStart'] == null ? null : json['PfCareerStart'] as String,
-      done: json['PfCareerDone'] == null ? null : json['PfCareerDone'] as String,
-      isNow: json['PfCareerNow'] == null ? false : json['PfCareerNow'] == null as bool,
+      start: json['PfCareerStart'] as String,
+      done: json['PfCareerDone'] as String,
+      isNow: json['PfCareerNow'] as bool,
       auth: json['PfCareerAuth'] as int,
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
@@ -302,7 +302,7 @@ class UserData {
       badge3: json["Badge3"] as int,
       createdAt: replaceUTCDate(json["createdAt"] as String),
       updatedAt: replaceUTCDate(json["updatedAt"] as String),
-      accessToken: json["AccessToken"] == null ? '' :  json["AccessToken"] as String,
+      accessToken: json["AccessToken"] as String,
       badgeList: json['PersonalBadgeLists'] == null ? [] : (json['PersonalBadgeLists'] as List).map((e) => BadgeModel.fromJson(e)).toList(),
       userCareerList: json['profilecareers'] == null ? [] : (json['profilecareers'] as List).map((e) => UserCareer.fromJson(e)).toList(),
       userLicenseList: json['profilelicenses'] == null ? [] : (json['profilelicenses'] as List).map((e) => UserLicense.fromJson(e)).toList(),
@@ -310,7 +310,7 @@ class UserData {
       userEducationList: json['profileunivs'] == null ? [] : (json['profileunivs'] as List).map((e) => UserEducation.fromJson(e)).toList(),
       marketingAgree: json["MarketingAgree"] == null ? false : json["MarketingAgree"] as bool,
       marketingAgreeTime: json["MarketingAgreeTime"] == null ? "" : json["MarketingAgreeTime"] as String,
-      loginType: json['Google'] == null ? 0 : json['Google'] as int,
+      loginType: json['Google'] as int,
       userLink: json['PersonalLinks'].length == 0 ? UserLink() : UserLink.fromJson(json['PersonalLinks'][0]),
     );
   }

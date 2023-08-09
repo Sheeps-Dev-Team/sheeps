@@ -72,7 +72,7 @@ class TeamMemberRecruit {
       title: json['Title'] as String,
       recruitPeriodStart: json['RecruitPeriodStart'] as String,
       recruitPeriodEnd: json['RecruitPeriodEnd'] as String,
-      ordinary: json['Ordinary'] == null ? 0 : json['Ordinary'] as int,
+      ordinary: json['Ordinary'] as int,
       recruitInfo: json['RecruitInfo'] as String,
       category: json['Category'] as String,
       servicePart: json['ServicePart'] as String,
