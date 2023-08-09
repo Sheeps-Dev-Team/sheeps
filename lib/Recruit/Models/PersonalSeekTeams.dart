@@ -28,29 +28,30 @@ class PersonalSeekTeam {
   String updateAt;
   String seekingFieldSubPart;
 
-  PersonalSeekTeam(
-      {this.id,
-      this.userId,
-      this.title,
-      this.seekingState,
-      this.selfInfo,
-      this.category,
-      this.seekingFieldPart,
-      this.abilityContents,
-      this.education,
-      this.career,
-      this.workFormFirst,
-      this.workFormSecond,
-      this.workDayOfWeek,
-      this.workTime,
-      this.welfare,
-      this.needWorkConditionContents,
-      this.location,
-      this.subLocation,
-      this.isShow,
-      this.createdAt,
-      this.updateAt,
-      this.seekingFieldSubPart});
+  PersonalSeekTeam({
+    required this.id,
+    required this.userId,
+    required this.title,
+    required this.seekingState,
+    required this.selfInfo,
+    required this.category,
+    required this.seekingFieldPart,
+    required this.abilityContents,
+    required this.education,
+    required this.career,
+    required this.workFormFirst,
+    required this.workFormSecond,
+    required this.workDayOfWeek,
+    required this.workTime,
+    required this.welfare,
+    required this.needWorkConditionContents,
+    required this.location,
+    required this.subLocation,
+    required this.isShow,
+    required this.createdAt,
+    required this.updateAt,
+    required this.seekingFieldSubPart,
+  });
 
   factory PersonalSeekTeam.fromJson(Map<String, dynamic> json) {
     return PersonalSeekTeam(
@@ -108,22 +109,19 @@ class PersonalSeekTeam {
 List<PersonalSeekTeam> globalPersonalSeekTeamList = [];
 
 Future<PersonalSeekTeam> getFuturePersonalSeekTeam(int id) async {
-
-  PersonalSeekTeam personalSeekTeam;
+  PersonalSeekTeam? personalSeekTeam;
   globalPersonalSeekTeamList.forEach((element) {
-    if(element.id == id){
+    if (element.id == id) {
       personalSeekTeam = element;
     }
   });
 
-  if(PersonalSeekTeam == null){
-    var res = await ApiProvider().post('/Matching/Select/PersonalSeekTeam', jsonEncode({
-      "id" : id
-    }));
+  if (personalSeekTeam == null) {
+    var res = await ApiProvider().post('/Matching/Select/PersonalSeekTeam', jsonEncode({"id": id}));
     if (res == null || res['IsShow'] == false) return Future.value(null);
 
     personalSeekTeam = PersonalSeekTeam.fromJson(res);
-    globalPersonalSeekTeamList.add(personalSeekTeam);
+    globalPersonalSeekTeamList.add(personalSeekTeam!);
 
     return Future.value(personalSeekTeam);
   } else {

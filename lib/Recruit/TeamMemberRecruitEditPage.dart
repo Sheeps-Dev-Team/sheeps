@@ -24,10 +24,10 @@ import 'RecruitDetailPage.dart';
 
 class TeamMemberRecruitEditPage extends StatefulWidget {
   final Team team;
-  final TeamMemberRecruit teamMemberRecruit;
+  final TeamMemberRecruit? teamMemberRecruit;
   final bool isMyPageRecruit;
 
-  const TeamMemberRecruitEditPage({Key key, @required this.team, this.teamMemberRecruit, this.isMyPageRecruit = false}) : super(key: key);
+  const TeamMemberRecruitEditPage({Key? key, required this.team, this.teamMemberRecruit, this.isMyPageRecruit = false}) : super(key: key);
 
   @override
   _TeamMemberRecruitEditPageState createState() => _TeamMemberRecruitEditPageState();
@@ -54,7 +54,7 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
     super.initState();
     if (widget.teamMemberRecruit != null) {
       isEdit = true;
-      controller.editLoading(widget.teamMemberRecruit);
+      controller.editLoading(widget.teamMemberRecruit!);
       titleController.text = controller.title.value;
       infoController.text = controller.recruitInfo.value;
       roleContentsController.text = controller.roleContents.value;
@@ -120,7 +120,7 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
 
     recruitList.forEach((e) {
       if (widget.teamMemberRecruit != null) {
-        if (e.id != widget.teamMemberRecruit.id) if (setPeriodState(e.recruitPeriodEnd) != '모집마감') countRecruit++;
+        if (e.id != widget.teamMemberRecruit!.id) if (setPeriodState(e.recruitPeriodEnd) != '모집마감') countRecruit++;
       } else {
         if (setPeriodState(e.recruitPeriodEnd) != '모집마감') countRecruit++;
       }
@@ -427,7 +427,7 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
                                   primarySwatch: Colors.grey,
                                 ),
                               ),
-                              child: child,
+                              child: child ?? const SizedBox.shrink(),
                             );
                           },
                         ).then((value) {
@@ -490,7 +490,7 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
                                       primarySwatch: Colors.grey,
                                     ),
                                   ),
-                                  child: child,
+                                  child: child ?? const SizedBox.shrink(),
                                 );
                               },
                             ).then((value) {
@@ -645,7 +645,7 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
               SizedBox(height: 12 * sizeUnit),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => SelectField()).then((value) {
+                  Get.to(() => SelectField())?.then((value) {
                     if (value != null) {
                       controller.recruitJob = value[0];
                       controller.recruitPart.value = value[1];
@@ -1236,8 +1236,8 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
         await ApiProvider().post(
             '/Matching/Update/TeamMemberRecruit',
             jsonEncode({
-              'id': widget.teamMemberRecruit.id,
-              'teamID': widget.teamMemberRecruit.teamId,
+              'id': widget.teamMemberRecruit!.id,
+              'teamID': widget.teamMemberRecruit!.teamId,
               'title': controller.title.value + '||' + widget.team.name,
               'recruitPeriodStart': controller.recruitPeriodStart.value.replaceAll('년 ', '').replaceAll('월 ', '').replaceAll('일', '') + '000000',
               'recruitPeriodEnd': controller.recruitPeriodEnd.value == '상시모집' ? '상시모집' : controller.recruitPeriodEnd.value.replaceAll('년 ', '').replaceAll('월 ', '').replaceAll('일', '') + '235959',
@@ -1263,8 +1263,8 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
             }));
 
         TeamMemberRecruit modifiedTeamMemberRecruit = TeamMemberRecruit(
-          id: widget.teamMemberRecruit.id,
-          teamId: widget.teamMemberRecruit.teamId,
+          id: widget.teamMemberRecruit!.id,
+          teamId: widget.teamMemberRecruit!.teamId,
           title: controller.title.value + '||' + widget.team.name,
           recruitPeriodStart: controller.recruitPeriodStart.value.replaceAll('년 ', '').replaceAll('월 ', '').replaceAll('일', '') + '000000',
           recruitPeriodEnd: controller.recruitPeriodEnd.value == '상시모집' ? '상시모집' : controller.recruitPeriodEnd.value.replaceAll('년 ', '').replaceAll('월 ', '').replaceAll('일', '') + '235959',
@@ -1287,6 +1287,8 @@ class _TeamMemberRecruitEditPageState extends State<TeamMemberRecruitEditPage> {
           workTime: workTime,
           welfare: welfare,
           detailWorkCondition: controlSpace(controller.detailWorkCondition.value),
+          isShow: widget.teamMemberRecruit!.isShow,
+          ordinary: widget.teamMemberRecruit!.ordinary,
           createdAt: getYearMonthDayByDate(),
           updateAt: getYearMonthDayByDate(),
         );

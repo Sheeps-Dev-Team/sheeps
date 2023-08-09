@@ -21,7 +21,6 @@ class RecruitController extends GetxController {
   final Curve curve = Curves.fastOutSlowIn;
 
   bool isRecruit = true; // 리쿠르트 상태
-  Team teamData; // 팀 데이터
 
   final List<String> recruitCategoryList = ['전체', '팀・스타트업', '지원사업', '공모전', '소모임'];
   final List<String> seekCategoryList = ['전체', '개발', '경영', '디자인', '마케팅', '영업'];
@@ -67,9 +66,9 @@ class RecruitController extends GetxController {
   bool searchIconColorForSeek = false; // 검색창 색 적용 여부
 
   // 리쿠르트 포스트 카드 데이터 변수
-  int id;
-  String title;
-  String name;
+  late int id;
+  late String title;
+  late String name;
   List<String> firstWrapList = [];
   List<String> secondWrapList = [];
   String state = '';
@@ -78,7 +77,7 @@ class RecruitController extends GetxController {
   bool isLike = false;
 
   // 리쿠르트 포스트 카드 데이터 set 함수
-  void postCardDataSet({@required data, @required bool isRecruit}) {
+  void postCardDataSet({required data, required bool isRecruit}) {
     firstWrapList.clear();
     secondWrapList.clear();
 
@@ -327,7 +326,7 @@ class RecruitController extends GetxController {
   }
 
   // 새로고침
-  Future<void> refreshData({BuildContext context, String value}) async {
+  Future<void> refreshData({required BuildContext context, required String value}) async {
     if (isRecruit) {
       if (FilterController.to.recruitFiltered) {
         await FilterController.to.filterEvent(isRecruit, tabAlignForRecruit.value, tabAlignForSeek.value); // 필터가 켜져 있을 때

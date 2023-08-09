@@ -20,7 +20,7 @@ import 'package:sheeps_app/userdata/User.dart';
 class ApplicantViewPage extends StatefulWidget {
   final bool teamView;
 
-  const ApplicantViewPage({Key key, this.teamView = false}) : super(key: key);
+  const ApplicantViewPage({Key? key, this.teamView = false}) : super(key: key);
 
   @override
   _ApplicantViewPageState createState() => _ApplicantViewPageState();
@@ -77,7 +77,7 @@ class _ApplicantViewPageState extends State<ApplicantViewPage> {
                                             GlobalProfile.teamProfile[index] = resTeam;
                                           }
 
-                                          Get.to(() => DetailTeamProfile(index: index, team: resTeam, proposedTeam: true)).then((value) => setState(() {}));
+                                          Get.to(() => DetailTeamProfile(index: index, team: resTeam, proposedTeam: true))?.then((value) => setState(() {}));
                                         },
                                       );
                                     } else {
@@ -99,7 +99,7 @@ class _ApplicantViewPageState extends State<ApplicantViewPage> {
                                             GlobalProfile.personalProfile[index] = user; //개인 프로필 바뀐 데이터로 전역 데이터 세팅
                                           }
 
-                                          Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.Applicant)).then((value) => setState(() {}));
+                                          Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.Applicant))?.then((value) => setState(() {}));
                                         },
                                       );
                                     }

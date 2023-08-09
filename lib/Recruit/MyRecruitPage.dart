@@ -13,7 +13,7 @@ class MyRecruitPage extends StatelessWidget {
   final List<PersonalSeekTeam> mySeekList;
   final bool isRecruit;
 
-  const MyRecruitPage({Key key, this.myRecruitList, this.mySeekList, @required this.isRecruit}) : super(key: key);
+  const MyRecruitPage({Key? key, this.myRecruitList = const [], this.mySeekList = const [], required this.isRecruit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

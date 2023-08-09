@@ -200,12 +200,12 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
     _profileStatus = widget.profileStatus;
     // 내 프로필이 들어왔나 확인
     if (widget.user != null) {
-      if (widget.user.userID == GlobalProfile.loggedInUser!.userID) {
+      if (widget.user!.userID == GlobalProfile.loggedInUser!.userID) {
         _profileStatus = PROFILE_STATUS.MyProfile;
       }
     }
     // profileStatus 에 따라 _user 변경
-    _user = _profileStatus == PROFILE_STATUS.MyProfile ? GlobalProfile.loggedInUser! : widget.user;
+    _user = _profileStatus == PROFILE_STATUS.MyProfile ? GlobalProfile.loggedInUser! : widget.user!;
 
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);

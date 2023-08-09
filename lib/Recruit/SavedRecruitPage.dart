@@ -14,7 +14,7 @@ class SavedRecruitPage extends StatefulWidget {
   final List<TeamMemberRecruit> recruitList;
   final List<PersonalSeekTeam> seekList;
 
-  const SavedRecruitPage({Key key, @required this.recruitList, @required this.seekList}) : super(key: key);
+  const SavedRecruitPage({Key? key, required this.recruitList, required this.seekList}) : super(key: key);
 
   @override
   _SavedRecruitPageState createState() => _SavedRecruitPageState();
@@ -124,7 +124,7 @@ class _SavedRecruitPageState extends State<SavedRecruitPage> {
                   isRecruit: isRecruit,
                   data: resultList[index],
                   dataList: resultList,
-                )).then(
+                ))?.then(
               (value) => setState(() {}),
             ),
             controller: controller,

@@ -20,10 +20,10 @@ import 'Controller/PersonalSeekTeamsEditController.dart';
 import 'RecruitDetailPage.dart';
 
 class PersonalSeekTeamsEditPage extends StatefulWidget {
-  PersonalSeekTeam personalSeekTeam; //수정일때만 받음
+  final PersonalSeekTeam? personalSeekTeam; //수정일때만 받음
   final bool isMyPagePersonalSeek; // 마이페이지에서 왔으면 true
 
-  PersonalSeekTeamsEditPage({Key key, this.personalSeekTeam, this.isMyPagePersonalSeek = false}) : super(key: key);
+  PersonalSeekTeamsEditPage({Key? key, this.personalSeekTeam, this.isMyPagePersonalSeek = false}) : super(key: key);
 
   @override
   _PersonalSeekTeamsEditPageState createState() => _PersonalSeekTeamsEditPageState();
@@ -49,7 +49,7 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
     controller.loading();
     if (widget.personalSeekTeam != null) {
       isEdit = true;
-      controller.editLoading(widget.personalSeekTeam);
+      controller.editLoading(widget.personalSeekTeam!);
       titleController.text = controller.title.value;
       infoController.text = controller.selfInfo.value;
       abilityContentsController.text = controller.abilityContents.value;
@@ -101,7 +101,7 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
     var res = await ApiProvider().post(
         '/Matching/Select/PersonalSeekTeamByUserID',
         jsonEncode({
-          'userID': GlobalProfile.loggedInUser.userID,
+          'userID': GlobalProfile.loggedInUser!.userID,
         }));
 
     if (res != null) {
@@ -113,7 +113,7 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
 
     seekList.forEach((e) {
       if(widget.personalSeekTeam != null){
-        if(e.id != widget.personalSeekTeam.id) if (e.seekingState == 1) countRecruit++;
+        if(e.id != widget.personalSeekTeam!.id) if (e.seekingState == 1) countRecruit++;
       }else{
         if (e.seekingState == 1) countRecruit++;
       }
@@ -372,9 +372,9 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
               SizedBox(height: 8 * sizeUnit),
               GestureDetector(
                 onTap: () {
-                  if (GlobalProfile.loggedInUser.information != null) {
-                    infoController.text = GlobalProfile.loggedInUser.information;
-                    controller.selfInfo.value = GlobalProfile.loggedInUser.information;
+                  if (GlobalProfile.loggedInUser!.information != null) {
+                    infoController.text = GlobalProfile.loggedInUser!.information;
+                    controller.selfInfo.value = GlobalProfile.loggedInUser!.information;
                   }
                 },
                 child: Container(
@@ -1109,8 +1109,8 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
   }
 
   Widget linkItem({
-    @required String title,
-    @required RxString linkUrl,
+    required String title,
+    required RxString linkUrl,
     Color color = sheepsColorBlue,
   }) {
     return GestureDetector(
@@ -1279,9 +1279,9 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
         await ApiProvider().post(
             '/Matching/Update/PersonalSeekTeam',
             jsonEncode({
-              'id': widget.personalSeekTeam.id,
-              "userID": widget.personalSeekTeam.userId,
-              "title": controller.title.value + '||' + GlobalProfile.loggedInUser.name,
+              'id': widget.personalSeekTeam!.id,
+              "userID": widget.personalSeekTeam!.userId,
+              "title": controller.title.value + '||' + GlobalProfile.loggedInUser!.name,
               'seekingState': controller.seekingState.value ? 1 : 0,
               'selfInfo': controlSpace(controller.selfInfo.value),
               'category': category,
@@ -1296,14 +1296,14 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
               'workTime': workTime,
               'welfare': welfare,
               'needWorkConditionContents': controlSpace(controller.needWorkConditionContents.value),
-              'location': GlobalProfile.loggedInUser.location,
-              'subLocation': GlobalProfile.loggedInUser.subLocation,
+              'location': GlobalProfile.loggedInUser!.location,
+              'subLocation': GlobalProfile.loggedInUser!.subLocation,
             }));
 
         PersonalSeekTeam modifiedPersonalSeekTeam = PersonalSeekTeam(
-          id: widget.personalSeekTeam.id,
-          userId: widget.personalSeekTeam.userId,
-          title: controller.title.value + '||' + GlobalProfile.loggedInUser.name,
+          id: widget.personalSeekTeam!.id,
+          userId: widget.personalSeekTeam!.userId,
+          title: controller.title.value + '||' + GlobalProfile.loggedInUser!.name,
           seekingState: controller.seekingState.value ? 1 : 0,
           selfInfo: controlSpace(controller.selfInfo.value),
           category: category,
@@ -1318,8 +1318,9 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
           workTime: workTime,
           welfare: welfare,
           needWorkConditionContents: controlSpace(controller.needWorkConditionContents.value),
-          location: GlobalProfile.loggedInUser.location,
-          subLocation: GlobalProfile.loggedInUser.subLocation,
+          location: GlobalProfile.loggedInUser!.location,
+          subLocation: GlobalProfile.loggedInUser!.subLocation,
+          isShow: widget.personalSeekTeam!.isShow,
           createdAt: getYearMonthDayByDate(),
           updateAt: getYearMonthDayByDate(),
         );
@@ -1349,8 +1350,8 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
         var res = await ApiProvider().post(
             '/Matching/Insert/PersonalSeekTeam',
             jsonEncode({
-              "userID": GlobalProfile.loggedInUser.userID,
-              "title": controller.title.value + '||' + GlobalProfile.loggedInUser.name,
+              "userID": GlobalProfile.loggedInUser!.userID,
+              "title": controller.title.value + '||' + GlobalProfile.loggedInUser!.name,
               'seekingState': controller.seekingState.value ? 1 : 0,
               'selfInfo': controlSpace(controller.selfInfo.value),
               'category': category,
@@ -1365,8 +1366,8 @@ class _PersonalSeekTeamsEditPageState extends State<PersonalSeekTeamsEditPage> {
               'workTime': workTime,
               'welfare': welfare,
               'needWorkConditionContents': controlSpace(controller.needWorkConditionContents.value),
-              'location': GlobalProfile.loggedInUser.location,
-              'subLocation': GlobalProfile.loggedInUser.subLocation,
+              'location': GlobalProfile.loggedInUser!.location,
+              'subLocation': GlobalProfile.loggedInUser!.subLocation,
             }));
 
         PersonalSeekTeam newPersonalSeekTeam = PersonalSeekTeam.fromJson(res);

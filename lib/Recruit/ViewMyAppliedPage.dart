@@ -21,7 +21,7 @@ class ViewMyAppliedPage extends StatefulWidget {
   final List<Team> teamList;
   final List<UserData> userList;
 
-  const ViewMyAppliedPage({Key key, this.isRecruit = true, this.teamList, this.userList}) : super(key: key);
+  const ViewMyAppliedPage({Key? key, this.isRecruit = true, this.teamList = const [], this.userList = const []}) : super(key: key);
 
   @override
   _ViewMyAppliedPageState createState() => _ViewMyAppliedPageState();
@@ -82,7 +82,7 @@ class _ViewMyAppliedPageState extends State<ViewMyAppliedPage> {
                                           GlobalProfile.teamProfile[index] = resTeam;
                                         }
 
-                                        Get.to(() => DetailTeamProfile(index: index, team: resTeam)).then((value) => setState(() {}));
+                                        Get.to(() => DetailTeamProfile(index: index, team: resTeam))?.then((value) => setState(() {}));
                                       },
                                     );
                                   } else {
@@ -102,7 +102,7 @@ class _ViewMyAppliedPageState extends State<ViewMyAppliedPage> {
                                           GlobalProfile.personalProfile[index] = user; //개인 프로필 바뀐 데이터로 전역 데이터 세팅
                                         }
 
-                                        Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.OtherProfile)).then((value) => setState(() {}));
+                                        Get.to(() => DetailProfile(index: 0, user: user, profileStatus: PROFILE_STATUS.OtherProfile))?.then((value) => setState(() {}));
                                       },
                                     );
                                   }

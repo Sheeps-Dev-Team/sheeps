@@ -8,9 +8,15 @@ class RecruitLikes {
   String createdAt;
   String updatedAt;
 
-  RecruitLikes({this.updatedAt,this.id,this.createdAt,this.targetId,this.userId});
+  RecruitLikes({
+    required this.updatedAt,
+    required this.id,
+    required this.createdAt,
+    required this.targetId,
+    required this.userId,
+  });
 
-  factory RecruitLikes.fromJson(Map<String, dynamic> json){
+  factory RecruitLikes.fromJson(Map<String, dynamic> json) {
     return RecruitLikes(
       id: json['id'] as int,
       userId: json['UserID'] as int,
@@ -30,9 +36,17 @@ class RecruitInvite {
   String createdAt;
   String updatedAt;
 
-  RecruitInvite({this.updatedAt,this.id,this.createdAt,this.targetID, this.inviteID, this.response, this.index});
+  RecruitInvite({
+    required this.updatedAt,
+    required this.id,
+    required this.createdAt,
+    required this.targetID,
+    required this.inviteID,
+    required this.response,
+    required this.index,
+  });
 
-  factory RecruitInvite.fromJson(Map<String, dynamic> json, {bool isUserID = true}){
+  factory RecruitInvite.fromJson(Map<String, dynamic> json, {bool isUserID = true}) {
     return RecruitInvite(
       id: json['id'] as int,
       targetID: isUserID ? json['UserID'] as int : json['TeamID'] as int,
@@ -48,33 +62,31 @@ class RecruitInvite {
 List<RecruitLikes> recruitLikesList = []; // 팀원 모집 좋아요 리스트
 List<RecruitLikes> personalSeekLikesList = []; // 팀 찾기 좋아요 리스트
 
-class RecruitInviteController extends GetxController{
+class RecruitInviteController extends GetxController {
   static get to => Get.find();
 
-  RxList currRecritInviteList = [RecruitInvite()].obs;
-  RecruitInvite currRecruitInvite;
+  RxList currRecritInviteList = [].obs;
+  late RecruitInvite currRecruitInvite;
 
   RecruitInvite get getCurrRecruitInvite => currRecruitInvite;
 
-  void setCurrRecruitInvite(int index, {RecruitInvite recruitInvite}){
-    if(recruitInvite == null){
+  void setCurrRecruitInvite(int index, {RecruitInvite? recruitInvite}) {
+    if (recruitInvite == null) {
       currRecruitInvite = currRecritInviteList[index];
-    }else{
+    } else {
       currRecruitInvite = recruitInvite;
     }
   }
 
   void removeRecruitInviteCurr(int id) {
-
     currRecritInviteList.removeWhere((element) => element.id == id);
 
     update();
   }
 
-  void responseRecruitInviteCurr(int id, dynamic recruit){
-
+  void responseRecruitInviteCurr(int id, dynamic recruit) {
     currRecritInviteList.forEach((element) {
-      if(element.id == id){
+      if (element.id == id) {
         element = recruit;
       }
     });
