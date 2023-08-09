@@ -14,7 +14,7 @@ import 'package:sheeps_app/config/ListForProfileModify.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
 
 class SelectArea extends StatefulWidget {
-  SelectArea({Key key}) : super(key: key);
+  SelectArea({Key? key}) : super(key: key);
 
   @override
   _SelectAreaState createState() => _SelectAreaState();

@@ -516,10 +516,10 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
                                             spacing: 12 * sizeUnit,
                                             runSpacing: 8 * sizeUnit,
                                             children: [
-                                              if (modifyTeam.teamLink.siteUrl.isNotEmpty) linkItem(title: 'Site', linkUrl: modifyTeam.teamLink.siteUrl),
-                                              if (modifyTeam.teamLink.recruitUrl.isNotEmpty) linkItem(title: '채용페이지', linkUrl: modifyTeam.teamLink.recruitUrl),
-                                              if (modifyTeam.teamLink.instagramUrl.isNotEmpty) linkItem(title: 'Instagram', linkUrl: modifyTeam.teamLink.instagramUrl, color: Color(0xFFDF3666)),
-                                              if (modifyTeam.teamLink.facebookUrl.isNotEmpty) linkItem(title: 'Facebook', linkUrl: modifyTeam.teamLink.facebookUrl, color: Color(0xFF006AEA)),
+                                              if (modifyTeam.teamLink!.siteUrl.isNotEmpty) linkItem(title: 'Site', linkUrl: modifyTeam.teamLink!.siteUrl),
+                                              if (modifyTeam.teamLink!.recruitUrl.isNotEmpty) linkItem(title: '채용페이지', linkUrl: modifyTeam.teamLink!.recruitUrl),
+                                              if (modifyTeam.teamLink!.instagramUrl.isNotEmpty) linkItem(title: 'Instagram', linkUrl: modifyTeam.teamLink!.instagramUrl, color: Color(0xFFDF3666)),
+                                              if (modifyTeam.teamLink!.facebookUrl.isNotEmpty) linkItem(title: 'Facebook', linkUrl: modifyTeam.teamLink!.facebookUrl, color: Color(0xFF006AEA)),
                                             ],
                                           ),
                                         ] else ...[

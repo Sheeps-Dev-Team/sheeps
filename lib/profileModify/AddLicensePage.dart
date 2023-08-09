@@ -30,7 +30,7 @@ class _AddLicenseState extends State<AddLicensePage> {
 
   String date = '';
 
-  File authFile;
+  File? authFile;
 
   @override
   void dispose() {
@@ -121,7 +121,7 @@ class _AddLicenseState extends State<AddLicensePage> {
                                                 primarySwatch: Colors.grey,
                                               ),
                                             ),
-                                            child: child,
+                                            child: child ?? const SizedBox.shrink(),
                                           );
                                         },
                                       ).then((value) {
@@ -152,7 +152,7 @@ class _AddLicenseState extends State<AddLicensePage> {
                                   GestureDetector(
                                     onTap: () {
                                       unFocus(context);
-                                      Get.to(() => AuthFileUploadPage(appBarTitle: '자격증 증빙 자료', authFile: authFile)).then((value) {
+                                      Get.to(() => AuthFileUploadPage(appBarTitle: '자격증 증빙 자료', authFile: authFile))?.then((value) {
                                         if (value != null) {
                                           setState(() {
                                             authFile = value[0];
@@ -175,7 +175,7 @@ class _AddLicenseState extends State<AddLicensePage> {
                                             child: Container(
                                               width: 284 * sizeUnit,
                                               child: Text(
-                                                authFile != null ? authFile.path.substring(authFile.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
+                                                authFile != null ? authFile!.path.substring(authFile!.path.lastIndexOf('\/') + 1) : '증빙 자료는 1개의 업로드만 가능해요',
                                                 style: SheepsTextStyle.hint4Profile().copyWith(color: authFile != null ? sheepsColorBlue : sheepsColorGrey),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -224,7 +224,7 @@ class _AddLicenseState extends State<AddLicensePage> {
                                 controller.licenseList.add(UserLicense(
                                   id: -1,
                                   contents: contents,
-                                  imgUrl: authFile.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
+                                  imgUrl: authFile!.path, //우선 파일경로 저장. 이후 수정 완료시 처리. id -1으로 확인
                                   auth: 2,
                                 ));
                                 Get.back();

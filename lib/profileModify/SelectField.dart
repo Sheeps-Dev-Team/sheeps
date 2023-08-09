@@ -13,7 +13,7 @@ import 'package:sheeps_app/config/ListForProfileModify.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
 
 class SelectField extends StatefulWidget {
-  SelectField({Key key}) : super(key: key);
+  SelectField({Key? key}) : super(key: key);
 
   @override
   _SelectFieldState createState() => _SelectFieldState();

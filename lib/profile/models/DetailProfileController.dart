@@ -76,7 +76,7 @@ class DetailProfileController {
     });
 
     // 이력 링크가 하나도 없으면
-    if (team.teamLink.siteUrl.isEmpty && team.teamLink.recruitUrl.isEmpty && team.teamLink.instagramUrl.isEmpty && team.teamLink.facebookUrl.isEmpty) showTeamUrl = false;
+    if (team.teamLink == null || (team.teamLink!.siteUrl.isEmpty && team.teamLink!.recruitUrl.isEmpty && team.teamLink!.instagramUrl.isEmpty && team.teamLink!.facebookUrl.isEmpty)) showTeamUrl = false;
 
     // 팀 멤버인지 체크
     // print(team.leaderID);
