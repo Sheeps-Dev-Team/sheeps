@@ -82,7 +82,7 @@ dependencies:
   socket_io_client: ^1.0.0 #소켓
   sign_in_with_apple: ^3.0.0 #애플 로그인
   app_tracking_transparency: ^2.0.4 #아이폰 앱 추적관련
-  google_sign_in: ^5.0.2 #구글 로그인
+  google_sign_in: ^6.1.4
 de_dependencies:
   flutter_test:
     sdk: flutter
