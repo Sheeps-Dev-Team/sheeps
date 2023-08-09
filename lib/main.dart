@@ -382,7 +382,7 @@ class _MyAppState extends State<MyApp> {
       child: GetMaterialApp(
         defaultTransition: Transition.cupertino,
         debugShowCheckedModeBanner: false,
-        initialRoute: '/SplashScreen',
+        initialRoute: '/LoginSelectPage',
         routes: {
           //'/': (BuildContext context) => DashBoardMain(),
           '/LoginSelectPage': (BuildContext context) => LoginSelectPage(),

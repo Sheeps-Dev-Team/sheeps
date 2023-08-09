@@ -268,7 +268,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    SocketProvider provider = SocketProvider.to;
+    SocketProvider provider = Get.put(SocketProvider());
     provider.setLocalNotification(LocalNotification());
     provider.setChatGlobal(Get.put(ChatGlobal()));
 
