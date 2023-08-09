@@ -76,7 +76,7 @@ class TeamPerformances {
 
 class TeamLink {
   int id = -1;
-  int userID = -1;
+  int teamID = -1;
   String siteUrl = '';
   String recruitUrl = '';
   String instagramUrl = '';
@@ -84,7 +84,7 @@ class TeamLink {
 
   TeamLink({
     this.id = -1,
-    this.userID = -1,
+    this.teamID = -1,
     this.siteUrl = '',
     this.recruitUrl = '',
     this.instagramUrl = '',
@@ -93,8 +93,8 @@ class TeamLink {
 
   factory TeamLink.fromJson(Map<String, dynamic> json) {
     return TeamLink(
-      id: json['id'] as int,
-      userID: json['UserID'] as int,
+      id: json['id']  == null ? 0 : json['id'] as int,
+      teamID: json['TeamID'] as int,
       siteUrl: json['Site'] as String,
       recruitUrl: json['Recruit'] as String,
       instagramUrl: json['Instagram'] as String,
@@ -105,7 +105,7 @@ class TeamLink {
 
 class TeamProfileImg {
   int id;
-  int userID;
+  int teamID;
   int index;
   String imgUrl;
   String createdAt;
@@ -113,7 +113,7 @@ class TeamProfileImg {
 
   TeamProfileImg({
     this.id = -1,
-    this.userID = -1,
+    this.teamID = -1,
     this.index = -1,
     this.imgUrl = '',
     this.createdAt = '',
@@ -123,7 +123,7 @@ class TeamProfileImg {
   factory TeamProfileImg.fromJson(Map<String, dynamic> json) {
     return TeamProfileImg(
       id: json['id'] as int,
-      userID: json['UserID'] as int,
+      teamID: json['TeamID'] as int,
       index: json['Index'] as int,
       imgUrl: ApiProvider().getUrl + json['ImgUrl'],
       createdAt: json['createdAt'] as String,
