@@ -12,7 +12,7 @@ import 'package:sheeps_app/userdata/GlobalProfile.dart';
 enum Status { LOADING, COMPLETED, ERROR }
 
 class ApiProvider {
-  final String _baseUrl = myReleaseMode == true ? "http://211.34.221.66:" : "http://211.34.221.66:"; //서버 붙는 위치
+  final String _baseUrl = myReleaseMode == true ? "http://192.168.2.168:" : "http://192.168.2.168:"; //서버 붙는 위치
   final String port = myReleaseMode == true ? "50105" : "50105";                       //기본 포트 50004~50007 LoadBalencer
   final String imgPort = myReleaseMode == true ? "50105" : "50105";                    //이미지 포트
   final String chatPort = myReleaseMode == true ? "50106" : "50106";                   //채팅 포트
