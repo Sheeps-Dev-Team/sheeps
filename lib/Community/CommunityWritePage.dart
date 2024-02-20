@@ -101,7 +101,8 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
   }
 
   void backFunc() {
-    showEditCancelDialog(okButtonColor: sheepsColorBlue);
+    //showEditCancelDialog(okButtonColor: sheepsColorBlue);
+    Get.back();
   }
 
   @override
@@ -226,159 +227,159 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                                       controller.checkFilledRequired();
                                     },
                                   )),
-                              SizedBox(height: 8 * sizeUnit),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      text: '사진',
-                                    ),
-                                    style: SheepsTextStyle.h3(),
-                                  ),
-                                  SizedBox(width: 8 * sizeUnit),
-                                  Text('최대 3장까지 등록 가능해요.', style: SheepsTextStyle.info2()),
-                                ],
-                              ),
-                              SizedBox(height: 12 * sizeUnit),
-                              Container(
-                                height: 110 * sizeUnit,
-                                child: Obx(() => ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      cacheExtent: 3,
-                                      reverse: false,
-                                      shrinkWrap: true,
-                                      itemCount: controller.imgUrlFilePathList.length != 3 ? controller.imgUrlFilePathList.length + 1 : 3,
-                                      itemBuilder: (context, index) => Card(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16 * sizeUnit)),
-                                        elevation: 0,
-                                        child: LayoutBuilder(builder: (context, constraints) {
-                                          if (index == controller.imgUrlFilePathList.length) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                SheepsBottomSheetForImg(
-                                                  context,
-                                                  cameraFunc: () {
-                                                    if (isFinishFileLoading) {
-                                                      int checkAddFile = _filesController.filesList.length;
-                                                      _filesController.getImageCamera().then((value) {
-                                                        if (checkAddFile != _filesController.filesList.length) {
-                                                          controller.imgUrlFilePathList.add(_filesController.filesList[_filesController.filesList.length - 1].path);
-                                                          controller.isFilePathList.add(true);
-                                                        }
-                                                      }); // 카메라에서 사진 가져오기
-                                                    }
-                                                  },
-                                                  galleryFunc: () {
-                                                    if (isFinishFileLoading) {
-                                                      int checkAddFile = _filesController.filesList.length;
-                                                      _filesController.getImageGallery().then((value) {
-                                                        if (checkAddFile != _filesController.filesList.length) {
-                                                          controller.imgUrlFilePathList.add(_filesController.filesList[_filesController.filesList.length - 1].path);
-                                                          controller.isFilePathList.add(true);
-                                                        }
-                                                      }); // 갤러리에서 사진 가져오기
-                                                    }
-                                                  },
-                                                );
-                                              },
-                                              child: Stack(
-                                                alignment: Alignment.bottomRight,
-                                                children: [
-                                                  DottedBorder(
-                                                    borderType: BorderType.RRect,
-                                                    dashPattern: [6.1 * sizeUnit, 6.1 * sizeUnit],
-                                                    strokeWidth: 2 * sizeUnit,
-                                                    radius: Radius.circular(16 * sizeUnit),
-                                                    color: sheepsColorGrey,
-                                                    child: Container(
-                                                      width: 98 * sizeUnit,
-                                                      height: 98 * sizeUnit,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
-                                                      ),
-                                                      child: Center(
-                                                        child: SvgPicture.asset(
-                                                          svgSheepsBasicProfileImage,
-                                                          width: 60 * sizeUnit,
-                                                          height: 55 * sizeUnit,
-                                                          color: sheepsColorGrey,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    right: 1 * sizeUnit,
-                                                    bottom: 1 * sizeUnit,
-                                                    child: Container(
-                                                      child: SvgPicture.asset(
-                                                        svgPlusInCircle,
-                                                        width: 34 * sizeUnit,
-                                                        height: 34 * sizeUnit,
-                                                        color: sheepsColorGreen,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                          return Stack(
-                                            alignment: Alignment.bottomRight,
-                                            children: [
-                                              DottedBorder(
-                                                borderType: BorderType.RRect,
-                                                dashPattern: [6 * sizeUnit, 6 * sizeUnit],
-                                                strokeWidth: 2 * sizeUnit,
-                                                radius: Radius.circular(16 * sizeUnit),
-                                                color: sheepsColorGrey,
-                                                padding: EdgeInsets.zero,
-                                                child: Container(
-                                                  width: 104 * sizeUnit,
-                                                  height: 104 * sizeUnit,
-                                                  decoration: BoxDecoration(
-                                                    color: sheepsColorLightGrey,
-                                                    borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius: BorderRadius.circular(16 * sizeUnit),
-                                                    child: FittedBox(
-                                                      child: controller.isFilePathList[index]
-                                                          ? Image(image: FileImage(_filesController.filesList[index]))
-                                                          : getExtendedImage(controller.imgUrlFilePathList[index], 60, extendedController),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                right: 1 * sizeUnit,
-                                                bottom: 1 * sizeUnit,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    if (isFinishFileLoading) {
-                                                      controller.imgUrlFilePathList.removeAt(index);
-                                                      controller.isFilePathList.removeAt(index);
-                                                      _filesController.removeFile(targetFile: _filesController.filesList[index]);
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    child: SvgPicture.asset(
-                                                      svgXInCircle,
-                                                      width: 34 * sizeUnit,
-                                                      height: 34 * sizeUnit,
-                                                      color: sheepsColorGrey,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }),
-                                      ),
-                                    )),
-                              ),
+                              // SizedBox(height: 8 * sizeUnit),
+                              // Row(
+                              //   crossAxisAlignment: CrossAxisAlignment.end,
+                              //   children: [
+                              //     Text.rich(
+                              //       TextSpan(
+                              //         text: '사진',
+                              //       ),
+                              //       style: SheepsTextStyle.h3(),
+                              //     ),
+                              //     SizedBox(width: 8 * sizeUnit),
+                              //     Text('최대 3장까지 등록 가능해요.', style: SheepsTextStyle.info2()),
+                              //   ],
+                              // ),
+                              // SizedBox(height: 12 * sizeUnit),
+                              // Container(
+                              //   height: 110 * sizeUnit,
+                              //   child: Obx(() => ListView.builder(
+                              //         scrollDirection: Axis.horizontal,
+                              //         cacheExtent: 3,
+                              //         reverse: false,
+                              //         shrinkWrap: true,
+                              //         itemCount: controller.imgUrlFilePathList.length != 3 ? controller.imgUrlFilePathList.length + 1 : 3,
+                              //         itemBuilder: (context, index) => Card(
+                              //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16 * sizeUnit)),
+                              //           elevation: 0,
+                              //           child: LayoutBuilder(builder: (context, constraints) {
+                              //             if (index == controller.imgUrlFilePathList.length) {
+                              //               return GestureDetector(
+                              //                 onTap: () {
+                              //                   SheepsBottomSheetForImg(
+                              //                     context,
+                              //                     cameraFunc: () {
+                              //                       if (isFinishFileLoading) {
+                              //                         int checkAddFile = _filesController.filesList.length;
+                              //                         _filesController.getImageCamera().then((value) {
+                              //                           if (checkAddFile != _filesController.filesList.length) {
+                              //                             controller.imgUrlFilePathList.add(_filesController.filesList[_filesController.filesList.length - 1].path);
+                              //                             controller.isFilePathList.add(true);
+                              //                           }
+                              //                         }); // 카메라에서 사진 가져오기
+                              //                       }
+                              //                     },
+                              //                     galleryFunc: () {
+                              //                       if (isFinishFileLoading) {
+                              //                         int checkAddFile = _filesController.filesList.length;
+                              //                         _filesController.getImageGallery().then((value) {
+                              //                           if (checkAddFile != _filesController.filesList.length) {
+                              //                             controller.imgUrlFilePathList.add(_filesController.filesList[_filesController.filesList.length - 1].path);
+                              //                             controller.isFilePathList.add(true);
+                              //                           }
+                              //                         }); // 갤러리에서 사진 가져오기
+                              //                       }
+                              //                     },
+                              //                   );
+                              //                 },
+                              //                 child: Stack(
+                              //                   alignment: Alignment.bottomRight,
+                              //                   children: [
+                              //                     DottedBorder(
+                              //                       borderType: BorderType.RRect,
+                              //                       dashPattern: [6.1 * sizeUnit, 6.1 * sizeUnit],
+                              //                       strokeWidth: 2 * sizeUnit,
+                              //                       radius: Radius.circular(16 * sizeUnit),
+                              //                       color: sheepsColorGrey,
+                              //                       child: Container(
+                              //                         width: 98 * sizeUnit,
+                              //                         height: 98 * sizeUnit,
+                              //                         decoration: BoxDecoration(
+                              //                           color: Colors.white,
+                              //                           borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
+                              //                         ),
+                              //                         child: Center(
+                              //                           child: SvgPicture.asset(
+                              //                             svgSheepsBasicProfileImage,
+                              //                             width: 60 * sizeUnit,
+                              //                             height: 55 * sizeUnit,
+                              //                             color: sheepsColorGrey,
+                              //                           ),
+                              //                         ),
+                              //                       ),
+                              //                     ),
+                              //                     Positioned(
+                              //                       right: 1 * sizeUnit,
+                              //                       bottom: 1 * sizeUnit,
+                              //                       child: Container(
+                              //                         child: SvgPicture.asset(
+                              //                           svgPlusInCircle,
+                              //                           width: 34 * sizeUnit,
+                              //                           height: 34 * sizeUnit,
+                              //                           color: sheepsColorGreen,
+                              //                         ),
+                              //                       ),
+                              //                     ),
+                              //                   ],
+                              //                 ),
+                              //               );
+                              //             }
+                              //             return Stack(
+                              //               alignment: Alignment.bottomRight,
+                              //               children: [
+                              //                 DottedBorder(
+                              //                   borderType: BorderType.RRect,
+                              //                   dashPattern: [6 * sizeUnit, 6 * sizeUnit],
+                              //                   strokeWidth: 2 * sizeUnit,
+                              //                   radius: Radius.circular(16 * sizeUnit),
+                              //                   color: sheepsColorGrey,
+                              //                   padding: EdgeInsets.zero,
+                              //                   child: Container(
+                              //                     width: 104 * sizeUnit,
+                              //                     height: 104 * sizeUnit,
+                              //                     decoration: BoxDecoration(
+                              //                       color: sheepsColorLightGrey,
+                              //                       borderRadius: BorderRadius.all(Radius.circular(16 * sizeUnit)),
+                              //                     ),
+                              //                     child: ClipRRect(
+                              //                       borderRadius: BorderRadius.circular(16 * sizeUnit),
+                              //                       child: FittedBox(
+                              //                         child: controller.isFilePathList[index]
+                              //                             ? Image(image: FileImage(_filesController.filesList[index]))
+                              //                             : getExtendedImage(controller.imgUrlFilePathList[index], 60, extendedController),
+                              //                         fit: BoxFit.cover,
+                              //                       ),
+                              //                     ),
+                              //                   ),
+                              //                 ),
+                              //                 Positioned(
+                              //                   right: 1 * sizeUnit,
+                              //                   bottom: 1 * sizeUnit,
+                              //                   child: GestureDetector(
+                              //                     onTap: () {
+                              //                       if (isFinishFileLoading) {
+                              //                         controller.imgUrlFilePathList.removeAt(index);
+                              //                         controller.isFilePathList.removeAt(index);
+                              //                         _filesController.removeFile(targetFile: _filesController.filesList[index]);
+                              //                       }
+                              //                     },
+                              //                     child: Container(
+                              //                       child: SvgPicture.asset(
+                              //                         svgXInCircle,
+                              //                         width: 34 * sizeUnit,
+                              //                         height: 34 * sizeUnit,
+                              //                         color: sheepsColorGrey,
+                              //                       ),
+                              //                     ),
+                              //                   ),
+                              //                 ),
+                              //               ],
+                              //             );
+                              //           }),
+                              //         ),
+                              //       )),
+                              // ),
                             ],
                           ),
                         ),
@@ -402,171 +403,195 @@ class _CommunityWritePageState extends State<CommunityWritePage> with SingleTick
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(20 * sizeUnit, 12 * sizeUnit, 20 * sizeUnit, 20 * sizeUnit),
-                        child: Obx(() => SheepsBottomButton(
-                              context: context,
-                              function: () {
-                                if (controller.isFilledRequired.value) {
-                                  if (isFinishFileLoading) {
-                                    late String category;
-                                    if (controller.isCategoryCompany.value) category = '회사';
-                                    if (controller.isCategorySecret.value) category = '비밀';
-                                    if (controller.isCategoryPromotion.value) category = '홍보';
-                                    if (controller.isCategoryFree.value) category = '자유';
-                                    if (controller.isCategoryMeeting.value) category = '소모임';
-                                    if (controller.isCategoryDevelopment.value) category = '개발';
-                                    if (controller.isCategoryOperation.value) category = '경영';
-                                    if (controller.isCategoryDesign.value) category = '디자인';
-                                    if (controller.isCategoryMarketing.value) category = '마케팅';
-                                    if (controller.isCategorySales.value) category = '영업';
-                                    if (controller.isCategoryCollegeStudent.value) category = '대학생';
+                        child: SheepsBottomButton(
+                          context: context,
+                          function: () {
+                            late String category;
+                            if (controller.isCategoryCompany.value) category = '회사';
+                            if (controller.isCategorySecret.value) category = '비밀';
+                            if (controller.isCategoryPromotion.value) category = '홍보';
+                            if (controller.isCategoryFree.value) category = '자유';
+                            if (controller.isCategoryMeeting.value) category = '소모임';
+                            if (controller.isCategoryDevelopment.value) category = '개발';
+                            if (controller.isCategoryOperation.value) category = '경영';
+                            if (controller.isCategoryDesign.value) category = '디자인';
+                            if (controller.isCategoryMarketing.value) category = '마케팅';
+                            if (controller.isCategorySales.value) category = '영업';
+                            if (controller.isCategoryCollegeStudent.value) category = '대학생';
 
-                                    showSheepsDialog(
-                                      context: context,
-                                      title: widget.isEdit ? '수정 완료' : '작성 완료',
-                                      description: widget.isEdit ? '게시글을 수정할까요?' : '게시글을 등록할까요?',
-                                      okFunc: () async {
-                                        Dio dio = new Dio();
-                                        dio.options.headers = {'Content-Type': 'application/json', 'user': GlobalProfile.loggedInUser!.userID};
+                            Community community = new Community(id: GlobalProfile.globalCommunityList.length + 10, userID: GlobalProfile.loggedInUser!.userID, category: category, title: controlSpace(controller.title.value), contents: controlSpace(controller.contents.value), imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '방금전', updatedAt: '방금전', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+                            GlobalProfile.globalCommunityList.add(community);
+                            Get.back();
 
-                                        if (widget.isEdit) {
-                                          //게시글 수정
-                                          FormData formData = FormData.fromMap({
-                                            "id": widget.community!.id,
-                                            "category": category,
-                                            "title": controlSpace(controller.title.value),
-                                            "contents": controlSpace(controller.contents.value),
-                                            "accessToken": GlobalProfile.accessToken,
-                                            'type': 0,
-                                            "0": controller.imgUrlFilePathList.length >= 1
-                                                ? await MultipartFile.fromFile(controller.imgUrlFilePathList[0], filename: getFileName(0, controller.imgUrlFilePathList[0]))
-                                                : null,
-                                            "1": controller.imgUrlFilePathList.length >= 2
-                                                ? await MultipartFile.fromFile(controller.imgUrlFilePathList[1], filename: getFileName(1, controller.imgUrlFilePathList[1]))
-                                                : null,
-                                            "2": controller.imgUrlFilePathList.length >= 3
-                                                ? await MultipartFile.fromFile(controller.imgUrlFilePathList[2], filename: getFileName(2, controller.imgUrlFilePathList[2]))
-                                                : null,
-                                          });
-
-                                          DialogBuilder(context).showLoadingIndicator();
-
-                                          var res;
-                                          late Community modifiedCommunity;
-
-                                          try {
-                                            res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Modify', data: formData);
-                                            modifiedCommunity = Community.fromJson(json.decode(res.toString()));
-
-                                            for (int i = 0; i < GlobalProfile.globalCommunityList.length; i++) {
-                                              if (GlobalProfile.globalCommunityList[i].id == widget.community!.id) {
-                                                GlobalProfile.globalCommunityList[i] = Community.fromJson(json.decode(res.toString()));
-                                                modifiedCommunity = GlobalProfile.globalCommunityList[i];
-                                                break;
-                                              }
-                                            }
-
-                                            for (int i = 0; i < GlobalProfile.hotCommunityList.length; i++) {
-                                              if (GlobalProfile.hotCommunityList[i].id == widget.community!.id) {
-                                                GlobalProfile.hotCommunityList[i] = Community.fromJson(json.decode(res.toString()), isHot: true);
-                                                modifiedCommunity = GlobalProfile.hotCommunityList[i];
-                                                break;
-                                              }
-                                            }
-
-                                            for (int i = 0; i < GlobalProfile.popularCommunityList.length; i++) {
-                                              if (GlobalProfile.popularCommunityList[i].id == widget.community!.id) {
-                                                GlobalProfile.popularCommunityList[i] = Community.fromJson(json.decode(res.toString()));
-                                                modifiedCommunity = GlobalProfile.popularCommunityList[i];
-                                                break;
-                                              }
-                                            }
-
-                                            for (int i = 0; i < GlobalProfile.filteredCommunityList.length; i++) {
-                                              bool isHot = false;
-
-                                              if (GlobalProfile.filteredCommunityList[i].id == widget.community!.id) {
-                                                if (GlobalProfile.filteredCommunityList[i].type == COMMUNITY_HOT_TYPE) isHot = true; // 필터 리스트에 있는 타입에 따라 hot 체크
-
-                                                GlobalProfile.filteredCommunityList[i] = Community.fromJson(json.decode(res.toString()), isHot: isHot);
-                                                modifiedCommunity = GlobalProfile.filteredCommunityList[i];
-                                              }
-                                            }
-
-                                            for (int i = 0; i < GlobalProfile.searchedCommunityList.length; i++) {
-                                              if (GlobalProfile.searchedCommunityList[i].id == widget.community!.id) {
-                                                GlobalProfile.searchedCommunityList[i] = Community.fromJson(json.decode(res.toString()));
-                                                modifiedCommunity = GlobalProfile.searchedCommunityList[i];
-                                                break;
-                                              }
-                                            }
-
-                                            for (int i = 0; i < GlobalProfile.myCommunityList.length; i++) {
-                                              if (GlobalProfile.myCommunityList[i].id == widget.community!.id) {
-                                                GlobalProfile.myCommunityList[i] = Community.fromJson(json.decode(res.toString()));
-                                                modifiedCommunity = GlobalProfile.myCommunityList[i];
-                                                break;
-                                              }
-                                            }
-                                          } on DioError catch (e) {
-                                            DialogBuilder(context).hideOpenDialog();
-                                            throw FetchDataException(e.message ?? '');
-                                          }
-
-                                          DialogBuilder(context).hideOpenDialog();
-                                          Get.back();
-                                          Get.back(result: [modifiedCommunity]);
-                                          showSheepsToast(context: context, text: "게시물이 수정되었습니다.");
-                                        } else {
-                                          //신규게시글
-                                          FormData formData = FormData.fromMap({
-                                            "userid": GlobalProfile.loggedInUser!.userID,
-                                            "category": category,
-                                            "title": controlSpace(controller.title.value),
-                                            "contents": controlSpace(controller.contents.value),
-                                            "accessToken": GlobalProfile.accessToken,
-                                            'type': 0,
-                                            "0": controller.imgUrlFilePathList.length >= 1
-                                                ? await MultipartFile.fromFile(controller.imgUrlFilePathList[0], filename: getFileName(0, controller.imgUrlFilePathList[0]))
-                                                : null,
-                                            "1": controller.imgUrlFilePathList.length >= 2
-                                                ? await MultipartFile.fromFile(controller.imgUrlFilePathList[1], filename: getFileName(1, controller.imgUrlFilePathList[1]))
-                                                : null,
-                                            "2": controller.imgUrlFilePathList.length >= 3
-                                                ? await MultipartFile.fromFile(controller.imgUrlFilePathList[2], filename: getFileName(2, controller.imgUrlFilePathList[2]))
-                                                : null,
-                                          });
-
-                                          DialogBuilder(context).showLoadingIndicator();
-
-                                          var res;
-                                          late Community newCommunity;
-                                          try {
-                                            res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Insert', data: formData);
-                                          } on DioError catch (e) {
-                                            DialogBuilder(context).hideOpenDialog();
-                                            throw FetchDataException(e.message ?? '');
-                                          }
-                                          newCommunity = Community.fromJson(json.decode(res.toString()));
-                                          GlobalProfile.globalCommunityList.insert(0, newCommunity);
-                                          if (widget.selectedCategory != null && widget.selectedCategory == category) {
-                                            GlobalProfile.filteredCommunityList.insert(0, newCommunity);
-                                          }
-                                          GlobalProfile.communityReply.clear(); // 댓글 초기화
-                                          DialogBuilder(context).hideOpenDialog();
-                                          showSheepsToast(context: context, text: "게시물이 등록되었습니다.");
-                                          Get.back();
-                                          Get.off(() => CommunityMainDetail(newCommunity));
-                                        }
-                                      },
-                                    );
-                                  } else {
-                                    Get.snackbar('title', '이미지 변환중');
-                                  }
-                                }
-                              },
-                              text: widget.isEdit ? '수정 완료' : '작성 완료',
-                              isOK: controller.isFilledRequired.value,
-                            )),
+                            // if (controller.isFilledRequired.value) {
+                            //   if (isFinishFileLoading) {
+                            //     late String category;
+                            //     if (controller.isCategoryCompany.value) category = '회사';
+                            //     if (controller.isCategorySecret.value) category = '비밀';
+                            //     if (controller.isCategoryPromotion.value) category = '홍보';
+                            //     if (controller.isCategoryFree.value) category = '자유';
+                            //     if (controller.isCategoryMeeting.value) category = '소모임';
+                            //     if (controller.isCategoryDevelopment.value) category = '개발';
+                            //     if (controller.isCategoryOperation.value) category = '경영';
+                            //     if (controller.isCategoryDesign.value) category = '디자인';
+                            //     if (controller.isCategoryMarketing.value) category = '마케팅';
+                            //     if (controller.isCategorySales.value) category = '영업';
+                            //     if (controller.isCategoryCollegeStudent.value) category = '대학생';
+                            //
+                            //     Community community = new Community(id: GlobalProfile.globalCommunityList.length + 10, userID: GlobalProfile.loggedInUser!.userID, category: category, title: controlSpace(controller.title.value), contents: controlSpace(controller.contents.value), imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '방금전', updatedAt: '방금전', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+                            //     GlobalProfile.globalCommunityList.add(community);
+                            //
+                            //
+                            //     showSheepsDialog(
+                            //       context: context,
+                            //       title: widget.isEdit ? '수정 완료' : '작성 완료',
+                            //       description: widget.isEdit ? '게시글을 수정할까요?' : '게시글을 등록할까요?',
+                            //       okFunc: () async {
+                            //         Community community = new Community(id: GlobalProfile.globalCommunityList.length + 10, userID: GlobalProfile.loggedInUser!.userID, category: category, title: controlSpace(controller.title.value), contents: controlSpace(controller.contents.value), imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '방금전', updatedAt: '방금전', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+                            //         GlobalProfile.globalCommunityList.add(community);
+                            //
+                            //         Dio dio = new Dio();
+                            //         dio.options.headers = {'Content-Type': 'application/json', 'user': GlobalProfile.loggedInUser!.userID};
+                            //
+                            //         if (widget.isEdit) {
+                            //           //게시글 수정
+                            //           FormData formData = FormData.fromMap({
+                            //             "id": widget.community!.id,
+                            //             "category": category,
+                            //             "title": controlSpace(controller.title.value),
+                            //             "contents": controlSpace(controller.contents.value),
+                            //             "accessToken": GlobalProfile.accessToken,
+                            //             'type': 0,
+                            //             "0": controller.imgUrlFilePathList.length >= 1
+                            //                 ? await MultipartFile.fromFile(controller.imgUrlFilePathList[0], filename: getFileName(0, controller.imgUrlFilePathList[0]))
+                            //                 : null,
+                            //             "1": controller.imgUrlFilePathList.length >= 2
+                            //                 ? await MultipartFile.fromFile(controller.imgUrlFilePathList[1], filename: getFileName(1, controller.imgUrlFilePathList[1]))
+                            //                 : null,
+                            //             "2": controller.imgUrlFilePathList.length >= 3
+                            //                 ? await MultipartFile.fromFile(controller.imgUrlFilePathList[2], filename: getFileName(2, controller.imgUrlFilePathList[2]))
+                            //                 : null,
+                            //           });
+                            //
+                            //           DialogBuilder(context).showLoadingIndicator();
+                            //
+                            //           var res;
+                            //           late Community modifiedCommunity;
+                            //
+                            //           try {
+                            //             res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Modify', data: formData);
+                            //             modifiedCommunity = Community.fromJson(json.decode(res.toString()));
+                            //
+                            //             for (int i = 0; i < GlobalProfile.globalCommunityList.length; i++) {
+                            //               if (GlobalProfile.globalCommunityList[i].id == widget.community!.id) {
+                            //                 GlobalProfile.globalCommunityList[i] = Community.fromJson(json.decode(res.toString()));
+                            //                 modifiedCommunity = GlobalProfile.globalCommunityList[i];
+                            //                 break;
+                            //               }
+                            //             }
+                            //
+                            //             for (int i = 0; i < GlobalProfile.hotCommunityList.length; i++) {
+                            //               if (GlobalProfile.hotCommunityList[i].id == widget.community!.id) {
+                            //                 GlobalProfile.hotCommunityList[i] = Community.fromJson(json.decode(res.toString()), isHot: true);
+                            //                 modifiedCommunity = GlobalProfile.hotCommunityList[i];
+                            //                 break;
+                            //               }
+                            //             }
+                            //
+                            //             for (int i = 0; i < GlobalProfile.popularCommunityList.length; i++) {
+                            //               if (GlobalProfile.popularCommunityList[i].id == widget.community!.id) {
+                            //                 GlobalProfile.popularCommunityList[i] = Community.fromJson(json.decode(res.toString()));
+                            //                 modifiedCommunity = GlobalProfile.popularCommunityList[i];
+                            //                 break;
+                            //               }
+                            //             }
+                            //
+                            //             for (int i = 0; i < GlobalProfile.filteredCommunityList.length; i++) {
+                            //               bool isHot = false;
+                            //
+                            //               if (GlobalProfile.filteredCommunityList[i].id == widget.community!.id) {
+                            //                 if (GlobalProfile.filteredCommunityList[i].type == COMMUNITY_HOT_TYPE) isHot = true; // 필터 리스트에 있는 타입에 따라 hot 체크
+                            //
+                            //                 GlobalProfile.filteredCommunityList[i] = Community.fromJson(json.decode(res.toString()), isHot: isHot);
+                            //                 modifiedCommunity = GlobalProfile.filteredCommunityList[i];
+                            //               }
+                            //             }
+                            //
+                            //             for (int i = 0; i < GlobalProfile.searchedCommunityList.length; i++) {
+                            //               if (GlobalProfile.searchedCommunityList[i].id == widget.community!.id) {
+                            //                 GlobalProfile.searchedCommunityList[i] = Community.fromJson(json.decode(res.toString()));
+                            //                 modifiedCommunity = GlobalProfile.searchedCommunityList[i];
+                            //                 break;
+                            //               }
+                            //             }
+                            //
+                            //             for (int i = 0; i < GlobalProfile.myCommunityList.length; i++) {
+                            //               if (GlobalProfile.myCommunityList[i].id == widget.community!.id) {
+                            //                 GlobalProfile.myCommunityList[i] = Community.fromJson(json.decode(res.toString()));
+                            //                 modifiedCommunity = GlobalProfile.myCommunityList[i];
+                            //                 break;
+                            //               }
+                            //             }
+                            //           } on DioError catch (e) {
+                            //             DialogBuilder(context).hideOpenDialog();
+                            //             throw FetchDataException(e.message ?? '');
+                            //           }
+                            //
+                            //           DialogBuilder(context).hideOpenDialog();
+                            //           Get.back();
+                            //           Get.back(result: [modifiedCommunity]);
+                            //           showSheepsToast(context: context, text: "게시물이 수정되었습니다.");
+                            //         } else {
+                            //           //신규게시글
+                            //           FormData formData = FormData.fromMap({
+                            //             "userid": GlobalProfile.loggedInUser!.userID,
+                            //             "category": category,
+                            //             "title": controlSpace(controller.title.value),
+                            //             "contents": controlSpace(controller.contents.value),
+                            //             "accessToken": GlobalProfile.accessToken,
+                            //             'type': 0,
+                            //             "0": controller.imgUrlFilePathList.length >= 1
+                            //                 ? await MultipartFile.fromFile(controller.imgUrlFilePathList[0], filename: getFileName(0, controller.imgUrlFilePathList[0]))
+                            //                 : null,
+                            //             "1": controller.imgUrlFilePathList.length >= 2
+                            //                 ? await MultipartFile.fromFile(controller.imgUrlFilePathList[1], filename: getFileName(1, controller.imgUrlFilePathList[1]))
+                            //                 : null,
+                            //             "2": controller.imgUrlFilePathList.length >= 3
+                            //                 ? await MultipartFile.fromFile(controller.imgUrlFilePathList[2], filename: getFileName(2, controller.imgUrlFilePathList[2]))
+                            //                 : null,
+                            //           });
+                            //
+                            //           DialogBuilder(context).showLoadingIndicator();
+                            //
+                            //           var res;
+                            //           late Community newCommunity;
+                            //           try {
+                            //             res = await dio.post(ApiProvider().getImgUrl + '/CommunityPost/Insert', data: formData);
+                            //           } on DioError catch (e) {
+                            //             DialogBuilder(context).hideOpenDialog();
+                            //             throw FetchDataException(e.message ?? '');
+                            //           }
+                            //           newCommunity = Community.fromJson(json.decode(res.toString()));
+                            //           GlobalProfile.globalCommunityList.insert(0, newCommunity);
+                            //           if (widget.selectedCategory != null && widget.selectedCategory == category) {
+                            //             GlobalProfile.filteredCommunityList.insert(0, newCommunity);
+                            //           }
+                            //           GlobalProfile.communityReply.clear(); // 댓글 초기화
+                            //           DialogBuilder(context).hideOpenDialog();
+                            //           showSheepsToast(context: context, text: "게시물이 등록되었습니다.");
+                            //           Get.back();
+                            //           Get.off(() => CommunityMainDetail(newCommunity));
+                            //         }
+                            //       },
+                            //     );
+                            //   } else {
+                            //     Get.snackbar('title', '이미지 변환중');
+                            //   }
+                            // }
+                          },
+                          text: widget.isEdit ? '수정 완료' : '작성 완료',
+                          isOK: true,
+                        )
                       ),
                     ],
                   ),

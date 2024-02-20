@@ -437,7 +437,7 @@ List<PersonalBadgeDescription> PersonalBadgeDescriptionList = [
   PersonalBadgeDescription("활동", "음유시인", "커뮤니티 게시글 및 댓글 50개", "스타트업만을 위한 최초의 앱 커뮤니티!\n활동해주셔서 감사합니다.☺️"), //3
   PersonalBadgeDescription("활동", "수필작가", "커뮤니티 게시글 및 댓글 100개", "항상 당신의 이야기를 공유해줘서\n너무 감사합니다.😚"), //4
   PersonalBadgeDescription("활동", "단편소설가", "커뮤니티 게시글 및 댓글 200개", "당신만을 위한 게시판을 개설하겠습니다.\n(충성충성)"), //5
-  PersonalBadgeDescription("활동", "장편소설가", "커뮤니티 게시글 및 댓글 400개", "당신은 혹시 박찬호 인가요?\n그렇다면 홍보모델로..\n-쉽스 홍보팀-"), //6
+  PersonalBadgeDescription("활동", "장편소설가", "커뮤니티 게시글 및 댓글 400개", "당신은 혹시 박찬호 인가요?\n그렇다면 홍보모델로..\n-사담 홍보팀-"), //6
   PersonalBadgeDescription("활동", "뱃지 수집가", "뱃지 10개 이상", "뱃지를 10개 이상 모으셨어요!"), //7
   PersonalBadgeDescription("활동", "열혈 뱃지 수집가", "뱃지 20개 이상", "뱃지를 20개 이상 모으셨어요!"), //8
   PersonalBadgeDescription("활동", "최고 뱃지 수집가", "뱃지 50개 이상", "더는 모을 뱃지가 없는걸요?"), //9
@@ -446,7 +446,7 @@ List<PersonalBadgeDescription> PersonalBadgeDescriptionList = [
   PersonalBadgeDescription("경력", "사춘기직딩", "경력 2년", "직딩도 사춘기만 넘으면 성숙해집니다!"), //11
   PersonalBadgeDescription("경력", "한창실세", "경력 3년", "업무는 이제 눈감고 발로도 가능해요!"), //12
   PersonalBadgeDescription("경력", "할거다한", "경력 5년", "마! 내가 느그 팀장이랑! 어!\n프로젝트도 하고! 어! 다했어!"), //13
-  PersonalBadgeDescription("경력", "베테랑", "경력 7년 이상", "지금 내 기분이 그래. 어이가 없네?\n-쉽스 채용팀-"), //14
+  PersonalBadgeDescription("경력", "베테랑", "경력 7년 이상", "지금 내 기분이 그래. 어이가 없네?\n-사담 채용팀-"), //14
 
   PersonalBadgeDescription("학력", "학사", "최종 학력 학사", "양이라는 동물에 대해 공부했어요!"), //15
   PersonalBadgeDescription("학력", "석사", "최종 학력 석사", "양의 감각기관에 대해 공부했어요!"), //16
@@ -461,7 +461,7 @@ List<PersonalBadgeDescription> PersonalBadgeDescriptionList = [
 
   PersonalBadgeDescription("수상", "따놓은당상", "수상 횟수 3개", "어딜 가나 수상하는 저는 능력자에요!"), //23
   PersonalBadgeDescription("수상", "상장수집가", "수상 횟수 5개", "이 정도면 상 받는 게 취미라고 해도 되겠네요!"), //24
-  PersonalBadgeDescription("수상", "들숨에 수, 날숨에 상", "수상 횟수 10개", "숨만 쉬어도 상을 받는 당신! 탐나는군요?\n-쉽스 채용팀-"), //25
+  PersonalBadgeDescription("수상", "들숨에 수, 날숨에 상", "수상 횟수 10개", "숨만 쉬어도 상을 받는 당신! 탐나는군요?\n-사담 채용팀-"), //25
 
   PersonalBadgeDescription("자격증", "기능사", "국가 기능사", "수준 높은 숙련기능을 보유하고 있습니다!"), //26
   PersonalBadgeDescription("자격증", "산업기사", "국가 산업기사", "기능사보다 한층 수준 높은\n숙련기능을 보유하고 있습니다!"), //27
@@ -479,7 +479,7 @@ List<PersonalBadgeDescription> PersonalBadgeDescriptionList = [
   PersonalBadgeDescription("교육", "민간 교육 수료", "민간교육 수료", "민간에서 주관하는 교육을 수료했어요!"), //37
   PersonalBadgeDescription("교육", "늘새로이", "교육 횟수 2회", "새로운 걸 배운다는 것, 짜릿하더군요."), //38
   PersonalBadgeDescription("교육", "늘배움이", "교육 횟수 4회", "저희 어머니가\n배움에는 끝이 없다고 했습니다."), //39
-  PersonalBadgeDescription("교육", "늘앞자리", "교육 횟수 6회", "자, 이제 쉽스에서 강의를 할 차례입니다.\n-쉽스 채용팀-"), //40
+  PersonalBadgeDescription("교육", "늘앞자리", "교육 횟수 6회", "자, 이제 사담에서 강의를 할 차례입니다.\n-사담 채용팀-"), //40
 
   PersonalBadgeDescription("매력", "고려", "단증 1단", "통나무 잡고, 손날치기, 이단 옆차기! 파박!"), //41
   PersonalBadgeDescription("매력", "금강", "단증 3단", "강함과 무거움을 의미하는 나의 강한 의지..."), //42
@@ -490,8 +490,8 @@ List<PersonalBadgeDescription> PersonalBadgeDescriptionList = [
 List<PersonalBadgeDescription> EventBadgeDescriptionList = [
   //index와 id와 동기화
   PersonalBadgeDescription("", "", "", ""),
-  PersonalBadgeDescription("이벤트", "쉽스런칭기념", "회원가입", "스타트업 필수앱 쉽스 런칭기념 뱃지!\n초기에 가입하고 활동해주신 분들의 은혜..\n잊지않고 갚을거양 🐏"), //1
-  PersonalBadgeDescription("이벤트", "CLASS101", "CLASS101 쿠폰발급 최초 1회", "쉽스가 발급해준 CLASS101 쿠폰으로\n저렴하게 강의를 들었어요!"), //2
+  PersonalBadgeDescription("이벤트", "사담런칭기념", "회원가입", "스타트업 필수앱 사담 런칭기념 뱃지!\n초기에 가입하고 활동해주신 분들의 은혜..\n잊지않고 갚을거양 🐏"), //1
+  PersonalBadgeDescription("이벤트", "CLASS101", "CLASS101 쿠폰발급 최초 1회", "사담가 발급해준 CLASS101 쿠폰으로\n저렴하게 강의를 들었어요!"), //2
 ];
 
 List<TeamBadgeDescription> TeamBadgeDescriptionList = [
@@ -504,7 +504,7 @@ List<TeamBadgeDescription> TeamBadgeDescriptionList = [
   TeamBadgeDescription("활동", "팀 뱃지 50개", "뱃지 50개 이상", "팀 뱃지 50개를 모았어요! 정말 멋진 팀이에요!"), //5
 
   TeamBadgeDescription("경력", "개인사업자", "개인사업자 등록", "개인사업자라고 혼자하는거 아닙니다."), //6
-  TeamBadgeDescription("경력", "법인사업자", "법인사업자 등록", "법인 임직원 채용은 쉽스"), //7
+  TeamBadgeDescription("경력", "법인사업자", "법인사업자 등록", "법인 임직원 채용은 사담"), //7
   TeamBadgeDescription("경력", "사회적기업", "사회적 기업 인증", "세상을 더 아름답게 만들어주는 사회적 기업"), //8
   TeamBadgeDescription("경력", "사업자", "사업자 인증", "사업자 인증이 완료되었습니다."), //9
 
@@ -515,7 +515,7 @@ List<TeamBadgeDescription> TeamBadgeDescriptionList = [
 
   TeamBadgeDescription("경력", "소수정예 팀", "팀원 3명 이상", "셋이면 못할 게 없어요!"), //14
   TeamBadgeDescription("경력", "성장하는 팀", "팀원 5명 이상", "공모전, 대회를 휩쓸 준비가 되었어요."), //15
-  TeamBadgeDescription("경력", "돌이킬 수 없는 팀", "팀원 7명 이상", "회사를 만들 때가 왔네요! 창업 준비는 쉽스에서."), //16
+  TeamBadgeDescription("경력", "돌이킬 수 없는 팀", "팀원 7명 이상", "회사를 만들 때가 왔네요! 창업 준비는 사담에서."), //16
   TeamBadgeDescription("경력", "이정도면 회사", "팀원 10명 이상", "팀원이 어느덧 10명, 이제 지분은 10% 씩이다."), //17
 
   TeamBadgeDescription("경력", "사업장 보유", "사업장 보유", "팀원들을 위한 사업장이 준비되어있습니다!"), //18
@@ -557,9 +557,9 @@ List<TeamBadgeDescription> TeamBadgeDescriptionList = [
   TeamBadgeDescription("수상", "수상의 짜릿함", "수상 이력", "수상 경력을 보유하고 있어요!"), //48
   TeamBadgeDescription("수상", "기관장상 뱃지", "기관장상 수상 이력", "기관장급 수상 경력을 보유하고 있어요!"), //49
   TeamBadgeDescription("수상", "장관상 뱃지", "장관상 수상 이력", "내가 살다가 뉴스에서만 보던 장관님을 뵐 줄이야.."), //50
-  TeamBadgeDescription("수상", "대통령상 뱃지", "대통령상 수상 이력", "대통령이랑 악수도 했나요? - 쉽스 콘텐츠 팀 -"), //51
+  TeamBadgeDescription("수상", "대통령상 뱃지", "대통령상 수상 이력", "대통령이랑 악수도 했나요? - 사담 콘텐츠 팀 -"), //51
 
-  TeamBadgeDescription("수상", "해외파 기업", "해외수상 이력", "상장에 영어 필기체로 마구 써있어서 인증하기 힘들었어요😢 -쉽스 인증 팀 -"), //52
+  TeamBadgeDescription("수상", "해외파 기업", "해외수상 이력", "상장에 영어 필기체로 마구 써있어서 인증하기 힘들었어요😢 -사담 인증 팀 -"), //52
 
   TeamBadgeDescription("수상", "수상더하기", "수상경력 3회 이상", "수상에 수상에 수상을 더해서~"), //53
   TeamBadgeDescription("수상", "수상주의 회사", "수상경력 5회 이상", "각종 대회에서 실력을 인정받았어요!"), //54

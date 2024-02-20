@@ -29,7 +29,7 @@ const int CHATROOM_PAGE = 4;
 const int minimumDeclareForBlind = 3; // 블라인드 최소 신고 갯수
 const int minimumScoreForPopular = 5; // 커뮤니티 인기글 최소 점수
 
-const String sheepsHomePageUrl = 'https://www.sheeps.kr';//쉽스 홈페이지
+const String sheepsHomePageUrl = 'https://www.sheeps.kr';//사담 홈페이지
 const String sheepsKakaoTalkChannel = 'http://pf.kakao.com/_eGYas/chat';//문의하기 카카오톡채널 채팅
 const String sheepsTermsOfServiceUrl = 'https://www.sheeps.kr/legal/user-agreement'; // 서비스 이용약관
 const String sheepsPrivacyPolicyUrl = 'https://www.sheeps.kr/legal/privacy-policy'; // 개인정보 처리방침

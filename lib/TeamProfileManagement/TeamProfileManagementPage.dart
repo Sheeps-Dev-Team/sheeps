@@ -1310,7 +1310,7 @@ class _TeamProfileManagementPageState extends State<TeamProfileManagementPage> w
       showSheepsDialog(
         context: context,
         title: '팀 생성 완료!',
-        description: '팀 프로필 생성이 완료되었어요!\n 이제 쉽스에서 팀원들을 모아보세요!',
+        description: '팀 프로필 생성이 완료되었어요!\n 이제 사담에서 팀원들을 모아보세요!',
         isCancelButton: false,
         isBarrierDismissible: false,
       ).then((val) {

@@ -33,9 +33,12 @@ class CommunityWriteController extends GetxController {
   RxString title = ''.obs;
   RxString contents = ''.obs;
 
-  RxBool isFilledRequired = false.obs;
+  RxBool isFilledRequired = true.obs;
 
   bool checkFilledRequired() {
+    isFilledRequired.value = true;
+    return true;
+
     if (removeSpace(title.value).length >= 2 &&
         removeSpace(title.value).length <= 40 &&
         removeSpace(contents.value).length >= 10 &&

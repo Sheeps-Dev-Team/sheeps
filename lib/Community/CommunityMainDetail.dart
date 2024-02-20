@@ -96,17 +96,19 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
     if (_community.imageUrl2 != null) urlList.add(_community.imageUrl2!);
     if (_community.imageUrl3 != null) urlList.add(_community.imageUrl3!);
 
-    Future.microtask(() async {
-      var res = await ApiProvider().post('/CommunityPost/Select/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser!.userID}));
+    isAlarm = true;
 
-      if (res != null) {
-        isAlarm = true;
-      }
-    }).then((value) {
-      setState(() {});
-    });
+    // Future.microtask(() async {
+    //   var res = await ApiProvider().post('/CommunityPost/Select/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser!.userID}));
+    //
+    //   if (res != null) {
+    //     isAlarm = true;
+    //   }
+    // }).then((value) {
+    //   setState(() {});
+    // });
 
-    controller.communityLikeCheck(_community, GlobalProfile.loggedInUser!.userID);
+    // controller.communityLikeCheck(_community, GlobalProfile.loggedInUser!.userID);
 
     communityReplyController.addListener(() {
       controller.checkTextField(removeSpace(communityReplyController.text));
@@ -130,27 +132,27 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
       color: Colors.white,
       key: refreshKey,
       onRefresh: () async {
-        var tmp = await ApiProvider().post(
-            '/CommunityPost/PostSelect',
-            jsonEncode({
-              "id": _community.id,
-            }));
-
-        GlobalProfile.communityReply = [];
-        if (tmp == null) return;
-        for (int i = 0; i < tmp.length; i++) {
-          Map<String, dynamic> data = tmp[i];
-          CommunityReply tmpReply = CommunityReply.fromJson(data);
-          GlobalProfile.communityReply.add(tmpReply);
-        }
-
-        syncRepliesLength(communityList: GlobalProfile.globalCommunityList, community: _community);
-        syncRepliesLength(communityList: GlobalProfile.popularCommunityList, community: _community);
-        syncRepliesLength(communityList: GlobalProfile.hotCommunityList, community: _community);
-        syncRepliesLength(communityList: GlobalProfile.filteredCommunityList, community: _community);
-        syncRepliesLength(communityList: GlobalProfile.searchedCommunityList, community: _community);
-        syncRepliesLength(communityList: GlobalProfile.myCommunityList, community: _community);
-        setState(() {});
+        // var tmp = await ApiProvider().post(
+        //     '/CommunityPost/PostSelect',
+        //     jsonEncode({
+        //       "id": _community.id,
+        //     }));
+        //
+        // GlobalProfile.communityReply = [];
+        // if (tmp == null) return;
+        // for (int i = 0; i < tmp.length; i++) {
+        //   Map<String, dynamic> data = tmp[i];
+        //   CommunityReply tmpReply = CommunityReply.fromJson(data);
+        //   GlobalProfile.communityReply.add(tmpReply);
+        // }
+        //
+        // syncRepliesLength(communityList: GlobalProfile.globalCommunityList, community: _community);
+        // syncRepliesLength(communityList: GlobalProfile.popularCommunityList, community: _community);
+        // syncRepliesLength(communityList: GlobalProfile.hotCommunityList, community: _community);
+        // syncRepliesLength(communityList: GlobalProfile.filteredCommunityList, community: _community);
+        // syncRepliesLength(communityList: GlobalProfile.searchedCommunityList, community: _community);
+        // syncRepliesLength(communityList: GlobalProfile.myCommunityList, community: _community);
+        // setState(() {});
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
@@ -168,14 +170,14 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                     actions: [
                       GestureDetector(
                         onTap: () async {
-                          var res = await ApiProvider().post('/CommunityPost/Update/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser!.userID}));
-
-                          if (res['item'] == 1) {
-                            isAlarm = false;
-                          } else {
-                            isAlarm = true;
-                          }
-                          setState(() {});
+                          // var res = await ApiProvider().post('/CommunityPost/Update/Subscribe', jsonEncode({"postID": _community.id, "userID": GlobalProfile.loggedInUser!.userID}));
+                          //
+                          // if (res['item'] == 1) {
+                          //   isAlarm = false;
+                          // } else {
+                          //   isAlarm = true;
+                          // }
+                          // setState(() {});
                         },
                         child: SvgPicture.asset(
                           isAlarm ? 'assets/images/Chat/alarmOn.svg' : 'assets/images/Chat/alarmOff.svg',
@@ -187,17 +189,17 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                       SizedBox(
                         width: 4 * sizeUnit,
                       ),
-                      GestureDetector(
-                        onTap: () => Get.dialog(_settingDialog(), barrierColor: Color.fromRGBO(204, 204, 204, 0.5)),
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 12 * sizeUnit),
-                          child: SvgPicture.asset(
-                            grey3dot,
-                            width: 28 * sizeUnit,
-                            height: 28 * sizeUnit,
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () => Get.dialog(_settingDialog(), barrierColor: Color.fromRGBO(204, 204, 204, 0.5)),
+                      //   child: Padding(
+                      //     padding: EdgeInsets.only(right: 12 * sizeUnit),
+                      //     child: SvgPicture.asset(
+                      //       grey3dot,
+                      //       width: 28 * sizeUnit,
+                      //       height: 28 * sizeUnit,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                     bottomLine: true,
                   ),
@@ -273,27 +275,27 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                                           ),
                                         ),
                                       ),
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Spacer(),
-                                          GestureDetector(
-                                            onTap: () {
-                                              if (isReady) {
-                                                isReady = false;
-                                                Future.delayed(Duration(milliseconds: 800), () => isReady = true);
-                                                shareCommunity();
-                                              }
-                                            },
-                                            child: SvgPicture.asset(
-                                              svgShareBox,
-                                              width: 20 * sizeUnit,
-                                              height: 20 * sizeUnit,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    // Expanded(
+                                    //   child: Row(
+                                    //     children: [
+                                    //       Spacer(),
+                                    //       GestureDetector(
+                                    //         onTap: () {
+                                    //           if (isReady) {
+                                    //             isReady = false;
+                                    //             Future.delayed(Duration(milliseconds: 800), () => isReady = true);
+                                    //             shareCommunity();
+                                    //           }
+                                    //         },
+                                    //         child: SvgPicture.asset(
+                                    //           svgShareBox,
+                                    //           width: 20 * sizeUnit,
+                                    //           height: 20 * sizeUnit,
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -308,152 +310,156 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
                           ),
                         ),
                       ),
-                      Container(
-                        width: 360 * sizeUnit,
-                        padding: EdgeInsets.only(bottom: 20 * sizeUnit),
-                        color: Colors.white,
-                        child: Row(
-                          children: [
-                            SizedBox(width: 12 * sizeUnit),
-                            Container(
-                                width: 336 * sizeUnit,
-                                constraints: BoxConstraints(maxHeight: 60 * sizeUnit),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: sheepsColorGrey),
-                                  borderRadius: BorderRadius.circular(18 * sizeUnit),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      child: TextField(
-                                        controller: communityReplyController,
-                                        maxLines: null,
-                                        textInputAction: TextInputAction.newline,
-                                        style: SheepsTextStyle.b3(),
-                                        decoration: InputDecoration(
-                                          hintText: '댓글 내용을 입력해주세요',
-                                          hintStyle: SheepsTextStyle.hint4Profile(),
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.only(left: 12 * sizeUnit),
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                        ),
-                                        maxLength: 200,
-                                        // buildCounter: (context, {currentLength, isFocused, maxLength}) => null,
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () async {
-                                        if (controller.isInputColor.value) {
-                                          if (isCanWriteReply) {
-                                            isCanWriteReply = false;
-
-                                            DialogBuilder(context).showLoadingIndicator();
-
-                                            var jsonCommunity = await ApiProvider().post(
-                                                '/CommunityPost/PostSelect',
-                                                jsonEncode({
-                                                  "id": _community.id,
-                                                }));
-
-                                            if (jsonCommunity == null) {
-                                              DialogBuilder(context).hideOpenDialog();
-
-                                              controller.syncDeletedList(communityList: GlobalProfile.globalCommunityList, community: _community);
-                                              controller.syncDeletedList(communityList: GlobalProfile.popularCommunityList, community: _community);
-                                              controller.syncDeletedList(communityList: GlobalProfile.hotCommunityList, community: _community);
-                                              controller.syncDeletedList(communityList: GlobalProfile.filteredCommunityList, community: _community);
-                                              controller.syncDeletedList(communityList: GlobalProfile.searchedCommunityList, community: _community);
-                                              controller.syncDeletedList(communityList: GlobalProfile.myCommunityList, community: _community);
-
-                                              showSheepsDialog(
-                                                context: context,
-                                                title: '삭제된 게시글입니다.',
-                                                description: '삭제된 게시글이에요.',
-                                                okFunc: () {
-                                                  Get.back();
-                                                  Get.back();
-                                                },
-                                                isCancelButton: false,
-                                                isBarrierDismissible: false,
-                                              );
-                                              return;
-                                            }
-
-                                            await ApiProvider().post(
-                                                '/CommunityPost/InsertReply',
-                                                jsonEncode({
-                                                  "userID": GlobalProfile.loggedInUser!.userID,
-                                                  "postID": _community.id,
-                                                  "contents": controlSpace(communityReplyController.text),
-                                                }));
-
-                                            var tmp = await ApiProvider().post(
-                                                '/CommunityPost/PostSelect',
-                                                jsonEncode({
-                                                  "id": _community.id,
-                                                }));
-                                            if (tmp == null) return;
-                                            GlobalProfile.communityReply = [];
-                                            for (int i = 0; i < tmp.length; i++) {
-                                              Map<String, dynamic> data = tmp[i];
-                                              CommunityReply tmpReply = CommunityReply.fromJson(data);
-                                              GlobalProfile.communityReply.add(tmpReply);
-                                            }
-
-                                            DialogBuilder(context).hideOpenDialog();
-
-                                            // 댓글 갯수 올려주기
-                                            syncRepliesLength(communityList: GlobalProfile.globalCommunityList, community: _community);
-                                            syncRepliesLength(communityList: GlobalProfile.popularCommunityList, community: _community);
-                                            syncRepliesLength(communityList: GlobalProfile.hotCommunityList, community: _community);
-                                            syncRepliesLength(communityList: GlobalProfile.filteredCommunityList, community: _community);
-                                            syncRepliesLength(communityList: GlobalProfile.searchedCommunityList, community: _community);
-                                            syncRepliesLength(communityList: GlobalProfile.myCommunityList, community: _community);
-
-                                            FocusManager.instance.primaryFocus?.unfocus();
-                                            SystemChannels.textInput.invokeMethod('TextInput.hide');
-
-                                            communityReplyController.clear(); // 텍스트 필드 클리어
-                                            FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
-                                            SystemChannels.textInput.invokeMethod('TextInput.hide');
-
-                                            // 스크롤 밑으로
-                                            Timer(Duration(milliseconds: 100), () {
-                                              scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-                                            });
-
-                                            // 연속 호출 방지
-                                            Future.delayed(Duration(milliseconds: tapLikeDelayMilliseconds), () {
-                                              isCanWriteReply = true;
-                                            });
-
-                                            setState(() {});
-                                          }
-                                        }
-                                      },
-                                      child: Obx(() => Container(
-                                        margin: EdgeInsets.only(left: 4 * sizeUnit, right: 8 * sizeUnit),
-                                        width: 22 * sizeUnit,
-                                        height: 32 * sizeUnit,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: controller.isInputColor.value ? sheepsColorGreen : sheepsColorGrey,
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.arrow_upward,
-                                            size: 16 * sizeUnit,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )),
-                                    )
-                                  ],
-                                )),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   width: 360 * sizeUnit,
+                      //   padding: EdgeInsets.only(bottom: 20 * sizeUnit),
+                      //   color: Colors.white,
+                      //   child: Row(
+                      //     children: [
+                      //       SizedBox(width: 12 * sizeUnit),
+                      //       Container(
+                      //           width: 336 * sizeUnit,
+                      //           constraints: BoxConstraints(maxHeight: 60 * sizeUnit),
+                      //           decoration: BoxDecoration(
+                      //             border: Border.all(color: sheepsColorGrey),
+                      //             borderRadius: BorderRadius.circular(18 * sizeUnit),
+                      //           ),
+                      //           child: Row(
+                      //             children: [
+                      //               Flexible(
+                      //                 child: TextField(
+                      //                   controller: communityReplyController,
+                      //                   maxLines: null,
+                      //                   textInputAction: TextInputAction.newline,
+                      //                   style: SheepsTextStyle.b3(),
+                      //                   decoration: InputDecoration(
+                      //                     hintText: '댓글 내용을 입력해주세요',
+                      //                     hintStyle: SheepsTextStyle.hint4Profile(),
+                      //                     isDense: true,
+                      //                     contentPadding: EdgeInsets.only(left: 12 * sizeUnit),
+                      //                     focusedBorder: InputBorder.none,
+                      //                     enabledBorder: InputBorder.none,
+                      //                   ),
+                      //                   maxLength: 200,
+                      //                   // buildCounter: (context, {currentLength, isFocused, maxLength}) => null,
+                      //                 ),
+                      //               ),
+                      //               InkWell(
+                      //                 onTap: () async {
+                      //                   // if (controller.isInputColor.value) {
+                      //                   //   if (isCanWriteReply) {
+                      //                   //     isCanWriteReply = false;
+                      //                   //
+                      //                   //     DialogBuilder(context).showLoadingIndicator();
+                      //                   //
+                      //                   //     var jsonCommunity = await ApiProvider().post(
+                      //                   //         '/CommunityPost/PostSelect',
+                      //                   //         jsonEncode({
+                      //                   //           "id": _community.id,
+                      //                   //         }));
+                      //                   //
+                      //                   //     if (jsonCommunity == null) {
+                      //                   //       DialogBuilder(context).hideOpenDialog();
+                      //                   //
+                      //                   //       controller.syncDeletedList(communityList: GlobalProfile.globalCommunityList, community: _community);
+                      //                   //       controller.syncDeletedList(communityList: GlobalProfile.popularCommunityList, community: _community);
+                      //                   //       controller.syncDeletedList(communityList: GlobalProfile.hotCommunityList, community: _community);
+                      //                   //       controller.syncDeletedList(communityList: GlobalProfile.filteredCommunityList, community: _community);
+                      //                   //       controller.syncDeletedList(communityList: GlobalProfile.searchedCommunityList, community: _community);
+                      //                   //       controller.syncDeletedList(communityList: GlobalProfile.myCommunityList, community: _community);
+                      //                   //
+                      //                   //       showSheepsDialog(
+                      //                   //         context: context,
+                      //                   //         title: '삭제된 게시글입니다.',
+                      //                   //         description: '삭제된 게시글이에요.',
+                      //                   //         okFunc: () {
+                      //                   //           Get.back();
+                      //                   //           Get.back();
+                      //                   //         },
+                      //                   //         isCancelButton: false,
+                      //                   //         isBarrierDismissible: false,
+                      //                   //       );
+                      //                   //       return;
+                      //                   //     }
+                      //                   //
+                      //                   //     await ApiProvider().post(
+                      //                   //         '/CommunityPost/InsertReply',
+                      //                   //         jsonEncode({
+                      //                   //           "userID": GlobalProfile.loggedInUser!.userID,
+                      //                   //           "postID": _community.id,
+                      //                   //           "contents": controlSpace(communityReplyController.text),
+                      //                   //         }));
+                      //                   //
+                      //                   //     var tmp = await ApiProvider().post(
+                      //                   //         '/CommunityPost/PostSelect',
+                      //                   //         jsonEncode({
+                      //                   //           "id": _community.id,
+                      //                   //         }));
+                      //                   //     if (tmp == null) return;
+                      //                   //     GlobalProfile.communityReply = [];
+                      //                   //     for (int i = 0; i < tmp.length; i++) {
+                      //                   //       Map<String, dynamic> data = tmp[i];
+                      //                   //       CommunityReply tmpReply = CommunityReply.fromJson(data);
+                      //                   //       GlobalProfile.communityReply.add(tmpReply);
+                      //                   //     }
+                      //                   //
+                      //                   //     DialogBuilder(context).hideOpenDialog();
+                      //                   //
+                      //                   //     // 댓글 갯수 올려주기
+                      //                   //     syncRepliesLength(communityList: GlobalProfile.globalCommunityList, community: _community);
+                      //                   //     syncRepliesLength(communityList: GlobalProfile.popularCommunityList, community: _community);
+                      //                   //     syncRepliesLength(communityList: GlobalProfile.hotCommunityList, community: _community);
+                      //                   //     syncRepliesLength(communityList: GlobalProfile.filteredCommunityList, community: _community);
+                      //                   //     syncRepliesLength(communityList: GlobalProfile.searchedCommunityList, community: _community);
+                      //                   //     syncRepliesLength(communityList: GlobalProfile.myCommunityList, community: _community);
+                      //                   //
+                      //                   //     FocusManager.instance.primaryFocus?.unfocus();
+                      //                   //     SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      //                   //
+                      //                   //     communityReplyController.clear(); // 텍스트 필드 클리어
+                      //                   //     FocusManager.instance.primaryFocus?.unfocus(); // 포커스 해제
+                      //                   //     SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      //                   //
+                      //                   //     // 스크롤 밑으로
+                      //                   //     Timer(Duration(milliseconds: 100), () {
+                      //                   //       scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                      //                   //     });
+                      //                   //
+                      //                   //     // 연속 호출 방지
+                      //                   //     Future.delayed(Duration(milliseconds: tapLikeDelayMilliseconds), () {
+                      //                   //       isCanWriteReply = true;
+                      //                   //     });
+                      //                   //
+                      //                   //     setState(() {});
+                      //                   //   }
+                      //                   // }
+                      //
+                      //                   setState(() {
+                      //
+                      //                   });
+                      //                 },
+                      //                 child: Obx(() => Container(
+                      //                   margin: EdgeInsets.only(left: 4 * sizeUnit, right: 8 * sizeUnit),
+                      //                   width: 22 * sizeUnit,
+                      //                   height: 32 * sizeUnit,
+                      //                   decoration: BoxDecoration(
+                      //                     shape: BoxShape.circle,
+                      //                     color: controller.isInputColor.value ? sheepsColorGreen : sheepsColorGrey,
+                      //                   ),
+                      //                   child: Center(
+                      //                     child: Icon(
+                      //                       Icons.arrow_upward,
+                      //                       size: 16 * sizeUnit,
+                      //                       color: Colors.white,
+                      //                     ),
+                      //                   ),
+                      //                 )),
+                      //               )
+                      //             ],
+                      //           )),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -1038,7 +1044,7 @@ class _CommunityMainDetailState extends State<CommunityMainDetail> with SingleTi
     String name = _community.title;
 
     DialogBuilder(context).hideOpenDialog();
-    Share.share('커뮤니티 글 보기\n$name\n$shortUrl', subject: '스타트업 필수 앱! 쉽스!\n');
+    Share.share('커뮤니티 글 보기\n$name\n$shortUrl', subject: '스타트업 필수 앱! 사담!\n');
   }
 }
 

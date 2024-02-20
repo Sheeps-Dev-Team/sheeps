@@ -81,7 +81,7 @@ class _AuthSuccessPageState extends State<AuthSuccessPage> {
                                 ? '본인인증에\n실패했어요.'
                                 : widget.state == 2
                                     ? '이미 가입된 번호에요!'
-                                    : '쉽스에선\n스타트업도, 팀모집도\n어렵지 않아요!',
+                                    : '사담에선\n스타트업도, 팀모집도\n어렵지 않아요!',
                             style: SheepsTextStyle.h5(),
                             textAlign: TextAlign.center,
                           ),
@@ -126,7 +126,7 @@ class _AuthSuccessPageState extends State<AuthSuccessPage> {
                           }
                         },
                         text: widget.state == 1
-                            ? '쉽스 시작하기'
+                            ? '사담 시작하기'
                             : '다시 인증하기',
                       ),
                     ),

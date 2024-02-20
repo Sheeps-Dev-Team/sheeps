@@ -109,7 +109,7 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    new FirebaseNotifications().setUpFirebase(context);
+    // new FirebaseNotifications().setUpFirebase(context);
     Get.lazyPut<CommunityDetailController>(() => CommunityDetailController());
   }
 
@@ -230,49 +230,49 @@ class _DashBoardMainState extends State<DashBoardMain> with SingleTickerProvider
                           ),
                         ),
                         SizedBox(height: 12 * sizeUnit),
-                        Container(
-                          width: 360 * sizeUnit,
-                          height: 116 * sizeUnit,
-                          color: sheepsColorLightGrey,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8 * sizeUnit),
-                            child: PageView.builder(
-                              pageSnapping: true,
-                              controller: _pageController,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () async {
-                                    switch(globalClientBannerList[index % globalClientBannerList.length].type){
-                                      case BANNER_TYPE_EXTERNAL:
-                                        launch(globalClientBannerList[index % globalClientBannerList.length].webURL);
-                                        break;
-                                      case BANNER_TYPE_INTERNAL:
-                                        bannerInternalFunction(globalClientBannerList[index % globalClientBannerList.length].webURL);
-                                        break;
-                                      case BANNER_TYPE_NOACTION:
-                                        //행동없음
-                                        break;
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 8 * sizeUnit),
-                                    child: Container(
-                                      width: 310 * sizeUnit,
-                                      height: 100 * sizeUnit,
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        borderRadius: BorderRadius.circular(24 * sizeUnit),
-                                      ),
-                                      child: Image.asset(
-                                        globalClientBannerList[index % globalClientBannerList.length].imgURL,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   width: 360 * sizeUnit,
+                        //   height: 116 * sizeUnit,
+                        //   color: sheepsColorLightGrey,
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 8 * sizeUnit),
+                        //     child: PageView.builder(
+                        //       pageSnapping: true,
+                        //       controller: _pageController,
+                        //       itemBuilder: (context, index) {
+                        //         return GestureDetector(
+                        //           onTap: () async {
+                        //             switch(globalClientBannerList[index % globalClientBannerList.length].type){
+                        //               case BANNER_TYPE_EXTERNAL:
+                        //                 launch(globalClientBannerList[index % globalClientBannerList.length].webURL);
+                        //                 break;
+                        //               case BANNER_TYPE_INTERNAL:
+                        //                 bannerInternalFunction(globalClientBannerList[index % globalClientBannerList.length].webURL);
+                        //                 break;
+                        //               case BANNER_TYPE_NOACTION:
+                        //                 //행동없음
+                        //                 break;
+                        //             }
+                        //           },
+                        //           child: Padding(
+                        //             padding: EdgeInsets.only(right: 8 * sizeUnit),
+                        //             child: Container(
+                        //               width: 310 * sizeUnit,
+                        //               height: 100 * sizeUnit,
+                        //               decoration: BoxDecoration(
+                        //                 color: Colors.transparent,
+                        //                 borderRadius: BorderRadius.circular(24 * sizeUnit),
+                        //               ),
+                        //               child: Image.asset(
+                        //                 globalClientBannerList[index % globalClientBannerList.length].imgURL,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         );
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
                         Padding(
                           padding: EdgeInsets.only(left: 16 * sizeUnit, top: 12 * sizeUnit, right: 16 * sizeUnit),
                           child: Row(

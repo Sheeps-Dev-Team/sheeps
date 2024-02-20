@@ -1519,6 +1519,6 @@ class _DetailProfileState extends State<DetailProfile> with SingleTickerProvider
     String name = _user.name;
 
     DialogBuilder(context).hideOpenDialog();
-    Share.share('$name님 프로필 보기\n$shortUrl', subject: '스타트업 필수 앱! 쉽스!\n');
+    Share.share('$name님 프로필 보기\n$shortUrl', subject: '스타트업 필수 앱! 사담!\n');
   }
 }

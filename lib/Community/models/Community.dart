@@ -10,7 +10,7 @@ const int COMMUNITY_HOT_TYPE = 2; // 핫 게시글
 const int COMMUNITY_NOTICE_TYPE = 100; // 공지 게시글
 
 const List<String> basicCommunityCategoryList = ['전체', '인기', '자유', '비밀', '홍보', '회사', '소모임', '개발', '경영', '디자인', '마케팅', '영업', '대학생']; // 기본 커뮤니티 카테고리 리스트
-List<String> communityCategoryList = []; // 커뮤니티 카테고리 리스트
+List<String> communityCategoryList = ['전체', '인기', '자유', '비밀', '홍보', '회사', '소모임', '개발', '경영', '디자인', '마케팅', '영업', '대학생']; // 커뮤니티 카테고리 리스트
 
 class Community {
   int id;
@@ -35,9 +35,9 @@ class Community {
     required this.category,
     required this.title,
     required this.contents,
-    required this.imageUrl1,
-    required this.imageUrl2,
-    required this.imageUrl3,
+    this.imageUrl1,
+    this.imageUrl2,
+    this.imageUrl3,
     required this.createdAt,
     required this.updatedAt,
     required this.communityLike,

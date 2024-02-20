@@ -117,7 +117,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                                 children: [
                                   SizedBox(width: 6 * sizeUnit),
                                   Text(
-                                    '쉽스를 안전하게 이용하기 위한 약관이에요.\n약관 동의 후 회원가입을 시작합니다.',
+                                    '사담를 안전하게 이용하기 위한 약관이에요.\n약관 동의 후 회원가입을 시작합니다.',
                                     style: SheepsTextStyle.b2().copyWith(height: 1.5),
                                   ),
                                 ],
@@ -360,7 +360,7 @@ class _PageTermsOfServiceState extends State<PageTermsOfService> {
                               } else {
                                 showSheepsCustomDialog(
                                   contents: Text(
-                                    '쉽스의 혜택 알림 수신에 동의하시면\n새로운 기능 안내, 프로필 맞춤정보,\n다양한 할인 혜택 등 도움이 되는\n정보를 받아볼 수 있습니다.\n\n회원님께 좋은것만 드리는데..👉🏻👈🏻\n동의하시겠어요?',
+                                    '사담의 혜택 알림 수신에 동의하시면\n새로운 기능 안내, 프로필 맞춤정보,\n다양한 할인 혜택 등 도움이 되는\n정보를 받아볼 수 있습니다.\n\n회원님께 좋은것만 드리는데..👉🏻👈🏻\n동의하시겠어요?',
                                     style: SheepsTextStyle.b3(),
                                     textAlign: TextAlign.center,
                                   ),

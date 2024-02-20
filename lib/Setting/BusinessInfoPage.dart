@@ -44,7 +44,7 @@ class BusinessInfoPage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          infoItem('법인명','주식회사 쉽스'),
+                          infoItem('법인명','주식회사 사담'),
                           infoItem('대표자','진성규'),
                           infoItem('등록번호','184-86-01811'),
                           infoItem('개업연월일','2020년 7월 31일'),

@@ -456,7 +456,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
               break;
             case 1:
               {
-                info = " 팀에서 추방되었습니다. 걱정하지 마세요! 쉽스에는 멋진 팀들이 계속 생겨난답니다!";
+                info = " 팀에서 추방되었습니다. 걱정하지 마세요! 사담에는 멋진 팀들이 계속 생겨난답니다!";
                 style = SheepsTextStyle.b3();
               }
               break;
@@ -484,7 +484,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
               break;
             case 1:
               {
-                info = " 님이 팀에서 나갔습니다. 하지만, 실망하지 마세요! 쉽스에는 좋은 인재들이 많답니다.";
+                info = " 님이 팀에서 나갔습니다. 하지만, 실망하지 마세요! 사담에는 좋은 인재들이 많답니다.";
                 style = SheepsTextStyle.b3();
               }
               break;
@@ -706,7 +706,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
               break;
             case 3:
               {
-                info = " 팀의 제안을 거절했어요. 하지만, 실망하지 마세요! 쉽스에는 좋은 인재들이 많답니다.";
+                info = " 팀의 제안을 거절했어요. 하지만, 실망하지 마세요! 사담에는 좋은 인재들이 많답니다.";
                 style = SheepsTextStyle.b3();
               }
               break;
@@ -791,7 +791,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
               break;
             case 1:
               {
-                info = " 팀 지원에 지원에 불합격했어요! 하지만, 실망하지마세요! 쉽스에는 멋진 팀들이 계속 생겨난답니다!";
+                info = " 팀 지원에 지원에 불합격했어요! 하지만, 실망하지마세요! 사담에는 멋진 팀들이 계속 생겨난답니다!";
                 style = SheepsTextStyle.b3();
               }
               break;
@@ -1296,7 +1296,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
           switch (index) {
             case 0:
               {
-                info = '쉽스에 오신걸 환영합니다! 간단히 프로필을 채우고, 사람들에게 주목을 받아보세요.';
+                info = '사담에 오신걸 환영합니다! 간단히 프로필을 채우고, 사람들에게 주목을 받아보세요.';
                 style = SheepsTextStyle.b3();
               }
               break;
@@ -1377,7 +1377,7 @@ class _TotalNotificationPageState extends State<TotalNotificationPage> {
           switch (index) {
             case 0:
               {
-                info = '쉽스 커뮤니티에서 스타트업에 관한 모든 이야기를 자유롭게 해보세요.';
+                info = '사담 커뮤니티에서 스타트업에 관한 모든 이야기를 자유롭게 해보세요.';
                 style = SheepsTextStyle.b3();
               }
               break;

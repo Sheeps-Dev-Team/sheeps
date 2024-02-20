@@ -89,7 +89,7 @@ class _AddCareerState extends State<AddCareerPage> {
                                   SizedBox(height: 12 * sizeUnit),
                                   multiLineTextField(
                                     controller: companyController,
-                                    hintText: 'ex) 주식회사 쉽스',
+                                    hintText: 'ex) 주식회사 사담',
                                     borderColor: sheepsColorBlue,
                                     isOneLine: true,
                                   ),

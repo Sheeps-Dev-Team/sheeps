@@ -76,7 +76,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             child: SafeArea(
               child: Scaffold(
                 backgroundColor: Color(0xFFF8F8F8),
-                appBar: SheepsAppBar(context, '${GlobalProfile.loggedInUser!.name}의 쉽스', actions: [
+                appBar: SheepsAppBar(context, '${GlobalProfile.loggedInUser!.name}의 사담', actions: [
                   GestureDetector(
                     onTap: () async {
                       PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -96,208 +96,6 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 body: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Container(
-                        width: 360 * sizeUnit,
-                        height: 30 * sizeUnit,
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit),
-                          child: Row(
-                            children: [
-                              Text(
-                                '프로필',
-                                style: SheepsTextStyle.h4(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SettingColumn(
-                        str: "내 프로필",
-                        myFunc: () {
-                          Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!, profileStatus: PROFILE_STATUS.MyProfile));
-                        },
-                      ),
-                      SettingColumn(
-                        str: "팀・스타트업 프로필",
-                        myFunc: () {
-                          Get.to(() => MyTeamProfile());
-                        },
-                      ),
-                      SettingColumn(
-                        str: "저장한 프로필",
-                        myFunc: () async{
-                          for (int i = 0; i < globalPersonalLikeList.length; ++i) {
-                            await GlobalProfile.getFutureUserByUserID(globalPersonalLikeList[i].TargetID);
-                          }
-                          for (int i = 0; i < globalTeamLikeList.length; ++i) {
-                            await GlobalProfile.getFutureTeamByID(globalTeamLikeList[i].TargetID);
-                          }
-                          Get.to(() => ProfileLikesPage());
-                        },
-                      ),
-                      Container(
-                        width: 360 * sizeUnit,
-                        height: 30 * sizeUnit,
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit),
-                          child: Row(
-                            children: [
-                              Text(
-                                '리쿠르트',
-                                style: SheepsTextStyle.h4(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SettingColumn(
-                        str: "나의 모집 공고",
-                        myFunc: () async {
-                          List<TeamMemberRecruit> recruitList = [];
-
-                          DialogBuilder(context).showLoadingIndicator();
-
-                          var res = await ApiProvider().post(
-                              '/Matching/Select/TeamMemberRecruitByUserID',
-                              jsonEncode({
-                                'userID': GlobalProfile.loggedInUser!.userID,
-                              }));
-
-                          if (res != null) {
-                            for (int i = 0; i < res.length; i++) {
-                              TeamMemberRecruit tmpRecruit = TeamMemberRecruit.fromJson(res[i]);
-                              recruitList.add(tmpRecruit);
-                              await GlobalProfile.getFutureTeamByID(tmpRecruit.teamId);
-                            }
-                          }
-
-                          DialogBuilder(context).hideOpenDialog();
-
-                          Get.to(() => SpecificUserRecruitPage(isRecruit: true, myRecruitList: recruitList, appBarTitle: '나의 모집 공고'));
-                        },
-                      ),
-                      SettingColumn(
-                        str: "나의 구직 공고",
-                        myFunc: () async {
-                          List<PersonalSeekTeam> seekList = [];
-
-                          DialogBuilder(context).showLoadingIndicator();
-
-                          var res = await ApiProvider().post(
-                              '/Matching/Select/PersonalSeekTeamByUserID',
-                              jsonEncode({
-                                'userID': GlobalProfile.loggedInUser!.userID,
-                              }));
-
-                          if (res != null) {
-                            for (int i = 0; i < res.length; i++) {
-                              PersonalSeekTeam tmpSeek = PersonalSeekTeam.fromJson(res[i]);
-                              seekList.add(tmpSeek);
-                              await GlobalProfile.getFutureUserByUserID(tmpSeek.userId);
-                            }
-                          }
-
-                          DialogBuilder(context).hideOpenDialog();
-
-                          Get.to(() => SpecificUserRecruitPage(isRecruit: false, mySeekList: seekList, appBarTitle: '나의 구직 공고'));
-                        },
-                      ),
-                      SettingColumn(
-                        str: "내가 지원한 팀",
-                        myFunc: () async {
-                          List<Team> teamList = [];
-
-                          DialogBuilder(context).showLoadingIndicator();
-
-                          var res = await ApiProvider().post(
-                              '/Matching/Select/Volunteer/TeamList',
-                              jsonEncode({
-                                'userID': GlobalProfile.loggedInUser!.userID,
-                              }));
-
-                          if (res != null) {
-                            for (int i = 0; i < res.length; i++) {
-                              Team tmpTeam = Team.fromJson(res[i]);
-                              teamList.add(tmpTeam);
-                              await GlobalProfile.getFutureTeamByID(tmpTeam.id);
-                            }
-                          }
-
-                          DialogBuilder(context).hideOpenDialog();
-
-                          Get.to(() => ViewMyAppliedPage(teamList: teamList));
-                        },
-                      ),
-                      SettingColumn(
-                        str: "내가 제안한 구직자",
-                        myFunc: () async {
-                          List<UserData> userList = [];
-
-                          DialogBuilder(context).showLoadingIndicator();
-
-                          var res = await ApiProvider().post(
-                              '/Matching/Select/Suggest/PersonalList',
-                              jsonEncode({
-                                'userID': GlobalProfile.loggedInUser!.userID,
-                              }));
-
-                          if (res != null) {
-                            for (int i = 0; i < res.length; i++) {
-                              UserData tmpUser = UserData.fromJson(res[i][0]);
-                              userList.add(tmpUser);
-                              await GlobalProfile.getFutureUserByUserID(tmpUser.userID);
-                            }
-                          }
-
-                          DialogBuilder(context).hideOpenDialog();
-
-                          Get.to(() => ViewMyAppliedPage(userList: userList, isRecruit: false));
-                        },
-                      ),
-                      SettingColumn(
-                        str: "저장한 공고",
-                        myFunc: () async {
-                          List<TeamMemberRecruit> recruitList = [];
-
-                          DialogBuilder(context).showLoadingIndicator();
-
-                          var resRecruit = await ApiProvider().post(
-                              '/Matching/Select/Save/TeamMemberRecruit',
-                              jsonEncode({
-                                'userID': GlobalProfile.loggedInUser!.userID,
-                              }));
-
-                          if (resRecruit != null) {
-                            for (int i = 0; i < resRecruit.length; i++) {
-                              TeamMemberRecruit tmpRecruit = TeamMemberRecruit.fromJson(resRecruit[i]);
-                              recruitList.add(tmpRecruit);
-                              await GlobalProfile.getFutureTeamByID(tmpRecruit.teamId);
-                            }
-                          }
-
-                          List<PersonalSeekTeam> seekList = [];
-
-                          var resSeek = await ApiProvider().post(
-                              '/Matching/Select/Save/PersonalSeekTeam',
-                              jsonEncode({
-                                'userID': GlobalProfile.loggedInUser!.userID,
-                              }));
-
-                          if (resSeek != null) {
-                            for (int i = 0; i < resSeek.length; i++) {
-                              PersonalSeekTeam tmpSeek = PersonalSeekTeam.fromJson(resSeek[i]);
-                              seekList.add(tmpSeek);
-                              await GlobalProfile.getFutureUserByUserID(tmpSeek.userId);
-                            }
-                          }
-
-                          DialogBuilder(context).hideOpenDialog();
-
-                          Get.to(() => SavedRecruitPage(recruitList: recruitList, seekList: seekList));
-                        },
-                      ),
                       Container(
                         width: 360 * sizeUnit,
                         height: 32 * sizeUnit,
@@ -392,28 +190,230 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                           Get.to(() => PostedPage(a_communityList: GlobalProfile.myCommunityList, a_title: '좋아요 한 글'))?.then((value) => GlobalProfile.myCommunityList.clear());
                         },
                       ),
-                      if(GlobalProfile.loggedInUser!.userID == 1)...[
-                        SettingColumn(
-                          str: "공지글 쓰기",
-                          myFunc: () => Get.to(() => CommunityWriteNoticePostPage()),
-                        ),
-                      ],
+                      // if(GlobalProfile.loggedInUser!.userID == 1)...[
+                      //   SettingColumn(
+                      //     str: "공지글 쓰기",
+                      //     myFunc: () => Get.to(() => CommunityWriteNoticePostPage()),
+                      //   ),
+                      // ],
                       Container(
                         width: 360 * sizeUnit,
-                        height: 32 * sizeUnit,
+                        height: 30 * sizeUnit,
                         color: Colors.transparent,
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit),
                           child: Row(
                             children: [
                               Text(
-                                '이벤트',
+                                '프로필',
                                 style: SheepsTextStyle.h4(),
                               ),
                             ],
                           ),
                         ),
                       ),
+                      SettingColumn(
+                        str: "내 프로필",
+                        myFunc: () {
+                          Get.to(() => DetailProfile(index: 0, user: GlobalProfile.loggedInUser!, profileStatus: PROFILE_STATUS.MyProfile));
+                        },
+                      ),
+                      // SettingColumn(
+                      //   str: "팀 프로필",
+                      //   myFunc: () {
+                      //     Get.to(() => MyTeamProfile());
+                      //   },
+                      // ),
+                      SettingColumn(
+                        str: "저장한 프로필",
+                        myFunc: () async{
+                          for (int i = 0; i < globalPersonalLikeList.length; ++i) {
+                            await GlobalProfile.getFutureUserByUserID(globalPersonalLikeList[i].TargetID);
+                          }
+                          for (int i = 0; i < globalTeamLikeList.length; ++i) {
+                            await GlobalProfile.getFutureTeamByID(globalTeamLikeList[i].TargetID);
+                          }
+                          Get.to(() => ProfileLikesPage());
+                        },
+                      ),
+                      // Container(
+                      //   width: 360 * sizeUnit,
+                      //   height: 30 * sizeUnit,
+                      //   color: Colors.transparent,
+                      //   child: Padding(
+                      //     padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit),
+                      //     child: Row(
+                      //       children: [
+                      //         Text(
+                      //           '리쿠르트',
+                      //           style: SheepsTextStyle.h4(),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      // SettingColumn(
+                      //   str: "나의 모집 공고",
+                      //   myFunc: () async {
+                      //     List<TeamMemberRecruit> recruitList = [];
+                      //
+                      //     DialogBuilder(context).showLoadingIndicator();
+                      //
+                      //     var res = await ApiProvider().post(
+                      //         '/Matching/Select/TeamMemberRecruitByUserID',
+                      //         jsonEncode({
+                      //           'userID': GlobalProfile.loggedInUser!.userID,
+                      //         }));
+                      //
+                      //     if (res != null) {
+                      //       for (int i = 0; i < res.length; i++) {
+                      //         TeamMemberRecruit tmpRecruit = TeamMemberRecruit.fromJson(res[i]);
+                      //         recruitList.add(tmpRecruit);
+                      //         await GlobalProfile.getFutureTeamByID(tmpRecruit.teamId);
+                      //       }
+                      //     }
+                      //
+                      //     DialogBuilder(context).hideOpenDialog();
+                      //
+                      //     Get.to(() => SpecificUserRecruitPage(isRecruit: true, myRecruitList: recruitList, appBarTitle: '나의 모집 공고'));
+                      //   },
+                      // ),
+                      // SettingColumn(
+                      //   str: "나의 구직 공고",
+                      //   myFunc: () async {
+                      //     List<PersonalSeekTeam> seekList = [];
+                      //
+                      //     DialogBuilder(context).showLoadingIndicator();
+                      //
+                      //     var res = await ApiProvider().post(
+                      //         '/Matching/Select/PersonalSeekTeamByUserID',
+                      //         jsonEncode({
+                      //           'userID': GlobalProfile.loggedInUser!.userID,
+                      //         }));
+                      //
+                      //     if (res != null) {
+                      //       for (int i = 0; i < res.length; i++) {
+                      //         PersonalSeekTeam tmpSeek = PersonalSeekTeam.fromJson(res[i]);
+                      //         seekList.add(tmpSeek);
+                      //         await GlobalProfile.getFutureUserByUserID(tmpSeek.userId);
+                      //       }
+                      //     }
+                      //
+                      //     DialogBuilder(context).hideOpenDialog();
+                      //
+                      //     Get.to(() => SpecificUserRecruitPage(isRecruit: false, mySeekList: seekList, appBarTitle: '나의 구직 공고'));
+                      //   },
+                      // ),
+                      // SettingColumn(
+                      //   str: "내가 지원한 팀",
+                      //   myFunc: () async {
+                      //     List<Team> teamList = [];
+                      //
+                      //     DialogBuilder(context).showLoadingIndicator();
+                      //
+                      //     var res = await ApiProvider().post(
+                      //         '/Matching/Select/Volunteer/TeamList',
+                      //         jsonEncode({
+                      //           'userID': GlobalProfile.loggedInUser!.userID,
+                      //         }));
+                      //
+                      //     if (res != null) {
+                      //       for (int i = 0; i < res.length; i++) {
+                      //         Team tmpTeam = Team.fromJson(res[i]);
+                      //         teamList.add(tmpTeam);
+                      //         await GlobalProfile.getFutureTeamByID(tmpTeam.id);
+                      //       }
+                      //     }
+                      //
+                      //     DialogBuilder(context).hideOpenDialog();
+                      //
+                      //     Get.to(() => ViewMyAppliedPage(teamList: teamList));
+                      //   },
+                      // ),
+                      // SettingColumn(
+                      //   str: "내가 제안한 구직자",
+                      //   myFunc: () async {
+                      //     List<UserData> userList = [];
+                      //
+                      //     DialogBuilder(context).showLoadingIndicator();
+                      //
+                      //     var res = await ApiProvider().post(
+                      //         '/Matching/Select/Suggest/PersonalList',
+                      //         jsonEncode({
+                      //           'userID': GlobalProfile.loggedInUser!.userID,
+                      //         }));
+                      //
+                      //     if (res != null) {
+                      //       for (int i = 0; i < res.length; i++) {
+                      //         UserData tmpUser = UserData.fromJson(res[i][0]);
+                      //         userList.add(tmpUser);
+                      //         await GlobalProfile.getFutureUserByUserID(tmpUser.userID);
+                      //       }
+                      //     }
+                      //
+                      //     DialogBuilder(context).hideOpenDialog();
+                      //
+                      //     Get.to(() => ViewMyAppliedPage(userList: userList, isRecruit: false));
+                      //   },
+                      // ),
+                      // SettingColumn(
+                      //   str: "저장한 공고",
+                      //   myFunc: () async {
+                      //     List<TeamMemberRecruit> recruitList = [];
+                      //
+                      //     DialogBuilder(context).showLoadingIndicator();
+                      //
+                      //     var resRecruit = await ApiProvider().post(
+                      //         '/Matching/Select/Save/TeamMemberRecruit',
+                      //         jsonEncode({
+                      //           'userID': GlobalProfile.loggedInUser!.userID,
+                      //         }));
+                      //
+                      //     if (resRecruit != null) {
+                      //       for (int i = 0; i < resRecruit.length; i++) {
+                      //         TeamMemberRecruit tmpRecruit = TeamMemberRecruit.fromJson(resRecruit[i]);
+                      //         recruitList.add(tmpRecruit);
+                      //         await GlobalProfile.getFutureTeamByID(tmpRecruit.teamId);
+                      //       }
+                      //     }
+                      //
+                      //     List<PersonalSeekTeam> seekList = [];
+                      //
+                      //     var resSeek = await ApiProvider().post(
+                      //         '/Matching/Select/Save/PersonalSeekTeam',
+                      //         jsonEncode({
+                      //           'userID': GlobalProfile.loggedInUser!.userID,
+                      //         }));
+                      //
+                      //     if (resSeek != null) {
+                      //       for (int i = 0; i < resSeek.length; i++) {
+                      //         PersonalSeekTeam tmpSeek = PersonalSeekTeam.fromJson(resSeek[i]);
+                      //         seekList.add(tmpSeek);
+                      //         await GlobalProfile.getFutureUserByUserID(tmpSeek.userId);
+                      //       }
+                      //     }
+                      //
+                      //     DialogBuilder(context).hideOpenDialog();
+                      //
+                      //     Get.to(() => SavedRecruitPage(recruitList: recruitList, seekList: seekList));
+                      //   },
+                      // ),
+                      // Container(
+                      //   width: 360 * sizeUnit,
+                      //   height: 32 * sizeUnit,
+                      //   color: Colors.transparent,
+                      //   child: Padding(
+                      //     padding: EdgeInsets.symmetric(horizontal: 16 * sizeUnit),
+                      //     child: Row(
+                      //       children: [
+                      //         Text(
+                      //           '이벤트',
+                      //           style: SheepsTextStyle.h4(),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       SettingColumn(
                         str: "쿠폰함",
                         myFunc: () => Get.to(() => CouponPage()),

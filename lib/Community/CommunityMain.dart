@@ -103,11 +103,11 @@ class _CommunityMainState extends State<CommunityMain> {
                       ),
                     ],
                   ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () => Get.to(() => CommunityWritePage(selectedCategory: controller.selectedCategory.value))?.then((value) => setState(() {})),
-                    backgroundColor: sheepsColorGreen,
-                    child: SvgPicture.asset(svgWriteIcon, color: Colors.white, width: 30 * sizeUnit, height: 30 * sizeUnit),
-                  ),
+                  // floatingActionButton: FloatingActionButton(
+                  //   onPressed: () => Get.to(() => CommunityWritePage(selectedCategory: controller.selectedCategory.value))?.then((value) => setState(() {})),
+                  //   backgroundColor: sheepsColorGreen,
+                  //   child: SvgPicture.asset(svgWriteIcon, color: Colors.white, width: 30 * sizeUnit, height: 30 * sizeUnit),
+                  // ),
                 ),
               ),
             ),
@@ -143,14 +143,55 @@ class _CommunityMainState extends State<CommunityMain> {
         communityList = GlobalProfile.popularCommunityList;
       else {
         addedPost += controller.addedPostForCategory;
-        communityList = GlobalProfile.filteredCommunityList; // 카테고리일 때
+        communityList = GlobalProfile.filteredCommunityList; // 카테고리일 때|
       }
     }
 
+    {
+      Community community = new Community(id: 3, userID: 2, category: '개발', title: '안녕하세요', contents: '잘부탁드려요', imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '20240210111111', updatedAt: '20240210111111', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+
+      List<CommunityLike> likelist1 = [];
+      likelist1.add(CommunityLike(id: 1,userID: 3,postID: 3,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist1.add(CommunityLike(id: 2,userID: 4,postID: 3,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist1.add(CommunityLike(id: 3,userID: 5,postID: 3,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist1.add(CommunityLike(id: 4,userID: 6,postID: 3,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      community.communityLike = likelist1;
+
+      communityList.add(community);
+
+      Community community2 = new Community(id: 4, userID: 3, category: '디자인', title: '디자이너 연봉', contents: '보통 4년차 대리 디자이너 연봉 어느정도 돼?\n내가 받고있는게 맞나 싶어서', imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '20240210111111', updatedAt: '20240210111111', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+
+      List<CommunityLike> likelist2 = [];
+      likelist2.add(CommunityLike(id: 5,userID: 3,postID: 4,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist2.add(CommunityLike(id: 6,userID: 4,postID: 4,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist2.add(CommunityLike(id: 7,userID: 5,postID: 4,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      community2.communityLike = likelist2;
+      communityList.add(community2);
+
+      Community community3 = new Community(id: 5, userID: 4, category: '블라블라', title: '3년동안 2200에서 6000됐는데 안행복함', contents: '왜그럴까? 하고싶은일 하면서 편하게 사는데 여친없어서그런가', imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '20240210111111', updatedAt: '20240210111111', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+      communityList.add(community3);
+
+      Community community4 = new Community(id: 6, userID: 5, category: '개발', title: '미래에 개발자 수요가 줄어든다는데', contents: '코딩공부 하고 있었는데 접을까?', imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '20240210111111', updatedAt: '20240210111111', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+      List<CommunityLike> likelist3 = [];
+      likelist3.add(CommunityLike(id: 5,userID: 3,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 6,userID: 4,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 7,userID: 5,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 7,userID: 5,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 7,userID: 5,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 7,userID: 5,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 7,userID: 5,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+      likelist3.add(CommunityLike(id: 7,userID: 5,postID: 6,createdAt:  '2024-01-01 11:11:11', updatedAt:'2024-01-01 11:11:11' ));
+
+      community4.communityLike = likelist3;
+      communityList.add(community4);
+    }
     // 전체 OR 인기 게시글
     return Obx(
       () => sheepsCustomRefreshIndicator(
-        onRefresh: () => controller.refreshEvent(searchWord: textEditingController.text).then((value) => setState(() {})),
+        //onRefresh: () => controller.refreshEvent(searchWord: textEditingController.text).then((value) => setState(() {})),
+        onRefresh: () {
+          return Future.value(true);
+        },
         child: controller.isLoading.value
             ? Center(child: CircularProgressIndicator(color: sheepsColorGreen))
             : communityList.length == 0
@@ -165,11 +206,12 @@ class _CommunityMainState extends State<CommunityMain> {
 
                       // 디테일 커뮤니티 페이지 이동 함수
                       Future<void> goToDetail() async {
-                        DialogBuilder(context).showLoadingIndicator();
-                        var tmp = await controller.getReply(context, community);
-                        DialogBuilder(context).hideOpenDialog();
-
-                        if (tmp != null) Get.to(() => CommunityMainDetail(community))?.then((value) => setState(() {}));
+                        // DialogBuilder(context).showLoadingIndicator();
+                        // var tmp = await controller.getReply(context, community);
+                        // DialogBuilder(context).hideOpenDialog();
+                        //
+                        // if (tmp != null) Get.to(() => CommunityMainDetail(community))?.then((value) => setState(() {}));
+                        Get.to(() => CommunityMainDetail(community))?.then((value) => setState(() {}));
                       }
 
                       if (community.category == '공지') return communityNoticePostCard(community: community, lastAddedPost: lastAddedPost, press: goToDetail);
@@ -437,18 +479,18 @@ class _CommunityMainState extends State<CommunityMain> {
                   style: SheepsTextStyle.h2(),
                 ),
                 Spacer(),
-                InkWell(
-                  onTap: () {
-                    controller.activeSearchBar.value = true;
-                    focusNode.requestFocus();
-                  },
-                  child: SvgPicture.asset(
-                    svgGreyMagnifyingGlass,
-                    color: sheepsColorDarkGrey,
-                    width: 28 * sizeUnit,
-                    height: 28 * sizeUnit,
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () {
+                //     controller.activeSearchBar.value = true;
+                //     focusNode.requestFocus();
+                //   },
+                //   child: SvgPicture.asset(
+                //     svgGreyMagnifyingGlass,
+                //     color: sheepsColorDarkGrey,
+                //     width: 28 * sizeUnit,
+                //     height: 28 * sizeUnit,
+                //   ),
+                // ),
               ],
               SizedBox(
                 width: 12 * sizeUnit,

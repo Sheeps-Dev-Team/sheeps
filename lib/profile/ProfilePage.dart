@@ -225,7 +225,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                               pageController: pageController,
                               barIndex: profileState.barIndex.value,
                               insidePadding: 20 * sizeUnit,
-                              listTabItemTitle: ['개인', '팀・스타트업', '전문가'],
+                              listTabItemTitle: ['개인'],
                               listTabItemWidth: [30 * sizeUnit, 90 * sizeUnit, 45 * sizeUnit],
                             )),
                       ),
@@ -1012,68 +1012,68 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   Widget myCustomRefreshIndicator({required Widget child}) {
     return CustomRefreshIndicator(
       onRefresh: () async {
-        //개인프로필상태
-        if (profileState.getState == ProfileState.STATE_PERSON) {
-          // 필터 켜져 있을 때
-          if (_FilterStateForPersonal.isFilteredForPersonal) {
-            await _FilterStateForPersonal.filterEventForPersonal();
-          } else if (GlobalProfile.personalFiltered) {
-            await _FilterStateForPersonal.searchEventForPersonal(_controller.text); // 검색 켜져 있을 때
-          } else {
-            // 리쿠르트에서 프로필 정보를 공유하기 때문에 clear 안하고 중복 체크 함
-            var tmp = await ApiProvider().post('/Personal/Select/UserList', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
-            if (tmp != null) {
-              for (int i = 0; i < tmp.length; i++) {
-                UserData _user = UserData.fromJson(tmp[i]);
-                bool contain = false;
-
-                // 이미 포함되어 있는지 체크
-                for (int j = 0; j < GlobalProfile.personalProfile.length; j++) {
-                  if (GlobalProfile.personalProfile[j].userID == _user.userID) {
-                    contain = true;
-                    GlobalProfile.personalProfile[j] = _user; // 포함되어 있으면 바꿔치기
-                    break;
-                  }
-                }
-
-                if (!contain) GlobalProfile.personalProfile.add(_user); // 포함되어 있지 않다면 집어넣기
-              }
-
-              GlobalProfile.personalProfile.sort((a, b) => b.updatedAt.compareTo(a.updatedAt)); // 최근 접속순으로 정렬
-            }
-          }
-        } else {
-          // 필터 켜져 있을 때
-          if (_FilterStateForPersonal.isFilteredForTeam) {
-            await _FilterStateForPersonal.filterEventForTeam();
-          } else if (GlobalProfile.teamFiltered) {
-            await _FilterStateForPersonal.searchEventForTeam(_controller.text); // 검색 켜져 있을 때
-          } else {
-            // 리쿠르트에서 프로필 정보를 공유하기 때문에 clear 안하고 중복 체크 함
-            var tmp = await ApiProvider().get('/Team/Profile/Select');
-            if (tmp != null) {
-              for (int i = 0; i < tmp.length; i++) {
-                Team _team = Team.fromJson(tmp[i]);
-                bool contain = false;
-
-                // 이미 포함되어 있는지 체크
-                for (int j = 0; j < GlobalProfile.teamProfile.length; j++) {
-                  if (GlobalProfile.teamProfile[j].id == _team.id) {
-                    contain = true;
-                    GlobalProfile.teamProfile[j] = _team; // 포함되어 있다면 바꿔치기
-                    break;
-                  }
-                }
-
-                if (!contain) GlobalProfile.teamProfile.add(_team); // 포함되어 있지 않다면 집어넣기
-
-                GlobalProfile.teamProfile.sort((a, b) => b.updatedAt.compareTo(a.updatedAt)); // 최근 접속순으로 정렬
-              }
-            }
-          }
-        }
-        //데이터 세팅 초기화
-        setState(() {});
+        // //개인프로필상태
+        // if (profileState.getState == ProfileState.STATE_PERSON) {
+        //   // 필터 켜져 있을 때
+        //   if (_FilterStateForPersonal.isFilteredForPersonal) {
+        //     await _FilterStateForPersonal.filterEventForPersonal();
+        //   } else if (GlobalProfile.personalFiltered) {
+        //     await _FilterStateForPersonal.searchEventForPersonal(_controller.text); // 검색 켜져 있을 때
+        //   } else {
+        //     // 리쿠르트에서 프로필 정보를 공유하기 때문에 clear 안하고 중복 체크 함
+        //     var tmp = await ApiProvider().post('/Personal/Select/UserList', jsonEncode({"userID": GlobalProfile.loggedInUser!.userID}));
+        //     if (tmp != null) {
+        //       for (int i = 0; i < tmp.length; i++) {
+        //         UserData _user = UserData.fromJson(tmp[i]);
+        //         bool contain = false;
+        //
+        //         // 이미 포함되어 있는지 체크
+        //         for (int j = 0; j < GlobalProfile.personalProfile.length; j++) {
+        //           if (GlobalProfile.personalProfile[j].userID == _user.userID) {
+        //             contain = true;
+        //             GlobalProfile.personalProfile[j] = _user; // 포함되어 있으면 바꿔치기
+        //             break;
+        //           }
+        //         }
+        //
+        //         if (!contain) GlobalProfile.personalProfile.add(_user); // 포함되어 있지 않다면 집어넣기
+        //       }
+        //
+        //       GlobalProfile.personalProfile.sort((a, b) => b.updatedAt.compareTo(a.updatedAt)); // 최근 접속순으로 정렬
+        //     }
+        //   }
+        // } else {
+        //   // 필터 켜져 있을 때
+        //   if (_FilterStateForPersonal.isFilteredForTeam) {
+        //     await _FilterStateForPersonal.filterEventForTeam();
+        //   } else if (GlobalProfile.teamFiltered) {
+        //     await _FilterStateForPersonal.searchEventForTeam(_controller.text); // 검색 켜져 있을 때
+        //   } else {
+        //     // 리쿠르트에서 프로필 정보를 공유하기 때문에 clear 안하고 중복 체크 함
+        //     var tmp = await ApiProvider().get('/Team/Profile/Select');
+        //     if (tmp != null) {
+        //       for (int i = 0; i < tmp.length; i++) {
+        //         Team _team = Team.fromJson(tmp[i]);
+        //         bool contain = false;
+        //
+        //         // 이미 포함되어 있는지 체크
+        //         for (int j = 0; j < GlobalProfile.teamProfile.length; j++) {
+        //           if (GlobalProfile.teamProfile[j].id == _team.id) {
+        //             contain = true;
+        //             GlobalProfile.teamProfile[j] = _team; // 포함되어 있다면 바꿔치기
+        //             break;
+        //           }
+        //         }
+        //
+        //         if (!contain) GlobalProfile.teamProfile.add(_team); // 포함되어 있지 않다면 집어넣기
+        //
+        //         GlobalProfile.teamProfile.sort((a, b) => b.updatedAt.compareTo(a.updatedAt)); // 최근 접속순으로 정렬
+        //       }
+        //     }
+        //   }
+        // }
+        // //데이터 세팅 초기화
+        // setState(() {});
         return Future.delayed(const Duration(milliseconds: 500));
       },
       builder: (

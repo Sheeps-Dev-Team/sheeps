@@ -257,6 +257,8 @@ String getOptimizeImageURL(String name, int size) {
 }
 
 String timeCheck(String tmp) {
+  if(tmp.length <= 10) return '방금전';
+
   int year = int.parse(tmp[0] + tmp[1] + tmp[2] + tmp[3]);
   int month = int.parse(tmp[4] + tmp[5]);
   int day = int.parse(tmp[6] + tmp[7]);

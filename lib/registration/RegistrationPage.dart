@@ -270,7 +270,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 SizedBox(height: 32 * sizeUnit),
                 Text(
-                  '쉽스에서 활동할 이름을 알려주세요.\n꼭 실명이 아니어도 괜찮아요!',
+                  '사담에서 활동할 이름을 알려주세요.\n꼭 실명이 아니어도 괜찮아요!',
                   style: SheepsTextStyle.b2(),
                 ),
                 SizedBox(

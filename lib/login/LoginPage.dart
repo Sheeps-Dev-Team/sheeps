@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,16 @@ import 'package:sheeps_app/config/GlobalAsset.dart';
 import 'package:sheeps_app/config/GlobalWidget.dart';
 import 'package:sheeps_app/config/SheepsTextStyle.dart';
 import 'package:sheeps_app/notification/models/LocalNotification.dart';
+import 'package:sheeps_app/notification/models/LocalNotificationController.dart';
 import 'package:sheeps_app/registration/IdentityVerificationPage.dart';
 import 'package:sheeps_app/registration/model/RegistrationModel.dart';
 import 'package:sheeps_app/network/ApiProvider.dart';
 import 'package:sheeps_app/network/SocketProvider.dart';
 import 'package:sheeps_app/login/LoginInfoFindPage.dart';
+import 'package:sheeps_app/userdata/User.dart';
+
+import '../Community/models/Community.dart';
+import '../userdata/GlobalProfile.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -103,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             SizedBox(height: 32 * sizeUnit),
                             Text(
-                              '쉽스와 함께 창업을\n쉽고, 멋지게 시작.',
+                              '사담과 함께 회사생활을\n쉽고, 멋지게 시작.',
                               style: SheepsTextStyle.h5(),
                             ),
                             Row(children: [SizedBox(height: 48 * sizeUnit)]),
@@ -141,72 +147,48 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: TextButton(
                                 onPressed: () {
+
+                                  if(kDebugMode){
+                                    GlobalProfile.loggedInUser = DummyUser;
+                                    //Navigator.of(context).pushNamedAndRemoveUntil("/MainPage", (route) => false);
+
+
+                                    List<UserProfileImg> profileImgList = [];
+                                    profileImgList.add(UserProfileImg(id: -2, imgUrl: 'BasicImage'));//id: -2로 기본이미지 구분
+
+                                    UserData user1 = UserData(userID : 3, id: 'sadam2@gmail.com', name: 'Roy', information: 'info', job: '개발자', part: '개발부서', subJob: '디자인', subPart: '디자인부서',
+                                        createdAt: '2024-02-01 11:11:11', updatedAt: '2024-02-01 11:11:11',phoneNumber: '010-1234-5678', profileImgList:profileImgList
+                                    );
+                                    GlobalProfile.personalProfile.add(user1);
+                                    UserData user2 = UserData(userID : 4, id: 'sadam3@gmail.com', name: 'Luen', information: 'info', job: '개발자', part: '개발부서', subJob: '디자인', subPart: '디자인부서',
+                                        createdAt: '2024-02-01 11:11:11', updatedAt: '2024-02-01 11:11:11',phoneNumber: '010-1234-5678', profileImgList:profileImgList
+                                    );
+                                    GlobalProfile.personalProfile.add(user2);
+                                    UserData user3 = UserData(userID : 5, id: 'sadam4@gmail.com', name: 'Noah', information: 'info', job: '개발자', part: '개발부서', subJob: '디자인', subPart: '디자인부서',
+                                        createdAt: '2024-02-01 11:11:11', updatedAt: '2024-02-01 11:11:11',phoneNumber: '010-1234-5678', profileImgList:profileImgList
+                                    );
+                                    GlobalProfile.personalProfile.add(user3);
+                                    UserData user4 = UserData(userID : 6, id: 'sadam5@gmail.com', name: 'Louis', information: 'info', job: '개발자', part: '개발부서', subJob: '디자인', subPart: '디자인부서',
+                                        createdAt: '2024-02-01 11:11:11', updatedAt: '2024-02-01 11:11:11',phoneNumber: '010-1234-5678', profileImgList:profileImgList
+                                    );
+                                    GlobalProfile.personalProfile.add(user4);
+
+                                    //더미데이터추가
+                                    Community noticommunity1 = new Community(id: 1, userID: 2, category: '공지', title: '사담에 오신것을', contents: 'contents', imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '20240210111111', updatedAt: '20240210111111', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+                                    Community noticommunity2 = new Community(id: 2, userID: 2, category: '공지', title: '환영합니다', contents: 'contents', imageUrl1: null, imageUrl2: null, imageUrl3: null, createdAt: '20240210111111', updatedAt: '20240210111111', communityLike: [], isShow: true, type: 0, repliesLength: 0, declareLength: 0);
+                                    GlobalProfile.noticeCommunityList.add(noticommunity1);
+                                    GlobalProfile.noticeCommunityList.add(noticommunity2);
+                                    Get.toNamed("/MainPage");
+                                  }
+
                                   if (_isReady && _idController.text.isNotEmpty && validPassword(_passwordController.text)) {
                                     _isReady = false; //서버중복신호방지
                                     (() async {
-                                      String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
-
-                                      var result = await ApiProvider().post(
-                                          loginURL,
-                                          jsonEncode({
-                                            "id": _idController.text,
-                                            "password": _passwordController.text,
-                                          }));
-
-                                      if (null != result) {
-                                        if (result['result'] == null) {
-                                          if (result['res'] == 2) {
-                                            Function okFunc = () {
-                                              globalLoginID = _idController.text;
-
-                                              Get.back();
-
-                                              Get.to(IdentityVerificationPage(identityStatus: IdentityStatus.SignUP));
-                                            };
-
-                                            Function cancelFunc = () {
-                                              Get.back();
-                                            };
-
-                                            _isReady = true; //서버중복신호방지
-                                            showSheepsDialog(
-                                              context: context,
-                                              title: '핸드폰 인증 필요',
-                                              description: "해당 아이디는 핸드폰 인증이 필요합니다.\n인증 페이지로 가시겠어요?",
-                                              okText: '갈게요',
-                                              okFunc: okFunc,
-                                              cancelText: '좀 더 생각해볼게요',
-                                              cancelFunc: cancelFunc,
-                                            );
-                                            return;
-                                          } else {
-                                            Function okFunc = () {
-                                              ApiProvider().post('/Personal/Logout', jsonEncode({"userID": result['userID'], "isSelf": 0}), isChat: true);
-
-                                              Get.back();
-                                            };
-
-                                            showSheepsDialog(
-                                              context: context,
-                                              title: "로그아웃",
-                                              description: "해당 아이디는 이미 로그인 중입니다.\n로그아웃을 요청하시겠어요?",
-                                              okText: "로그아웃 할게요",
-                                              okFunc: okFunc,
-                                              cancelText: "좀 더 생각해볼게요",
-                                            );
-                                            _isReady = true; //서버중복신호방지
-                                            return;
-                                          }
-                                        }
-
-                                        final SharedPreferences prefs = await SharedPreferences.getInstance();
-                                        prefs.setBool('autoLoginKey', true);
-                                        prefs.setString('autoLoginId', _idController.text);
-                                        prefs.setString('autoLoginPw', _passwordController.text);
-                                        prefs.setString('socialLogin', 0.toString());
-
-                                        globalLogin(context, provider, result);
-                                      } else {
+                                      if(_idController.text == 'sadam@gmail.com' && _passwordController.text == 'sadam1!'){
+                                        GlobalProfile.loggedInUser = DummyUser;
+                                        //Navigator.of(context).pushNamedAndRemoveUntil("/MainPage", (route) => false);
+                                        Get.toNamed("/MainPage");
+                                      }else {
                                         showSheepsDialog(
                                           context: context,
                                           title: "로그인 실패",
@@ -215,6 +197,78 @@ class _LoginPageState extends State<LoginPage> {
                                         );
                                         _isReady = true; //서버중복신호방지
                                       }
+
+                                      // String loginURL = !kReleaseMode ? '/Personal/Select/DebugLogin' : '/Personal/Select/Login';
+                                      //
+                                      // var result = await ApiProvider().post(
+                                      //     loginURL,
+                                      //     jsonEncode({
+                                      //       "id": _idController.text,
+                                      //       "password": _passwordController.text,
+                                      //     }));
+                                      //
+                                      // if (null != result) {
+                                      //   if (result['result'] == null) {
+                                      //     if (result['res'] == 2) {
+                                      //       Function okFunc = () {
+                                      //         globalLoginID = _idController.text;
+                                      //
+                                      //         Get.back();
+                                      //
+                                      //         Get.to(IdentityVerificationPage(identityStatus: IdentityStatus.SignUP));
+                                      //       };
+                                      //
+                                      //       Function cancelFunc = () {
+                                      //         Get.back();
+                                      //       };
+                                      //
+                                      //       _isReady = true; //서버중복신호방지
+                                      //       showSheepsDialog(
+                                      //         context: context,
+                                      //         title: '핸드폰 인증 필요',
+                                      //         description: "해당 아이디는 핸드폰 인증이 필요합니다.\n인증 페이지로 가시겠어요?",
+                                      //         okText: '갈게요',
+                                      //         okFunc: okFunc,
+                                      //         cancelText: '좀 더 생각해볼게요',
+                                      //         cancelFunc: cancelFunc,
+                                      //       );
+                                      //       return;
+                                      //     } else {
+                                      //       Function okFunc = () {
+                                      //         ApiProvider().post('/Personal/Logout', jsonEncode({"userID": result['userID'], "isSelf": 0}), isChat: true);
+                                      //
+                                      //         Get.back();
+                                      //       };
+                                      //
+                                      //       showSheepsDialog(
+                                      //         context: context,
+                                      //         title: "로그아웃",
+                                      //         description: "해당 아이디는 이미 로그인 중입니다.\n로그아웃을 요청하시겠어요?",
+                                      //         okText: "로그아웃 할게요",
+                                      //         okFunc: okFunc,
+                                      //         cancelText: "좀 더 생각해볼게요",
+                                      //       );
+                                      //       _isReady = true; //서버중복신호방지
+                                      //       return;
+                                      //     }
+                                      //   }
+                                      //
+                                      //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      //   prefs.setBool('autoLoginKey', true);
+                                      //   prefs.setString('autoLoginId', _idController.text);
+                                      //   prefs.setString('autoLoginPw', _passwordController.text);
+                                      //   prefs.setString('socialLogin', 0.toString());
+                                      //
+                                      //   globalLogin(context, provider, result);
+                                      // } else {
+                                      //   showSheepsDialog(
+                                      //     context: context,
+                                      //     title: "로그인 실패",
+                                      //     description: "가입하지 않은 아이디이거나\n잘못된 비밀번호입니다",
+                                      //     isCancelButton: false,
+                                      //   );
+                                      //   _isReady = true; //서버중복신호방지
+                                      // }
                                     })();
                                   } else {
                                     setState(() {
@@ -224,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                                 child: Text(
-                                  "쉽스에 로그인",
+                                  "사담에 로그인",
                                   style: SheepsTextStyle.button1(),
                                 ),
                               ),
@@ -314,33 +368,33 @@ class _LoginPageState extends State<LoginPage> {
                             //       _isReady = true;
                             //     }
                             //   },
-                            //   text: '쉽스에 로그인',
+                            //   text: '사담에 로그인',
                             // ),
                             SizedBox(height: 20 * sizeUnit),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => LoginInfoFindPage());
-                                  },
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "아이디, 비밀번호가 생각나지 않나요?",
-                                          style: SheepsTextStyle.info1(),
-                                        ),
-                                        TextSpan(
-                                          text: " 찾기",
-                                          style: SheepsTextStyle.infoStrong(),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //         Get.to(() => LoginInfoFindPage());
+                            //       },
+                            //       child: RichText(
+                            //         text: TextSpan(
+                            //           children: [
+                            //             TextSpan(
+                            //               text: "아이디, 비밀번호가 생각나지 않나요?",
+                            //               style: SheepsTextStyle.info1(),
+                            //             ),
+                            //             TextSpan(
+                            //               text: " 찾기",
+                            //               style: SheepsTextStyle.infoStrong(),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),

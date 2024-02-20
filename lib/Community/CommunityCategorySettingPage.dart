@@ -98,7 +98,7 @@ class _CommunityCategorySettingPageState extends State<CommunityCategorySettingP
   void initState() {
     super.initState();
 
-    _list = setList(communityCategoryList);
+    _list = setList(basicCommunityCategoryList);
   }
 
   @override

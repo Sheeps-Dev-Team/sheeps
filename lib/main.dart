@@ -61,15 +61,15 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    _chatGlobal = Get.put(ChatGlobal());
-    socket = Get.put(SocketProvider());
+    // WidgetsBinding.instance.addObserver(this);
+    // _chatGlobal = Get.put(ChatGlobal());
+    // socket = Get.put(SocketProvider());
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -77,163 +77,163 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   void didChangeAppLifecycleState(AppLifecycleState state) {
     debugPrint('state = $state');
 
-    List<StoppableService> services = [
-      socket!,
-    ];
-
-    services.forEach((service) {
-      if(state == AppLifecycleState.resumed){
-
-        //5분 주기로 access token 을 받아온다
-        if(GlobalProfile.loggedInUser != null ) {
-          Future.microtask(() async {
-            if (int.parse(GlobalProfile.accessTokenExpiredAt!) < int.parse(DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10))) {
-              var res = await ApiProvider().post('/Personal/Select/Login/Token', jsonEncode({
-                "userID" : GlobalProfile.loggedInUser!.userID,
-                "refreshToken" : GlobalProfile.refreshToken
-              }));
-
-              if(res != null){
-                GlobalProfile.accessToken = res['AccessToken'] as String;
-                GlobalProfile.accessTokenExpiredAt = (res['AccessTokenExpiredAt'] as int).toString();
-              }
-            }
-          });
-
-          if(isRecvData == false){
-
-            //알림 가져오기
-            Future.microtask(() async {
-              var notiListGet = await ApiProvider().post('/Notification/UnSendSelect', jsonEncode(
-                  {
-                    "userID" : GlobalProfile.loggedInUser!.userID,
-                  }
-              ));
-
-              if(null != notiListGet){
-                for(int i = 0; i < notiListGet.length; ++i){
-                  NotificationModel notificationModel = NotificationModel.fromJson(notiListGet[i]);
-
-                  //알림 이벤트 가져오기 필요함
-                  NotificationModel replaceModel;
-                  if(notificationModel.type == NOTI_EVENT_TEAM_REQUEST_ACCEPT){
-                    Team team = await GlobalProfile.getFutureTeamByID(notificationModel.teamIndex);
-
-                    var res = await ApiProvider().post('/Team/WithoutTeamList', jsonEncode(
-                        {
-                          "to" : notificationModel.to,
-                          "from" : notificationModel.from,
-                          "teamID" : team.id
-                        }
-                    ));
-
-                    List<int> chatList = [];
-
-                    if(res != null){
-                      for(int i = 0 ; i < res.length; ++i){
-                        chatList.add(res[i]['UserID']);
-                      }
-                    }
-                    replaceModel = await SetNotificationData(notificationModel, chatList);
-                  }
-                  else{
-                    replaceModel = await SetNotificationData(notificationModel, []);
-                  }
-
-                  if(isSaveNoti(replaceModel)){
-                    var id = await NotiDBHelper().createData(replaceModel);
-                    replaceModel.id = id;
-                    notiList.insert(0,replaceModel);
-                  }
-                }
-              }
-
-              var chatLogList = await ApiProvider().post('/ChatLog/UnSendSelect', jsonEncode(
-                  {
-                    "userID" : GlobalProfile.loggedInUser!.userID
-                  }
-              ));
-
-              if(chatLogList != null){
-                for(int i = 0 ; i < chatLogList.length; ++i){
-                  ChatRecvMessageModel message = ChatRecvMessageModel(
-                    chatId: chatLogList[i]['id'],
-                    roomName: chatLogList[i]['roomName'],
-                    to: chatLogList[i]['to'].toString(),
-                    from : chatLogList[i]['from'],
-                    message: chatLogList[i]['message'],
-                    date: chatLogList[i]['date'],
-                    isRead: 0,
-                    isImage: chatLogList[i]['isImage'],
-                    updatedAt: replaceUTCDate(chatLogList[i]['updatedAt']),
-                    createdAt: replaceUTCDate(chatLogList[i]['createdAt']),
-                  );
-
-                  if(message.isImage != 0){
-                    var getImageData = await ApiProvider().post('/ChatLog/SelectImageData', jsonEncode({"id": message.isImage}));
-
-                    if (getImageData != null) {
-                      message.message = getImageData['Data'];
-
-                      for(int i = 0 ; i < ChatGlobal.roomInfoList.length; ++i){
-                        if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
-                          message.isRead = 0;
-                          bool DoSort = true;
-                          if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
-                            DoSort = false;
-                            if(ChatGlobal.currentRoomIndex == i){
-                              message.isRead = 1;
-                            }
-                          }
-                          message.isContinue = true;
-                          await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
-
-                          int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
-
-                          _chatGlobal!.setContinue(message, prevIndex, i);
-                          _chatGlobal!.chatListScrollToBottom();
-
-                        }
-                      }
-                    }else{
-                      message.isImage = 0;
-                      message.message = "로드 할 수 없는 이미지 입니다.";
-                    }
-                  }else{
-                    for(int i = 0 ; i < ChatGlobal.roomInfoList.length; ++i){
-                      if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
-                        message.isRead = 0;
-                        bool DoSort = true;
-                        if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
-                          DoSort = false;
-                          if(ChatGlobal.currentRoomIndex == i){
-                            message.isRead = 1;
-                          }
-                        }
-                        message.isContinue = true;
-                        await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
-
-                        int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
-
-                        _chatGlobal!.setContinue(message, prevIndex, i);
-                        _chatGlobal!.chatListScrollToBottom();
-                      }
-                    }
-                  }
-                }
-              }
-
-              Get.appUpdate();
-            });
-          }else{
-            isRecvData = false;
-          }
-        }
-        service.start();
-      }else if(state == AppLifecycleState.paused){
-        service.stop();
-      }
-    });
+    // List<StoppableService> services = [
+    //   socket!,
+    // ];
+    //
+    // services.forEach((service) {
+    //   if(state == AppLifecycleState.resumed){
+    //
+    //     //5분 주기로 access token 을 받아온다
+    //     if(GlobalProfile.loggedInUser != null ) {
+    //       Future.microtask(() async {
+    //         if (int.parse(GlobalProfile.accessTokenExpiredAt!) < int.parse(DateTime.now().millisecondsSinceEpoch.toString().substring(0, 10))) {
+    //           var res = await ApiProvider().post('/Personal/Select/Login/Token', jsonEncode({
+    //             "userID" : GlobalProfile.loggedInUser!.userID,
+    //             "refreshToken" : GlobalProfile.refreshToken
+    //           }));
+    //
+    //           if(res != null){
+    //             GlobalProfile.accessToken = res['AccessToken'] as String;
+    //             GlobalProfile.accessTokenExpiredAt = (res['AccessTokenExpiredAt'] as int).toString();
+    //           }
+    //         }
+    //       });
+    //
+    //       if(isRecvData == false){
+    //
+    //         //알림 가져오기
+    //         Future.microtask(() async {
+    //           var notiListGet = await ApiProvider().post('/Notification/UnSendSelect', jsonEncode(
+    //               {
+    //                 "userID" : GlobalProfile.loggedInUser!.userID,
+    //               }
+    //           ));
+    //
+    //           if(null != notiListGet){
+    //             for(int i = 0; i < notiListGet.length; ++i){
+    //               NotificationModel notificationModel = NotificationModel.fromJson(notiListGet[i]);
+    //
+    //               //알림 이벤트 가져오기 필요함
+    //               NotificationModel replaceModel;
+    //               if(notificationModel.type == NOTI_EVENT_TEAM_REQUEST_ACCEPT){
+    //                 Team team = await GlobalProfile.getFutureTeamByID(notificationModel.teamIndex);
+    //
+    //                 var res = await ApiProvider().post('/Team/WithoutTeamList', jsonEncode(
+    //                     {
+    //                       "to" : notificationModel.to,
+    //                       "from" : notificationModel.from,
+    //                       "teamID" : team.id
+    //                     }
+    //                 ));
+    //
+    //                 List<int> chatList = [];
+    //
+    //                 if(res != null){
+    //                   for(int i = 0 ; i < res.length; ++i){
+    //                     chatList.add(res[i]['UserID']);
+    //                   }
+    //                 }
+    //                 replaceModel = await SetNotificationData(notificationModel, chatList);
+    //               }
+    //               else{
+    //                 replaceModel = await SetNotificationData(notificationModel, []);
+    //               }
+    //
+    //               if(isSaveNoti(replaceModel)){
+    //                 var id = await NotiDBHelper().createData(replaceModel);
+    //                 replaceModel.id = id;
+    //                 notiList.insert(0,replaceModel);
+    //               }
+    //             }
+    //           }
+    //
+    //           var chatLogList = await ApiProvider().post('/ChatLog/UnSendSelect', jsonEncode(
+    //               {
+    //                 "userID" : GlobalProfile.loggedInUser!.userID
+    //               }
+    //           ));
+    //
+    //           if(chatLogList != null){
+    //             for(int i = 0 ; i < chatLogList.length; ++i){
+    //               ChatRecvMessageModel message = ChatRecvMessageModel(
+    //                 chatId: chatLogList[i]['id'],
+    //                 roomName: chatLogList[i]['roomName'],
+    //                 to: chatLogList[i]['to'].toString(),
+    //                 from : chatLogList[i]['from'],
+    //                 message: chatLogList[i]['message'],
+    //                 date: chatLogList[i]['date'],
+    //                 isRead: 0,
+    //                 isImage: chatLogList[i]['isImage'],
+    //                 updatedAt: replaceUTCDate(chatLogList[i]['updatedAt']),
+    //                 createdAt: replaceUTCDate(chatLogList[i]['createdAt']),
+    //               );
+    //
+    //               if(message.isImage != 0){
+    //                 var getImageData = await ApiProvider().post('/ChatLog/SelectImageData', jsonEncode({"id": message.isImage}));
+    //
+    //                 if (getImageData != null) {
+    //                   message.message = getImageData['Data'];
+    //
+    //                   for(int i = 0 ; i < ChatGlobal.roomInfoList.length; ++i){
+    //                     if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
+    //                       message.isRead = 0;
+    //                       bool DoSort = true;
+    //                       if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
+    //                         DoSort = false;
+    //                         if(ChatGlobal.currentRoomIndex == i){
+    //                           message.isRead = 1;
+    //                         }
+    //                       }
+    //                       message.isContinue = true;
+    //                       await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
+    //
+    //                       int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
+    //
+    //                       _chatGlobal!.setContinue(message, prevIndex, i);
+    //                       _chatGlobal!.chatListScrollToBottom();
+    //
+    //                     }
+    //                   }
+    //                 }else{
+    //                   message.isImage = 0;
+    //                   message.message = "로드 할 수 없는 이미지 입니다.";
+    //                 }
+    //               }else{
+    //                 for(int i = 0 ; i < ChatGlobal.roomInfoList.length; ++i){
+    //                   if(ChatGlobal.roomInfoList[i].roomName == message.roomName){
+    //                     message.isRead = 0;
+    //                     bool DoSort = true;
+    //                     if(socket!.getRoomStatus == ROOM_STATUS_CHAT){
+    //                       DoSort = false;
+    //                       if(ChatGlobal.currentRoomIndex == i){
+    //                         message.isRead = 1;
+    //                       }
+    //                     }
+    //                     message.isContinue = true;
+    //                     await _chatGlobal!.addChatRecvMessage(message, i, doSort: DoSort);
+    //
+    //                     int prevIndex = ChatGlobal.roomInfoList[i].chatList.length > 2 ? ChatGlobal.roomInfoList[i].chatList.length - 2 : 0;
+    //
+    //                     _chatGlobal!.setContinue(message, prevIndex, i);
+    //                     _chatGlobal!.chatListScrollToBottom();
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //
+    //           Get.appUpdate();
+    //         });
+    //       }else{
+    //         isRecvData = false;
+    //       }
+    //     }
+    //     service.start();
+    //   }else if(state == AppLifecycleState.paused){
+    //     service.stop();
+    //   }
+    // });
   }
 
   @override
@@ -289,65 +289,65 @@ void main() async{
   //SystemChrome.setSystemUIOverlayStyle(dark);
   WidgetsFlutterBinding.ensureInitialized();
 
-  if(myReleaseMode){
-    HttpOverrides.global = new MyHttpOverrides();
-  }
+  // if(myReleaseMode){
+  //   HttpOverrides.global = new MyHttpOverrides();
+  // }
 
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
 
   // Set the background messaging handler early on, as a named top-level function
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  /// Update the iOS foreground notification presentation options to allow
-  /// heads up notifications.
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  var dir = await getApplicationDocumentsDirectory();
-  applicationDocumentsDirectory = dir.path;
-
-  // 릴리즈 버전에서 에러 확인하는 방법 -- 삭제 x
-  // ErrorWidget.builder = (FlutterErrorDetails details) {
-  //   bool inDebug = false;
-  //   assert(() { inDebug = true; return true; }());
-  //   // In debug mode, use the normal error widget which shows
-  //   // the error message:
-  //   if (inDebug)
-  //     return ErrorWidget(details.exception);
-  //   // In release builds, show a yellow-on-blue message instead:
-  //   return Container(
-  //     alignment: Alignment.center,
-  //     child: Text(
-  //       'Error! ${details.exception}',
-  //       style: TextStyle(color: Colors.yellow),
-  //       textDirection: TextDirection.ltr,
-  //     ),
-  //   );
-  // };
-
-  ByteData data = await rootBundle.load('assets/raw/certificate.pem');
-  SecurityContext context = SecurityContext.defaultContext;
-  context.setTrustedCertificatesBytes(data.buffer.asUint8List());
-
-  //카카오 네이티브앱 키
-  final String config = await rootBundle.loadString('assets/raw/config.json');
-  final configData = await json.decode(config);
-
-  //카카오 네이티브앱 키
-  KakaoSdk.init(nativeAppKey: configData['items'][0]['data']);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //     AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
+  //
+  // /// Update the iOS foreground notification presentation options to allow
+  // /// heads up notifications.
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
+  //
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+  //
+  // var dir = await getApplicationDocumentsDirectory();
+  // applicationDocumentsDirectory = dir.path;
+  //
+  // // 릴리즈 버전에서 에러 확인하는 방법 -- 삭제 x
+  // // ErrorWidget.builder = (FlutterErrorDetails details) {
+  // //   bool inDebug = false;
+  // //   assert(() { inDebug = true; return true; }());
+  // //   // In debug mode, use the normal error widget which shows
+  // //   // the error message:
+  // //   if (inDebug)
+  // //     return ErrorWidget(details.exception);
+  // //   // In release builds, show a yellow-on-blue message instead:
+  // //   return Container(
+  // //     alignment: Alignment.center,
+  // //     child: Text(
+  // //       'Error! ${details.exception}',
+  // //       style: TextStyle(color: Colors.yellow),
+  // //       textDirection: TextDirection.ltr,
+  // //     ),
+  // //   );
+  // // };
+  //
+  // ByteData data = await rootBundle.load('assets/raw/certificate.pem');
+  // SecurityContext context = SecurityContext.defaultContext;
+  // context.setTrustedCertificatesBytes(data.buffer.asUint8List());
+  //
+  // //카카오 네이티브앱 키
+  // final String config = await rootBundle.loadString('assets/raw/config.json');
+  // final configData = await json.decode(config);
+  //
+  // //카카오 네이티브앱 키
+  // KakaoSdk.init(nativeAppKey: configData['items'][0]['data']);
 
   runApp(MyApp());
 }
@@ -367,7 +367,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     //다이나믹 링크 - 앱이 켜져있으며 로그인 되어 있을 때 동작
-    initDynamicLinks();
+    // initDynamicLinks();
   }
 
   @override
@@ -441,11 +441,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   static List<Widget> _widgetOptions = <Widget>[
-    DashBoardMain(),
-    ProfilePage(),
-    RecruitPage(),
+    // DashBoardMain(),
     CommunityMain(),
-    ChatRoomPage(),
+    ProfilePage(),
+    // RecruitPage(),
+    // ChatRoomPage(),
   ];
 
   final navigationNum = Get.put(NavigationNum());
@@ -492,9 +492,9 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     // TODO: implement initState
-    if(Platform.isIOS){
-      WidgetsBinding.instance.addPostFrameCallback((_) => initPlugin());
-    }
+    // if(Platform.isIOS){
+    //   WidgetsBinding.instance.addPostFrameCallback((_) => initPlugin());
+    // }
 
 
     super.initState();
@@ -540,22 +540,39 @@ class _MainPageState extends State<MainPage> {
                       },
                       currentIndex: navigationNum.getNum(),
                       items: [
+                        // BottomNavigationBarItem(
+                        //     icon: Column(
+                        //       children: [
+                        //         SvgPicture.asset(
+                        //           svgHomeIcon,
+                        //           height: 18*sizeUnit,
+                        //           color: navigationNum.getNum() == DASHBOARD_MAIN_PAGE ? sheepsColorBlack : sheepsColorGrey,
+                        //         ),
+                        //         SizedBox(height: 6*sizeUnit),
+                        //         Text('홈',style: SheepsTextStyle.navigationBarTitle().copyWith(
+                        //             color: navigationNum.getNum() == DASHBOARD_MAIN_PAGE ? sheepsColorBlack : sheepsColorGrey
+                        //         )),
+                        //         SizedBox(height: 4*sizeUnit),
+                        //       ],
+                        //     ),
+                        //     label: '홈'
+                        // ),
                         BottomNavigationBarItem(
                             icon: Column(
                               children: [
                                 SvgPicture.asset(
-                                  svgHomeIcon,
+                                  svgCommunityIcon,
                                   height: 18*sizeUnit,
                                   color: navigationNum.getNum() == DASHBOARD_MAIN_PAGE ? sheepsColorBlack : sheepsColorGrey,
                                 ),
                                 SizedBox(height: 6*sizeUnit),
-                                Text('홈',style: SheepsTextStyle.navigationBarTitle().copyWith(
+                                Text('커뮤니티',style: SheepsTextStyle.navigationBarTitle().copyWith(
                                     color: navigationNum.getNum() == DASHBOARD_MAIN_PAGE ? sheepsColorBlack : sheepsColorGrey
                                 )),
                                 SizedBox(height: 4*sizeUnit),
                               ],
                             ),
-                            label: '홈'
+                            label: '커뮤니티'
                         ),
                         BottomNavigationBarItem(
                             icon: Column(
@@ -574,79 +591,63 @@ class _MainPageState extends State<MainPage> {
                             ),
                             label: '프로필'
                         ),
-                        BottomNavigationBarItem(
-                            icon: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  svgTeamRecruitIcon,
-                                  width: 18*sizeUnit,
-                                  height: 18*sizeUnit,
-                                  color: navigationNum.getNum() == TEAM_RECRUIT_PAGE ? sheepsColorBlack : sheepsColorGrey,
-                                ),
-                                SizedBox(height: 6*sizeUnit),
-                                Text('리쿠르트',style: SheepsTextStyle.navigationBarTitle().copyWith(
-                                    color: navigationNum.getNum() == TEAM_RECRUIT_PAGE ? sheepsColorBlack : sheepsColorGrey
-                                )),
-                                SizedBox(height: 4*sizeUnit),
-                              ],
-                            ),
-                            label: '리쿠르트'
-                        ),
-                        BottomNavigationBarItem(
-                            icon: Column(
-                              children: [
-                                SvgPicture.asset(
-                                  svgCommunityIcon,
-                                  height: 18*sizeUnit,
-                                  color: navigationNum.getNum() == COMMUNITY_MAIN_PAGE ? sheepsColorBlack : sheepsColorGrey,
-                                ),
-                                SizedBox(height: 6*sizeUnit),
-                                Text('커뮤니티',style: SheepsTextStyle.navigationBarTitle().copyWith(
-                                    color: navigationNum.getNum() == COMMUNITY_MAIN_PAGE ? sheepsColorBlack : sheepsColorGrey
-                                )),
-                                SizedBox(height: 4*sizeUnit),
-                              ],
-                            ),
-                            label: '커뮤니티'
-                        ),
-                        BottomNavigationBarItem(
-                            icon: Column(
-                              children: [
-                                badges.Badge(
-                                  badgeContent : Text(
-                                    chatGlobal.getMessageTotalCount() > 99
-                                        ? '99+'
-                                        : chatGlobal.getMessageTotalCount().toString(),
-                                    style: TextStyle(fontSize: 9*sizeUnit, color: Colors.white, height: 1.35, fontWeight: FontWeight.bold),
-                                  ),
-                                  badgeStyle: badges.BadgeStyle(
-                                    shape : badges.BadgeShape.circle,
-                                    badgeColor : sheepsColorRed,
-                                    elevation : 0,
-                                    padding : chatGlobal.getMessageTotalCount() > 9
-                                        ? EdgeInsets.all(3.5*sizeUnit)
-                                        : EdgeInsets.all(6*sizeUnit),
-                                  ),
-                                  position: chatGlobal.getMessageTotalCount() > 9
-                                      ? badges.BadgePosition.bottomStart(bottom: 8,start: 11)
-                                      : badges.BadgePosition.bottomStart(bottom: 5, start: 11),
-                                  showBadge: chatGlobal.getMessageTotalCount() == 0 ? false : true,
-                                  child: SvgPicture.asset(
-                                    svgChatRoomIcon,
-                                    width: 18*sizeUnit,
-                                    height: 18*sizeUnit,
-                                    color: navigationNum.getNum() == CHATROOM_PAGE ? sheepsColorBlack : sheepsColorGrey,
-                                  ),
-                                ),
-                                SizedBox(height: 6*sizeUnit),
-                                Text('채팅',style: SheepsTextStyle.navigationBarTitle().copyWith(
-                                    color: navigationNum.getNum() == CHATROOM_PAGE ? sheepsColorBlack : sheepsColorGrey
-                                )),
-                                SizedBox(height: 4*sizeUnit),
-                              ],
-                            ),
-                            label: '채팅'
-                        ),
+                        // BottomNavigationBarItem(
+                        //     icon: Column(
+                        //       children: [
+                        //         SvgPicture.asset(
+                        //           svgTeamRecruitIcon,
+                        //           width: 18*sizeUnit,
+                        //           height: 18*sizeUnit,
+                        //           color: navigationNum.getNum() == TEAM_RECRUIT_PAGE ? sheepsColorBlack : sheepsColorGrey,
+                        //         ),
+                        //         SizedBox(height: 6*sizeUnit),
+                        //         Text('리쿠르트',style: SheepsTextStyle.navigationBarTitle().copyWith(
+                        //             color: navigationNum.getNum() == TEAM_RECRUIT_PAGE ? sheepsColorBlack : sheepsColorGrey
+                        //         )),
+                        //         SizedBox(height: 4*sizeUnit),
+                        //       ],
+                        //     ),
+                        //     label: '리쿠르트'
+                        // ),
+
+                        // BottomNavigationBarItem(
+                        //     icon: Column(
+                        //       children: [
+                        //         badges.Badge(
+                        //           badgeContent : Text(
+                        //             chatGlobal.getMessageTotalCount() > 99
+                        //                 ? '99+'
+                        //                 : chatGlobal.getMessageTotalCount().toString(),
+                        //             style: TextStyle(fontSize: 9*sizeUnit, color: Colors.white, height: 1.35, fontWeight: FontWeight.bold),
+                        //           ),
+                        //           badgeStyle: badges.BadgeStyle(
+                        //             shape : badges.BadgeShape.circle,
+                        //             badgeColor : sheepsColorRed,
+                        //             elevation : 0,
+                        //             padding : chatGlobal.getMessageTotalCount() > 9
+                        //                 ? EdgeInsets.all(3.5*sizeUnit)
+                        //                 : EdgeInsets.all(6*sizeUnit),
+                        //           ),
+                        //           position: chatGlobal.getMessageTotalCount() > 9
+                        //               ? badges.BadgePosition.bottomStart(bottom: 8,start: 11)
+                        //               : badges.BadgePosition.bottomStart(bottom: 5, start: 11),
+                        //           showBadge: chatGlobal.getMessageTotalCount() == 0 ? false : true,
+                        //           child: SvgPicture.asset(
+                        //             svgChatRoomIcon,
+                        //             width: 18*sizeUnit,
+                        //             height: 18*sizeUnit,
+                        //             color: navigationNum.getNum() == CHATROOM_PAGE ? sheepsColorBlack : sheepsColorGrey,
+                        //           ),
+                        //         ),
+                        //         SizedBox(height: 6*sizeUnit),
+                        //         Text('채팅',style: SheepsTextStyle.navigationBarTitle().copyWith(
+                        //             color: navigationNum.getNum() == CHATROOM_PAGE ? sheepsColorBlack : sheepsColorGrey
+                        //         )),
+                        //         SizedBox(height: 4*sizeUnit),
+                        //       ],
+                        //     ),
+                        //     label: '채팅'
+                        // ),
                       ],
                     ),
                   ),

@@ -1235,7 +1235,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
       String title = cutAuthInfo(teamMemberRecruit.title);
 
       DialogBuilder(context).hideOpenDialog();
-      Share.share('$name 팀 팀원모집 보기\n$title\n$shortUrl', subject: '스타트업 필수 앱! 쉽스!\n');
+      Share.share('$name 팀 팀원모집 보기\n$title\n$shortUrl', subject: '스타트업 필수 앱! 사담!\n');
     } else {
       DialogBuilder(context).showLoadingIndicator();
       final DynamicLinkParameters parameters = DynamicLinkParameters(
@@ -1259,7 +1259,7 @@ class _RecruitDetailPageState extends State<RecruitDetailPage> {
       String title = cutAuthInfo(personalSeekTeam.title);
 
       DialogBuilder(context).hideOpenDialog();
-      Share.share('$name님 팀 찾기 보기\n$title\n$shortUrl', subject: '스타트업 필수 앱! 쉽스!\n');
+      Share.share('$name님 팀 찾기 보기\n$title\n$shortUrl', subject: '스타트업 필수 앱! 사담!\n');
     }
   }
 }

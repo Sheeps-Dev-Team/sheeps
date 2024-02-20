@@ -83,7 +83,7 @@ class _AddWinState extends State<AddWinPage> {
                                   SizedBox(height: 12 * sizeUnit),
                                   multiLineTextField(
                                     controller: winController,
-                                    hintText: 'ex)쉽스경진대회',
+                                    hintText: 'ex)사담경진대회',
                                     borderColor: sheepsColorBlue,
                                     isOneLine: true,
                                   ),

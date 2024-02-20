@@ -1345,6 +1345,6 @@ class _DetailTeamProfileState extends State<DetailTeamProfile> with SingleTicker
     String name = modifyTeam.name;
 
     DialogBuilder(context).hideOpenDialog();
-    Share.share('$name 팀 프로필 보기\n$shortUrl', subject: '스타트업 필수 앱! 쉽스!\n');
+    Share.share('$name 팀 프로필 보기\n$shortUrl', subject: '스타트업 필수 앱! 사담!\n');
   }
 }

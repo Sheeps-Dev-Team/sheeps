@@ -94,7 +94,7 @@ class _AddPerformanceState extends State<AddPerformancePage> {
                                   SizedBox(height: 12 * sizeUnit),
                                   multiLineTextField(
                                     controller: organizationController,
-                                    hintText: 'ex) 주식회사 쉽스/자체 프로젝트',
+                                    hintText: 'ex) 주식회사 사담/자체 프로젝트',
                                     borderColor: sheepsColorGreen,
                                     isOneLine: true,
                                   ),

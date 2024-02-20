@@ -334,3 +334,7 @@ class UserData {
         'accessToken': accessToken,
       };
 }
+
+UserData DummyUser = UserData(userID : 2, id: 'sadam@gmail.com', name: '사담', information: 'info', job: '개발자', part: '개발부서', subJob: '디자인', subPart: '디자인부서',
+createdAt: '2024-02-01 11:11:11', updatedAt: '2024-02-01 11:11:11',phoneNumber: '010-1234-5678'
+);

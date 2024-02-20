@@ -53,10 +53,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     listBoardContents = [
       BoardContents(
         icon: 'assets/images/LoginReg/BoardRocket.svg',
-        title1: '쉽스에 모여있는',
+        title1: '사담에 모여있는',
         title2: '미래의 유니콘들',
         contents: [
-          TextSpan(text: '쉽스는 '),
+          TextSpan(text: '사담는 '),
           TextSpan(
             text: '쉽지않은 스타트업',
             style: TextStyle(fontWeight: FontWeight.bold),
