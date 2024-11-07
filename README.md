@@ -1,16 +1,15 @@
-# sheeps_app
+# Sheeps Client
+쉽스 프로젝트 클라이언트 입니다.
 
-A new Flutter application.
+## 요약
 
-## Getting Started
+- 회원가입을 통해 이용할 수 있으며, 회원가입 유형은 카카오, 구글, 애플, 이메일이 있습니다.
+- 메인 페이지에서 배너와 커뮤니티, 프로필 관련 정보를 확인할 수 있습니다.
+- 프로필에는 개인과 팀이 있으며, 소개글(이력, 경력, 뱃지 등)을 확인 및 수정할 수 있습니다.
+- 관리자는 개인 및 팀원의 경력, 이력 사항을 인증합니다.
+- 개인은 마음에 드는 팀에 가입 요청을 할 수 있으며, 팀은 1:1 채팅을 통해 간이 면접 후 팀원으로 초대할 수 있습니다.
+- 팀은 리크루트 시스템을 통해 팀원 모집을 할 수 있으며, 소속 팀원들끼리는 단체 채팅이 가능합니다.
+- 커뮤니티를 통해 다른 사용자들과 소통할 수 있습니다.
 
-This project is a starting point for a Flutter application.
+![image](https://github.com/user-attachments/assets/4596d313-6655-4e95-aac0-b9d4e6ccd44e)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
